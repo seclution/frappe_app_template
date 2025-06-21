@@ -1,14 +1,23 @@
+
 # Frappe App Template
 
-This repository provides a starting point for developing custom Frappe or ERPNext applications.
-It helps you bootstrap a development environment with optional vendor apps and a Codex index.
+This repository is a starting point for developing custom **Frappe** or **ERPNext**
+applications. It bootstraps a local development environment, clones optional
+vendor apps and prepares a basic `codex.json` index for use with Codex.
 
 ## Quickstart
 
 1. Clone this repository.
-2. Optionally edit `vendor-repos.txt` to list additional apps you want to clone.
-3. Run `./setup.sh` to create the directory structure, clone vendor apps and generate `codex.json`.
+2. Edit `vendor-repos.txt` to list the Frappe/ERPNext apps you want cloned.
+3. Run `./setup.sh` from the repository root. It clones the apps listed in
+   `vendor-repos.txt` and generates `codex.json`.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
+
+## Adding Vendor Apps
+
+Each line in `vendor-repos.txt` should contain the HTTPS URL of a Frappe or
+ERPNext app repository. Re-run `./setup.sh` whenever you change this file to
+fetch the new apps.
 
 ## Repository Layout
 
@@ -21,4 +30,11 @@ init_codex_prompt.md# Starting prompt for Codex
 setup.sh            # Automated initialization script
 ```
 
-See the files in `instructions/` for framework-specific notes.
+## Further References
+
+More information is available in the `instructions/` folder:
+
+- [`instructions/frappe.md`](instructions/frappe.md) – notes on creating new
+  Frappe apps and useful links to the documentation.
+- [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
+  with ERPNext modules and doctypes.
