@@ -1,7 +1,5 @@
 {
   "sources": [
-    "apps/",
-    "vendor/frappe/",
-    "vendor/erpnext/"
+    "apps/"
   ]
 }

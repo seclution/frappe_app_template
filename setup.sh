@@ -5,28 +5,28 @@ echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 
 # Repos klonen
 mkdir -p vendor
-cd vendor
 
-if [ -f ../vendor-repos.txt ]; then
+if [ -f vendor-repos.txt ]; then
     while read -r repo; do
+        # leere Zeilen ignorieren
+        [ -z "$repo" ] && continue
         name=$(basename "$repo" .git)
-        if [ -n "$repo" ] && [ ! -d "$name" ]; then
-            git clone "$repo"
+        target="vendor/$name"
+        if [ ! -d "$target" ]; then
+            git clone "$repo" "$target"
         fi
-    done < ../vendor-repos.txt
+    done < vendor-repos.txt
 fi
 
-cd ..
-
 # codex.json erzeugen
-cat > codex.json <<'JSON'
-{
-  "sources": [
-    "apps/",
-    "vendor/frappe/",
-    "vendor/erpnext/"
-  ]
-}
-JSON
+sources=("apps/")
+for dir in vendor/*; do
+    [ -d "$dir" ] || continue
+    sources+=("$dir/")
+done
+
+printf '%s\n' "${sources[@]}" \
+    | jq -R . \
+    | jq -s '{sources: .}' > codex.json
 
 echo "✅ Setup abgeschlossen."

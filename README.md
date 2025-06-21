@@ -7,7 +7,7 @@ It helps you bootstrap a development environment with optional vendor apps and a
 
 1. Clone this repository.
 2. Optionally edit `vendor-repos.txt` to list additional apps you want to clone.
-3. Run `./setup.sh` to create the directory structure, clone vendor apps and generate `codex.json`.
+3. Run `./setup.sh` to clone the vendor apps and generate `codex.json`.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 
 ## Repository Layout
@@ -22,3 +22,10 @@ setup.sh            # Automated initialization script
 ```
 
 See the files in `instructions/` for framework-specific notes.
+
+## `setup.sh`
+
+Run this script after cloning the template. It reads `vendor-repos.txt`, clones
+any repositories listed there into `vendor/` and then creates `codex.json` with
+entries for `apps/` plus every cloned vendor directory. Re-run the script
+whenever you modify `vendor-repos.txt`.
