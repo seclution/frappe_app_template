@@ -20,11 +20,12 @@ if [ -f vendor-repos.txt ]; then
 fi
 
 # codex.json erzeugen
-sources=("apps/")
-for dir in vendor/*; do
-    [ -d "$dir" ] || continue
-    sources+=("$dir/")
-done
+sources=(
+    "apps/"
+    "vendor/frappe/"
+    "vendor/bench/"
+    "instructions/"
+)
 
 printf '%s\n' "${sources[@]}" \
     | jq -R . \
