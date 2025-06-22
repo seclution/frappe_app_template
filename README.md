@@ -16,9 +16,8 @@ vendor apps and prepares a basic `codex.json` index for use with Codex.
 
 ## Adding Vendor Apps
 
-Each line in `vendor-repos.txt` should contain the HTTPS URL of a Frappe or
-ERPNext app repository. Re-run `./setup.sh` whenever you change this file to
-fetch the new apps.
+Use `git submodule add <repo> vendor/<name>` to include additional Frappe or
+ERPNext apps. After adding a submodule, run `./setup.sh` to update `codex.json`.
 
 ## Repository Layout
 
