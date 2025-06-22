@@ -8,7 +8,8 @@ This repository uses Codex for automated code generation. These guidelines tell 
 2. List additional template repositories in `template-repos.txt`. Their
    instructions will be merged into `codex.json` automatically.
 3. The *Update Vendor Apps* workflow clones all repositories from both lists and
-   regenerates `codex.json`. Run `./setup.sh` locally for the same effect.
+   regenerates `codex.json`. Run `./setup.sh` locally for the same effect
+   (requires `jq`).
 4. The CI workflow executes the same script on every push.
 5. Example payloads or external API docs belong in `sample_data/`.
 
