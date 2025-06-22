@@ -1,1 +1,2 @@
 # Template repositories providing additional instructions
+https://github.com/seclution/erpnext_app_template
