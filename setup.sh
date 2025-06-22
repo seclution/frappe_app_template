@@ -3,7 +3,7 @@ set -e
 
 echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 
-# Repos klonen
+# Repos als Submodule klonen
 mkdir -p vendor
 
 if [ -f vendor-repos.txt ]; then
@@ -13,7 +13,8 @@ if [ -f vendor-repos.txt ]; then
         name=$(basename "$repo" .git)
         target="vendor/$name"
         if [ ! -d "$target" ]; then
-            git clone "$repo" "$target"
+            git submodule add "$repo" "$target"
+            git submodule update --init --recursive "$target"
         fi
     done < vendor-repos.txt
 fi
