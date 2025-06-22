@@ -1,18 +1,18 @@
-Willkommen zur App-Entwicklung!
+# Codex Setup Options
 
-Bitte wähle dein Ziel-Setup:
+Select the environment you want to initialize:
 
-1. **Frappe-Only App** → Verwende nur das Core-Framework.
-2. **ERPNext-Erweiterung** → Diese App erweitert ERPNext.
-3. **Multi-App-Erweiterung** → z. B. ERPNext + HRMS + CustomAppX
+1. **Frappe-only app** – build a standalone app using the Frappe framework.
+2. **ERPNext extension** – create a custom app that extends ERPNext.
+3. **Multi-app setup** – ERPNext together with additional apps.
 
-Bitte gib im Prompt ggf. Repos der Fremd-Apps an. Beispiel:
+If you need vendor repositories, mention them in your prompt. Example:
 
 ```
-ERPNext Erweiterung.
+ERPNext extension.
 Repos:
 - https://github.com/frappe/erpnext
-- https://github.com/xyz/hrms
+- https://github.com/example/hrms
 ```
 
-Die benötigten Repos werden automatisch geklont und Codex analysiert sie für dich.
+Codex will clone the listed repositories into `vendor/` and update `codex.json` automatically.
