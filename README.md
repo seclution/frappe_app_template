@@ -8,9 +8,9 @@
 3. **Run `./setup.sh`** to clone the listed repositories and generate `codex.json`.
 4. **Start Codex** with the prompt in `init_codex_prompt.md`.
 5. The `CI` workflow runs the same setup and tests automatically.
+6. **Optional sample data** for external integrations lives in `sample_data/`.
 
-This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional
-vendor apps and prepares a basic `codex.json` index for use with Codex.
+This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
 
 ## Quickstart
 
@@ -22,6 +22,8 @@ vendor apps and prepares a basic `codex.json` index for use with Codex.
    `vendor-repos.txt` and rerun `./setup.sh`.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 5. See [`prompts.md`](prompts.md) for instructions on adding more templates.
+6. Place any example payloads or external API docs under `sample_data/` for
+   reference.
 
 ## Adding Vendor Apps
 
@@ -44,6 +46,7 @@ instructions/       # Development guides
 codex.json          # Index of sources for Codex
 codex_prompt.md     # Main prompt for Codex
 setup.sh            # Automated initialization script
+sample_data/        # Example payloads and external API documentation
 ```
 
 ## Running Tests

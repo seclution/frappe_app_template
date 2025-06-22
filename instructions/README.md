@@ -5,6 +5,7 @@ This directory contains notes for developing apps with this template.
 1. List additional vendor repositories in `vendor-repos.txt`.
 2. Run `../setup.sh` to clone them and update `codex.json`.
 3. The `CI` workflow executes the same script on every push or via manual trigger.
+4. Store JSON example files and API docs in `../sample_data` when needed.
 
 Refer to the following guides for framework-specific tips:
 
