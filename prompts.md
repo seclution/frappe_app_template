@@ -15,6 +15,7 @@ Repos:
 ```
 
 Codex führt `setup.sh` aus, um die Verzeichnisse und `codex.json` zu erzeugen.
+In GitHub steht dafür das Workflow **Update Vendor Apps** bereit.
 
 ---
 
@@ -70,7 +71,7 @@ Codex führt `git submodule update --remote apps/frappe` aus und commitet die Ä
 
 ## Prompt 7: Frappe-only Initialisierung
 
-"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`, behalte Frappe und Bench, und führe `./setup.sh` aus."
+"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **Update Vendor Apps**."
 
 Codex aktualisiert `vendor-repos.txt`, klont nur Frappe und Bench und erzeugt eine neue `codex.json`.
 
@@ -78,7 +79,7 @@ Codex aktualisiert `vendor-repos.txt`, klont nur Frappe und Bench und erzeugt ei
 
 ## Prompt 8: ERPNext nachträglich hinzufügen
 
-"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf."
+"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **Update Vendor Apps**."
 
 Codex modifiziert `vendor-repos.txt`, klont ERPNext unter `vendor/` und aktualisiert `codex.json`.
 
@@ -86,7 +87,7 @@ Codex modifiziert `vendor-repos.txt`, klont ERPNext unter `vendor/` und aktualis
 
 ## Prompt 9: Weitere App-Templates integrieren
 
-"Erweitere das Projekt mit diesen App-Templates. Trage sie in `vendor-repos.txt` ein und starte danach `./setup.sh` neu."
+"Erweitere das Projekt mit diesen App-Templates. Trage sie in `vendor-repos.txt` ein und starte danach `./setup.sh` neu oder triggere das Workflow **Update Vendor Apps**." 
 
 ```
 Repos:
