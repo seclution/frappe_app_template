@@ -8,19 +8,26 @@ template with Codex. Detailed instructions for the Codex automation live in
 
 ## TL;DR – Using Codex
 
-1. **Clone this repo** or fork it for your own project.
+1. **Clone this repo** or fork it for your own project and work in a local copy.
 2. **Add required framework repos** (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
 3. **Add optional template repos** to `template-repos.txt` when you want to
    include additional instructions.
-4. The *Update Vendor Apps* workflow clones the listed repositories and
-   generates `codex.json`. You can still run `./setup.sh` locally if needed
-   (make sure `jq` is installed).
-5. **Start your project** by editing `vendor-repos.txt` and
-   `template-repos.txt` to include all external repositories you need.
-   Run the *Update Vendor Apps* workflow or `./setup.sh` to clone them and
-   rebuild `codex.json`.
-6. The `CI` workflow runs the same setup and tests automatically.
-7. **Optional sample data** for external integrations lives in `sample_data/`.
+4. **Commit and push to a fresh repository** once your lists are complete.
+
+   ```bash
+   git add vendor-repos.txt template-repos.txt
+   git commit -m "chore: configure vendor apps"
+   git remote add origin <new-repo-url>
+   git push -u origin main
+   ```
+
+5. Trigger the **Update Vendor Apps** workflow (and any *Update Template* flow)
+   on GitHub to clone the repositories and generate `codex.json`. You can still
+   run `./setup.sh` locally if needed (requires `jq`).
+6. **Create a Codex environment** and connect it with your new repository.
+7. **Start developing your app** inside this environment. The `CI` workflow
+   runs the same setup and tests automatically.
+8. **Optional sample data** for external integrations lives in `sample_data/`.
 
 This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
 
