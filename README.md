@@ -48,6 +48,34 @@ This repository is a starting point for developing custom **Frappe** application
 7. Place any example payloads or external API docs under `sample_data/` for
    reference. The directory is indexed in `codex.json` when present.
 
+## Using this Template as a Submodule
+
+You can also start a new project by including this repository as a Git submodule.
+This keeps the base template separate so you can pull in updates later.
+
+```bash
+git init myapp
+cd myapp
+git submodule add https://github.com/seclution/frappe_app_template template
+```
+
+Copy `apps.json`, `vendor-repos.txt` and `template-repos.txt` from `template/`
+to your project root and adjust them as needed. Run the setup script inside the
+submodule to clone the vendor apps and generate `codex.json`:
+
+```bash
+cd template
+./setup.sh
+```
+
+To update the template later simply execute:
+
+```bash
+git submodule update --remote template
+git commit -am "chore: update base template"
+```
+
+
 ## Adding Vendor Apps
 
 Use `git submodule add <repo> vendor/<name>` to include further Frappe apps.
