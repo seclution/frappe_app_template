@@ -38,3 +38,13 @@ More information is available in the `instructions/` folder:
   Frappe apps and useful links to the documentation.
 - [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
   with ERPNext modules and doctypes.
+
+## Running Tests
+
+This repository uses [pytest](https://pytest.org) for tests. To run the test suite:
+
+```bash
+pytest -q
+```
+
+The included sample test file is located in `tests/basic_integration_test.py`.
