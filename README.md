@@ -8,16 +8,14 @@ vendor apps and prepares a basic `codex.json` index for use with Codex.
 ## Quickstart
 
 1. Clone this repository.
-2. Edit `vendor-repos.txt` to list the Frappe/ERPNext apps you want cloned.
-3. Run `./setup.sh` from the repository root. It clones the apps listed in
-   `vendor-repos.txt` and generates `codex.json`.
+2. Run `git submodule update --init --recursive` to fetch Frappe and ERPNext.
+3. Execute `./setup.sh` from the repository root to generate `codex.json`.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 
 ## Adding Vendor Apps
 
-Each line in `vendor-repos.txt` should contain the HTTPS URL of a Frappe or
-ERPNext app repository. Re-run `./setup.sh` whenever you change this file to
-fetch the new apps.
+Use `git submodule add <repo> vendor/<name>` to include additional Frappe or
+ERPNext apps. After adding a submodule, run `./setup.sh` to update `codex.json`.
 
 ## Repository Layout
 
