@@ -40,8 +40,8 @@ This repository is a starting point for developing custom **Frappe** application
     They will be cloned alongside the framework repos and their instructions are
     added to Codex automatically.
 4. Template repositories may ship their own `vendor-repos.txt`. The update
-    workflow merges those entries into the main list so all required vendor apps
-    are cloned automatically.
+    workflow collects those files recursively and merges all entries so every
+    required vendor app is cloned automatically.
 5. Review `codex_prompt.md` for the default guidelines Codex follows.
 6. See [`prompts.md`](prompts.md) for instructions on adding more templates.
 7. Place any example payloads or external API docs under `sample_data/` for

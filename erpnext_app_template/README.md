@@ -6,8 +6,10 @@
 
 1. **Clone this repo** or include it as a submodule of your Frappe based project.
 2. **Optional template repos** go into `template-repos.txt`.
-3. **Sample data** can be placed in `sample_data/`.
-4. **Commit and push** your customised repository.
+3. The file `vendor-repos.txt` lists required framework apps. It already
+   includes ERPNext so the Frappe template clones it automatically.
+4. **Sample data** can be placed in `sample_data/`.
+5. **Commit and push** your customised repository.
 
 Trigger the **Update Vendor Apps** workflow in the Frappe template (or run `./setup.sh` there) to clone ERPNext and generate `codex.json`. Afterwards create a Codex environment and start developing your extensions.
 

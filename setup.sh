@@ -23,17 +23,14 @@ if [ -f template-repos.txt ]; then
     done < template-repos.txt
 fi
 
-# vendor-repos aus Subtemplates zusammenführen
+# vendor-repos aus Subtemplates zusammenführen (rekursiv)
 touch vendor-repos.txt
-for dir in vendor/*; do
-    [ -d "$dir" ] || continue
-    if [ -f "$dir/vendor-repos.txt" ]; then
-        while IFS= read -r repo; do
-            repo=$(echo "$repo" | sed 's/#.*//' | xargs)
-            [ -z "$repo" ] && continue
-            grep -qxF "$repo" vendor-repos.txt || echo "$repo" >> vendor-repos.txt
-        done < "$dir/vendor-repos.txt"
-    fi
+find vendor -type f -name vendor-repos.txt | while read file; do
+    while IFS= read -r repo; do
+        repo=$(echo "$repo" | sed 's/#.*//' | xargs)
+        [ -z "$repo" ] && continue
+        grep -qxF "$repo" vendor-repos.txt || echo "$repo" >> vendor-repos.txt
+    done < "$file"
 done
 sort -u vendor-repos.txt -o vendor-repos.txt
 
