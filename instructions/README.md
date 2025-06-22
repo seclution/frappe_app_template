@@ -21,3 +21,4 @@ Refer to the following guides for framework-specific tips:
 
 - [Frappe Notes](./frappe.md)
 - [ERPNext Notes](./erpnext.md)
+- [Using the Template as a Submodule](./submodule_usage.md)

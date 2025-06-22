@@ -24,3 +24,8 @@ sites/*/public/
 
 # Logs
 *.log
+
+# Keep configuration files under version control
+!apps.json
+!vendor-repos.txt
+!template-repos.txt
