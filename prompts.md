@@ -35,3 +35,33 @@ Codex aktualisiert die `hooks.py` und erstellt eine neue Python-Funktion unter `
 ---
 
 Diese Schritte lassen sich beliebig fortführen, um weitere Doctypes, REST-Endpoints oder Integrationen aufzubauen.
+
+---
+
+## Prompt 4: Submodule Setup
+
+"Initialisiere das Template mit Frappe und Bench als Git-Submodule. Führe die entsprechenden `git submodule add` Befehle aus."
+
+Codex bindet beide Repositories als Submodule ein und aktualisiert `.gitmodules`.
+
+---
+
+## Prompt 5: Zusätzliche App-Templates
+
+"Füge die folgenden app-template Repositories als Submodule hinzu."
+
+```
+Repos:
+- https://github.com/example/app-template-a
+- https://github.com/example/app-template-b
+```
+
+Codex legt die Submodule unter `apps/` an.
+
+---
+
+## Prompt 6: Frappe aktualisieren
+
+"Aktualisiere das Frappe-Submodule auf eine neuere Version."
+
+Codex führt `git submodule update --remote apps/frappe` aus und commitet die Änderungen.
