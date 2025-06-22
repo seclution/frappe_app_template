@@ -95,6 +95,10 @@ pytest -q
 ```
 
 The included sample test file is located in `tests/basic_integration_test.py`.
+## Draw.io Build Workflow
+
+The workflow `build-drawio-webjar.yml` compiles the Draw.io WebJar and builds the XWiki extension. Trigger it manually from the *Actions* tab to generate a WebJar and XAR artifact.
+
 
 ## Further References
 
