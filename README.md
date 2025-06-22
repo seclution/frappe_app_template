@@ -1,6 +1,11 @@
 
 # Frappe App Template
 
+**Important:** This project keeps its documentation in two separate files. This
+`README.md` is written for human developers who want to build on top of the
+template with Codex. Detailed instructions for the Codex automation live in
+`DEV_INSTRUCTIONS.md`.
+
 ## TL;DR – Using Codex
 
 1. **Clone this repo** or fork it for your own project.

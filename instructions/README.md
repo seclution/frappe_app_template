@@ -1,6 +1,7 @@
 # Development Instructions
 
-This directory contains notes for developing apps with this template.
+This directory contains additional notes for Frappe and ERPNext. For the
+automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 
 1. List additional vendor repositories in `vendor-repos.txt`.
 2. Run `../setup.sh` to clone them and update `codex.json`.
