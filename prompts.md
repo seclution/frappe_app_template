@@ -65,3 +65,33 @@ Codex legt die Submodule unter `apps/` an.
 "Aktualisiere das Frappe-Submodule auf eine neuere Version."
 
 Codex führt `git submodule update --remote apps/frappe` aus und commitet die Änderungen.
+
+---
+
+## Prompt 7: Frappe-only Initialisierung
+
+"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`, behalte Frappe und Bench, und führe `./setup.sh` aus."
+
+Codex aktualisiert `vendor-repos.txt`, klont nur Frappe und Bench und erzeugt eine neue `codex.json`.
+
+---
+
+## Prompt 8: ERPNext nachträglich hinzufügen
+
+"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf."
+
+Codex modifiziert `vendor-repos.txt`, klont ERPNext unter `vendor/` und aktualisiert `codex.json`.
+
+---
+
+## Prompt 9: Weitere App-Templates integrieren
+
+"Erweitere das Projekt mit diesen App-Templates. Trage sie in `vendor-repos.txt` ein und starte danach `./setup.sh` neu."
+
+```
+Repos:
+- https://github.com/example/app-template-c
+- https://github.com/example/app-template-d
+```
+
+Codex ergänzt `vendor-repos.txt`, führt `setup.sh` erneut aus und holt die neuen Repositories nach `vendor/`.
