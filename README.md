@@ -27,7 +27,7 @@ apps/               # Your custom app lives here
 vendor/             # Frappe, ERPNext and other apps (cloned or as submodules)
 instructions/       # Development guides
 codex.json          # Index of sources for Codex
-init_codex_prompt.md# Starting prompt for Codex
+codex_prompt.md     # Main prompt for Codex
 setup.sh            # Automated initialization script
 ```
 
