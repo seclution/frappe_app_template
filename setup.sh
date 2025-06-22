@@ -11,6 +11,20 @@ fi
 
 echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 
+# Copy GitHub workflow files to parent repository when executed inside a
+# submodule so that CI runs from the main repo
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
+    for wf in "$SCRIPT_DIR"/.github/workflows/*.yml; do
+        [ -f "$wf" ] || continue
+        target="$PARENT_DIR/.github/workflows/$(basename "$wf")"
+        if [ ! -f "$target" ]; then
+            mkdir -p "$PARENT_DIR/.github/workflows"
+            cp "$wf" "$target"
+        fi
+    done
+fi
+
 # Repos als Submodule klonen
 mkdir -p vendor
 
