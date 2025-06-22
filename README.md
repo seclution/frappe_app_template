@@ -10,7 +10,8 @@ template with Codex. Detailed instructions for the Codex automation live in
 
 1. **Clone this repo** or fork it for your own project.
 2. **Add required vendor apps** to `vendor-repos.txt`.
-3. **Run `./setup.sh`** to clone the listed repositories and generate `codex.json`.
+3. The *Update Vendor Apps* workflow clones the listed repositories and
+   generates `codex.json`. You can still run `./setup.sh` locally if needed.
 4. **Start Codex** with the prompt in `init_codex_prompt.md`.
 5. The `CI` workflow runs the same setup and tests automatically.
 6. **Optional sample data** for external integrations lives in `sample_data/`.
@@ -20,11 +21,11 @@ This repository is a starting point for developing custom **Frappe** application
 ## Quickstart
 
 1. Clone this repository.
-2. By default `vendor-repos.txt` contains only Frappe. Run `./setup.sh` to clone
-   Frappe and Bench and to generate `codex.json` referencing `apps/`,
-   `vendor/frappe/`, `vendor/bench/` and `instructions/`.
+2. By default `vendor-repos.txt` contains only Frappe. The *Update Vendor Apps*
+   workflow clones these repositories and regenerates `codex.json`. Run
+   `./setup.sh` locally if you want to mirror the process.
 3. To add ERPNext, append `https://github.com/frappe/erpnext` to
-   `vendor-repos.txt` and rerun `./setup.sh`.
+   `vendor-repos.txt` and trigger the workflow or run `./setup.sh` manually.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 5. See [`prompts.md`](prompts.md) for instructions on adding more templates.
 6. Place any example payloads or external API docs under `sample_data/` for
@@ -33,11 +34,12 @@ This repository is a starting point for developing custom **Frappe** application
 ## Adding Vendor Apps
 
 Use `git submodule add <repo> vendor/<name>` to include additional Frappe apps.
-To add ERPNext manually, run:
+After adding a repository trigger the *Update Vendor Apps* workflow or run
+`./setup.sh` locally. To add ERPNext manually:
 
 ```bash
 git submodule add https://github.com/frappe/erpnext vendor/erpnext
-./setup.sh
+./setup.sh   # optional when working locally
 ```
 
 This clones ERPNext into `vendor/` and updates `codex.json`.

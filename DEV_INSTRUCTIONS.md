@@ -5,7 +5,8 @@ This repository uses Codex for automated code generation. These guidelines tell 
 ## Setup
 
 1. Add any vendor repositories to `vendor-repos.txt`.
-2. Run `./setup.sh` to clone vendor apps and regenerate `codex.json`.
+2. The *Update Vendor Apps* workflow clones vendor apps and regenerates
+   `codex.json`. Run `./setup.sh` locally for the same effect.
 3. The CI workflow executes the same script on every push.
 4. Example payloads or external API docs belong in `sample_data/`.
 

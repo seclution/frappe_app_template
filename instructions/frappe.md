@@ -8,7 +8,8 @@
 * API-Aufrufe erfolgen über Whitelist-Methoden oder die REST API.
 * Weitere Details findest du in der offiziellen Frappe-Dokumentation.
 
-Um weitere Frappe-Apps einzubinden, ergänze `vendor-repos.txt` und rufe `../setup.sh` auf.
+Um weitere Frappe-Apps einzubinden, ergänze `vendor-repos.txt` und trigger das
+Workflow **Update Vendor Apps** oder führe `../setup.sh` manuell aus.
 
 ## Prerequisites
 
