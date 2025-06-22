@@ -10,9 +10,9 @@ template with Codex. Detailed instructions for the Codex automation live in
 
 1. **Clone this repo** or fork it for your own project and work in a local copy.
 2. **Add required framework repos** (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
-3. **Add optional template repos** to `template-repos.txt` when you want to
-   include additional instructions.
-4. **Commit and push to a fresh repository** once your lists are complete.
+3. **Add optional template repos** to `template-repos.txt` when you want to include additional instructions.
+4. **Optional sample data** for external integrations lives in `sample_data/`.
+5. **Commit and push to a fresh repository** once your lists are complete.
 
    ```bash
    git add vendor-repos.txt template-repos.txt
@@ -21,13 +21,12 @@ template with Codex. Detailed instructions for the Codex automation live in
    git push -u origin main
    ```
 
-5. Trigger the **Update Vendor Apps** workflow (and any *Update Template* flow)
+6. Trigger the **Update Vendor Apps** workflow (and any *Update Template* flow)
    on GitHub to clone the repositories and generate `codex.json`. You can still
    run `./setup.sh` locally if needed (requires `jq`).
-6. **Create a Codex environment** and connect it with your new repository.
-7. **Start developing your app** inside this environment. The `CI` workflow
+7. **Create a Codex environment** and connect it with your new repository.
+8. **Start developing your app** inside this environment. The `CI` workflow
    runs the same setup and tests automatically.
-8. **Optional sample data** for external integrations lives in `sample_data/`.
 
 This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
 
