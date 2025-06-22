@@ -70,6 +70,26 @@ The update workflow clones both lists and adds any `instructions/` directories
 from the templates to `codex.json`. Follow those instructions together with this
 document when developing your app.
 
+## Using `apps.json`
+
+The file `apps.json` defines the default versions for the core Frappe stack.
+Each entry specifies a repository URL and the tag that will be checked out
+by the update workflow. Adjust these tags when you need a newer or older
+release of Frappe or Bench:
+
+```json
+{
+  "bench": { "repo": "https://github.com/frappe/bench", "tag": "v5.2.1" },
+  "frappe": { "repo": "https://github.com/frappe/frappe", "tag": "v13.3.0" }
+}
+```
+
+Changing the values and re-running the **Update Vendor Apps** workflow (or
+`./setup.sh`) pulls the requested versions and regenerates `codex.json`.
+Only framework repositories managed through `apps.json` should be edited here;
+additional Frappe apps belong in `vendor-repos.txt` or as submodules under the
+`vendor/` directory.
+
 ## Repository Layout
 
 ```
