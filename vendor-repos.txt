@@ -1,2 +1,3 @@
 https://github.com/frappe/frappe
 https://github.com/frappe/erpnext
+https://github.com/frappe/bench  # bench v5.x
