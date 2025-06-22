@@ -31,6 +31,16 @@ codex_prompt.md     # Main prompt for Codex
 setup.sh            # Automated initialization script
 ```
 
+## Running Tests
+
+Install the dependencies listed in `requirements.txt` and execute the test suite
+with `pytest`:
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
 ## Further References
 
 More information is available in the `instructions/` folder:
