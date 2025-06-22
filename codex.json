@@ -1,5 +1,8 @@
 {
   "sources": [
-    "apps/"
+    "apps/",
+    "vendor/frappe/",
+    "vendor/bench/",
+    "instructions/"
   ]
 }

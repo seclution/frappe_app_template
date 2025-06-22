@@ -10,8 +10,9 @@ vendor apps and prepares a basic `codex.json` index for use with Codex.
 1. Clone this repository.
 2. Edit `vendor-repos.txt` to list the Frappe/ERPNext apps you want cloned.
 3. Run `./setup.sh` from the repository root. It clones the apps listed in
-   `vendor-repos.txt` and generates `codex.json`.
-4. Review `codex_prompt.md` for the main prompt used by Codex.
+   `vendor-repos.txt` and generates `codex.json` referencing `apps/`,
+   `vendor/frappe/`, `vendor/bench/` and `instructions/`.
+4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 
 ## Adding Vendor Apps
 
@@ -34,7 +35,9 @@ setup.sh            # Automated initialization script
 
 More information is available in the `instructions/` folder:
 
-- [`instructions/frappe.md`](instructions/frappe.md) – notes on creating new
-  Frappe apps and useful links to the documentation.
-- [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
-  with ERPNext modules and doctypes.
+- [`instructions/frappe.md`](instructions/frappe.md) – details on installing
+  Bench, creating new apps, definieren eines `<appname>_Globals` Doctypes sowie
+  den Einsatz von Hooks, Fixtures und API-Aufrufen.
+- [`instructions/erpnext.md`](instructions/erpnext.md) – Tipps zum Erweitern
+  von ERPNext-Modulen, Registrieren eigener Hooks und Exportieren von
+  Customizations.
