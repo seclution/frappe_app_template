@@ -6,9 +6,10 @@ This repository acts as a template for ERPNext extensions and is usually combine
 
 1. Include this repository as a submodule of the Frappe template.
 2. Optional template repositories can be added to `template-repos.txt`.
-3. Trigger the **Update Vendor Apps** workflow in the Frappe template (or run `./setup.sh` there) to fetch ERPNext and rebuild `codex.json`.
-4. The CI workflow in this repo executes the same script on each push.
-5. Place reference payloads or API docs in `sample_data/`.
+3. Set the desired ERPNext tag in `apps.json`.
+4. Trigger the **Update Vendor Apps** workflow in the Frappe template (or run `./setup.sh` there) to fetch ERPNext and rebuild `codex.json`.
+5. The CI workflow in this repo executes the same script on each push.
+6. Place reference payloads or API docs in `sample_data/`.
 
 ## Repository Layout
 
@@ -16,6 +17,7 @@ This repository acts as a template for ERPNext extensions and is usually combine
 - `instructions/` – ERPNext development notes.
 - `sample_data/` – example payloads and docs.
 - `template-repos.txt` – list of additional templates.
+- `apps.json` – ERPNext repository and tag.
 
 ## Testing
 

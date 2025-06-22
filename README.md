@@ -11,7 +11,7 @@ template with Codex. Detailed instructions for the Codex automation live in
 1. **Clone this repo** or fork it for your own project and work in a local copy.
 2. **Adjust vendor versions** in `apps.json` if you need different tags for
    Frappe or Bench. Add further frameworks to `vendor-repos.txt`.
-3. **Add optional template repos** to `template-repos.txt` when you want to include additional instructions.
+3. **Add optional template repos** to `template-repos.txt` when you want to include additional instructions. Templates may also ship an `apps.json` that pins their vendor apps.
 4. **Optional sample data** for external integrations lives in `sample_data/`.
 5. **Commit and push to a fresh repository** once your lists are complete.
 
@@ -40,9 +40,9 @@ This repository is a starting point for developing custom **Frappe** application
 3. Optional development templates can be listed in `template-repos.txt`.
     They will be cloned alongside the framework repos and their instructions are
     added to Codex automatically.
-4. Template repositories may ship their own `vendor-repos.txt`. The update
-    workflow collects those files recursively and merges all entries so every
-    required vendor app is cloned automatically.
+4. Template repositories may ship their own `apps.json` and `vendor-repos.txt`.
+    The update workflow processes these files recursively so every required
+    vendor app is cloned in the specified version automatically.
 5. Review `codex_prompt.md` for the default guidelines Codex follows.
 6. See [`prompts.md`](prompts.md) for instructions on adding more templates.
 7. Place any example payloads or external API docs under `sample_data/` for
@@ -61,21 +61,24 @@ cloned automatically.
 Three files keep track of external sources:
 
 1. `apps.json` – default vendor apps like Frappe and Bench with their tag
-   versions.
+   versions. Template repositories may ship their own `apps.json` files to pin
+   additional vendor projects.
 2. `vendor-repos.txt` – additional framework repositories (e.g. ERPNext).
 3. `template-repos.txt` – optional templates that include their own development
    instructions.
 
-The update workflow clones both lists and adds any `instructions/` directories
-from the templates to `codex.json`. Follow those instructions together with this
-document when developing your app.
+The update workflow clones repositories from these lists and also processes any
+`apps.json` found inside the templates. All vendor apps are checked out at the
+specified tag and `instructions/` folders are merged into `codex.json`. Follow
+those instructions together with this document when developing your app.
 
 ## Using `apps.json`
 
 The file `apps.json` defines the default versions for the core Frappe stack.
 Each entry specifies a repository URL and the tag that will be checked out
 by the update workflow. Adjust these tags when you need a newer or older
-release of Frappe or Bench:
+release of Frappe or Bench. Any template repositories are scanned for their own
+`apps.json` files which are processed in the same way:
 
 ```json
 {
