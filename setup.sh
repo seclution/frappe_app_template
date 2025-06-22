@@ -55,6 +55,19 @@ if [ -f apps.json ]; then
     done
 fi
 
+# additional apps.json files from templates
+find vendor -maxdepth 2 -name apps.json | while read file; do
+    jq -r 'to_entries[] | "\(.key) \(.value.repo) \(.value.tag)"' "$file" | while read name repo tag; do
+        target="vendor/$name"
+        if [ ! -d "$target" ]; then
+            git submodule add "$repo" "$target"
+        fi
+        git -C "$target" fetch --tags
+        git -C "$target" checkout "$tag"
+        git add "$target"
+    done
+done
+
 # eigentliche vendor-Repos klonen
 if [ -f vendor-repos.txt ]; then
     while IFS= read -r line; do
