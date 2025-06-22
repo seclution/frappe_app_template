@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# Load shared helper functions
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/../scripts/common_setup.sh" ]; then
+    source "$SCRIPT_DIR/../scripts/common_setup.sh"
+else
+    source "$SCRIPT_DIR/scripts/common_setup.sh"
+fi
+
 echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 
 # Repos als Submodule klonen
@@ -62,32 +70,13 @@ if [ -f vendor-repos.txt ]; then
 fi
 
 # ensure bench command is available
-if ! command -v bench >/dev/null 2>&1; then
-    echo "ℹ️ 'bench' command not found. Installing frappe-bench..."
-    pip install frappe-bench
-fi
+ensure_bench
 
 # vorhandene Submodule initialisieren
 git submodule update --init --recursive
 
 # codex.json erzeugen
-sources=("apps/")
-for dir in vendor/*; do
-    [ -d "$dir" ] || continue
-    sources+=("$dir/")
-    # merge additional instructions from template repos
-    if [ -d "$dir/instructions" ]; then
-        sources+=("$dir/instructions/")
-    fi
-done
-sources+=("instructions/")
-if [ -d sample_data ]; then
-    sources+=("sample_data/")
-fi
-
-printf '%s\n' "${sources[@]}" \
-    | jq -R . \
-    | jq -s '{sources: .}' > codex.json
+generate_codex_json
 
 guide="instructions/frappe.md"
 if [ -f instructions/frappe_dev.md ]; then
