@@ -24,7 +24,7 @@ Edit these files to add your own vendor apps or additional templates.
 
 ## 2. Initialising the Environment
 
-Run the setup script inside the submodule to clone the vendor apps and generate `codex.json`:
+Run the setup script inside the submodule to clone the vendor apps and generate `codex.json`. The script also copies the GitHub workflow files to the parent repository when they are missing so that CI runs automatically:
 
 ```bash
 cd template
