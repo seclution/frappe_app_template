@@ -95,3 +95,19 @@ Repos:
 ```
 
 Codex ergänzt `vendor-repos.txt`, führt `setup.sh` erneut aus und holt die neuen Repositories nach `vendor/`.
+
+---
+
+## Prompt 10: Beispielordner anlegen
+
+"Lege unter `sample_data/` einen Ordner fuer Beispiel-JSONs an und fuege eine Datei `example.json` mit einer Musterantwort hinzu."
+
+Codex erstellt das Verzeichnis und die Beispiel-Datei.
+
+---
+
+## Prompt 11: Weitere Beispiele hinzufuegen
+
+"Ergaenze `sample_data/` um weitere Dateien oder Dokumentationen fuer externe Schnittstellen."
+
+Codex legt zusaetzliche Dateien ab und ergaenzt die README bei Bedarf.

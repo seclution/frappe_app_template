@@ -7,3 +7,4 @@
 - Über `hooks.py` kannst du Events wie `on_submit` abfangen und zusätzliche Logik implementieren.
 - Eigene REST-API-Endpunkte lassen sich über Whitelist-Methoden bereitstellen.
 - Für tiefergehende Anpassungen siehe die ERPNext Dokumentation.
+- Lege Beispiel-JSONs externer Schnittstellen in `sample_data/` ab, um sie versioniert vorzuhalten.

@@ -5,6 +5,12 @@ This repository is a starting point for developing custom **Frappe**
 applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional
 vendor apps and prepares a basic `codex.json` index for use with Codex.
 
+## TL;DR
+
+- Run `./setup.sh` to pull vendor apps and generate `codex.json`.
+- Place any example API payloads or external integration docs under `sample_data/`.
+- See also [TLDR.md](TLDR.md) for a brief checklist.
+
 ## Quickstart
 
 1. Clone this repository.
@@ -15,6 +21,7 @@ vendor apps and prepares a basic `codex.json` index for use with Codex.
    `vendor-repos.txt` and rerun `./setup.sh`.
 4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
 5. See [`prompts.md`](prompts.md) for instructions on adding more templates.
+6. Legt Beispiel-JSONs oder Schnittstellendokumente im Verzeichnis `sample_data/` ab, falls eure App externe Dienste nutzt.
 
 ## Adding Vendor Apps
 
@@ -37,6 +44,7 @@ instructions/       # Development guides
 codex.json          # Index of sources for Codex
 codex_prompt.md     # Main prompt for Codex
 setup.sh            # Automated initialization script
+sample_data/        # Example payloads and API docs for external services
 ```
 
 ## Running Tests

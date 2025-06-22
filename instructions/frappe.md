@@ -7,6 +7,7 @@
 - Exportiere Custom Fields oder Doctypes mit Fixtures via `bench export-fixtures`.
 - API-Aufrufe können über Whitelist-Funktionen oder die REST API erfolgen.
 - Siehe die Frappe Dokumentation für Details zu DocTypes, Hooks und REST API.
+- Beispielantworten externer Dienste kannst du in `sample_data/` ablegen.
 
 ## Prerequisites
 
