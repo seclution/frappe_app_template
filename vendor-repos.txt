@@ -1,2 +1,2 @@
-https://github.com/frappe/bench  # bench v5.x (optional)
-https://github.com/frappe/frappe
+# Additional vendor repositories can be listed here.
+# Frappe and Bench versions are defined in apps.json.
