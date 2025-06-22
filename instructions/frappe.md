@@ -1,12 +1,14 @@
 # Frappe Development Notes
 
-- Standard App Struktur in `apps/`
-- Verwende `bench new-app` zum Erstellen neuer Apps.
-- Nach dem Anlegen einer App bietet sich ein DocType namens `<appname>_Globals` für globale Einstellungen an.
-- Registriere Events und Scheduler-Tasks über `hooks.py`.
-- Exportiere Custom Fields oder Doctypes mit Fixtures via `bench export-fixtures`.
-- API-Aufrufe können über Whitelist-Funktionen oder die REST API erfolgen.
-- Siehe die Frappe Dokumentation für Details zu DocTypes, Hooks und REST API.
+* Standard-App-Struktur in `apps/`.
+* Verwende `bench new-app` zum Erstellen neuer Apps.
+* Lege einen DocType `<appname>_Globals` für globale Einstellungen an.
+* Registriere Events und Scheduler-Tasks über `hooks.py`.
+* Exportiere Custom Fields oder Doctypes mit Fixtures via `bench export-fixtures`.
+* API-Aufrufe erfolgen über Whitelist-Methoden oder die REST API.
+* Weitere Details findest du in der offiziellen Frappe-Dokumentation.
+
+Um weitere Frappe-Apps einzubinden, ergänze `vendor-repos.txt` und rufe `../setup.sh` auf.
 
 ## Prerequisites
 
