@@ -40,13 +40,14 @@ setup.sh            # Automated initialization script
 
 ## Running Tests
 
-Install the dependencies listed in `requirements.txt` and execute the test suite
-with `pytest`:
+Install the dependencies listed in `requirements.txt` and then execute the test suite with `pytest -q`:
 
 ```bash
 pip install -r requirements.txt
-pytest
+pytest -q
 ```
+
+The included sample test file is located in `tests/basic_integration_test.py`.
 
 ## Further References
 
@@ -56,13 +57,3 @@ More information is available in the `instructions/` folder:
   Frappe apps and useful links to the documentation.
 - [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
   with ERPNext modules and doctypes.
-
-## Running Tests
-
-This repository uses [pytest](https://pytest.org) for tests. To run the test suite:
-
-```bash
-pytest -q
-```
-
-The included sample test file is located in `tests/basic_integration_test.py`.
