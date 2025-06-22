@@ -34,7 +34,9 @@ setup.sh            # Automated initialization script
 
 More information is available in the `instructions/` folder:
 
-- [`instructions/frappe.md`](instructions/frappe.md) – notes on creating new
-  Frappe apps and useful links to the documentation.
-- [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
-  with ERPNext modules and doctypes.
+- [`instructions/frappe.md`](instructions/frappe.md) – details on installing
+  Bench, creating new apps, definieren eines `<appname>_Globals` Doctypes sowie
+  den Einsatz von Hooks, Fixtures und API-Aufrufen.
+- [`instructions/erpnext.md`](instructions/erpnext.md) – Tipps zum Erweitern
+  von ERPNext-Modulen, Registrieren eigener Hooks und Exportieren von
+  Customizations.
