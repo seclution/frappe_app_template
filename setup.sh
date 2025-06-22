@@ -34,6 +34,19 @@ find vendor -type f -name vendor-repos.txt | while read file; do
 done
 sort -u vendor-repos.txt -o vendor-repos.txt
 
+# vendor apps aus apps.json verwenden
+if [ -f apps.json ]; then
+    jq -r 'to_entries[] | "\(.key) \(.value.repo) \(.value.tag)"' apps.json | while read name repo tag; do
+        target="vendor/$name"
+        if [ ! -d "$target" ]; then
+            git submodule add "$repo" "$target"
+        fi
+        git -C "$target" fetch --tags
+        git -C "$target" checkout "$tag"
+        git add "$target"
+    done
+fi
+
 # eigentliche vendor-Repos klonen
 if [ -f vendor-repos.txt ]; then
     while IFS= read -r line; do

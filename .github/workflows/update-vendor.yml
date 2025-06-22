@@ -35,14 +35,11 @@ jobs:
       - name: Run setup script
         run: ./setup.sh
 
-      - name: Update submodules
-        run: git submodule update --remote --init --recursive
-
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vendor .gitmodules codex.json vendor-repos.txt
+          git add vendor .gitmodules codex.json vendor-repos.txt apps.json
           git add template-repos.txt
           if git diff --cached --quiet; then
             echo "No changes to commit"

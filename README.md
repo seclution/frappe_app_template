@@ -9,7 +9,8 @@ template with Codex. Detailed instructions for the Codex automation live in
 ## TL;DR – Using Codex
 
 1. **Clone this repo** or fork it for your own project and work in a local copy.
-2. **Add required framework repos** (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
+2. **Adjust vendor versions** in `apps.json` if you need different tags for
+   Frappe or Bench. Add further frameworks to `vendor-repos.txt`.
 3. **Add optional template repos** to `template-repos.txt` when you want to include additional instructions.
 4. **Optional sample data** for external integrations lives in `sample_data/`.
 5. **Commit and push to a fresh repository** once your lists are complete.
@@ -33,9 +34,9 @@ This repository is a starting point for developing custom **Frappe** application
 ## Quickstart
 
 1. Clone this repository.
-2. By default `vendor-repos.txt` contains only Frappe. The *Update Vendor Apps*
-   workflow clones these repositories and regenerates `codex.json`. Run
-   `./setup.sh` locally if you want to mirror the process (requires `jq`).
+2. Frappe and Bench are already included using the tags defined in `apps.json`.
+   The *Update Vendor Apps* workflow clones them and rebuilds `codex.json`.
+   Run `./setup.sh` locally if you want to mirror the process (requires `jq`).
 3. Optional development templates can be listed in `template-repos.txt`.
     They will be cloned alongside the framework repos and their instructions are
     added to Codex automatically.
@@ -49,20 +50,21 @@ This repository is a starting point for developing custom **Frappe** application
 
 ## Adding Vendor Apps
 
-Use `git submodule add <repo> vendor/<name>` to include additional Frappe apps.
+Use `git submodule add <repo> vendor/<name>` to include further Frappe apps.
 After adding a repository trigger the *Update Vendor Apps* workflow or run
-`./setup.sh` locally (requires `jq`). When template repositories contain their
-own `vendor-repos.txt` the workflow automatically updates this list and clones
-the referenced apps.
+`./setup.sh` locally (requires `jq`). Template repositories may carry their own
+`vendor-repos.txt`; the workflow merges these lists so every required app is
+cloned automatically.
 
 ## Vendor Repository Types
 
-Two lists keep track of external sources:
+Three files keep track of external sources:
 
-1. `vendor-repos.txt` – reference repositories for the framework itself such as
-   Frappe, ERPNext or HRMS.
-2. `template-repos.txt` – additional templates that include their own
-   development instructions.
+1. `apps.json` – default vendor apps like Frappe and Bench with their tag
+   versions.
+2. `vendor-repos.txt` – additional framework repositories (e.g. ERPNext).
+3. `template-repos.txt` – optional templates that include their own development
+   instructions.
 
 The update workflow clones both lists and adds any `instructions/` directories
 from the templates to `codex.json`. Follow those instructions together with this
@@ -80,6 +82,7 @@ setup.sh            # Automated initialization script
 vendor-repos.txt    # Framework repositories like Frappe
 template-repos.txt  # Additional templates with instructions
 sample_data/        # Example payloads and external API documentation
+apps.json           # Default vendor apps and their versions
 ```
 
 ## Running Tests

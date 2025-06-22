@@ -4,7 +4,8 @@ This repository uses Codex for automated code generation. These guidelines tell 
 
 ## Setup
 
-1. Add framework repositories such as Frappe to `vendor-repos.txt`.
+1. Versions for Frappe and Bench are defined in `apps.json`. Add additional
+   framework repositories to `vendor-repos.txt`.
 2. List additional template repositories in `template-repos.txt`. Their
     instructions and any `vendor-repos.txt` files are merged automatically.
 3. The *Update Vendor Apps* workflow clones all repositories from the merged
@@ -21,6 +22,7 @@ This repository uses Codex for automated code generation. These guidelines tell 
 - `sample_data/` – reference payloads and docs.
 - `vendor-repos.txt` – list of framework repositories.
 - `template-repos.txt` – list of additional template repositories.
+- `apps.json` – default vendor apps and their versions.
 
 ## Testing
 
