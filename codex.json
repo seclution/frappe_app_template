@@ -3,6 +3,7 @@
     "apps/",
     "vendor/frappe/",
     "vendor/bench/",
-    "instructions/"
+    "instructions/",
+    "sample_data/"
   ]
 }
