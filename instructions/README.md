@@ -3,7 +3,8 @@
 This directory contains additional notes for Frappe and ERPNext. For the
 automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 
-1. Add framework repositories (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
+1. Frappe and Bench are pinned via `apps.json`. Add further framework
+   repositories (ERPNext/HRMS) to `vendor-repos.txt`.
 2. List template repositories that ship extra instructions in
    `template-repos.txt`.
 3. The *Update Vendor Apps* workflow clones all repositories and refreshes

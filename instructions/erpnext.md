@@ -8,4 +8,4 @@
 * Eigene REST-API-Endpunkte lassen sich über Whitelist-Methoden bereitstellen.
 * Für tiefergehende Anpassungen siehe die ERPNext-Dokumentation.
 
-Um ERPNext hinzuzufügen, trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und starte das Workflow **Update Vendor Apps** oder führe `../setup.sh` aus.
+Frappe und Bench sind bereits über `apps.json` eingebunden. Um ERPNext hinzuzufügen, trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und starte das Workflow **Update Vendor Apps** oder führe `../setup.sh` aus.

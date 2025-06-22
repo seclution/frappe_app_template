@@ -4,7 +4,8 @@ This repository uses Codex for automated code generation. These guidelines tell 
 
 ## Setup
 
-1. Add framework repositories such as Frappe or ERPNext to `vendor-repos.txt`.
+1. Frappe and Bench are pinned via `apps.json`. Add further framework
+   repositories such as ERPNext or HRMS to `vendor-repos.txt`.
 2. List additional template repositories in `template-repos.txt`. Their
    instructions will be merged into `codex.json` automatically.
 3. The *Update Vendor Apps* workflow clones all repositories from both lists and
@@ -19,7 +20,7 @@ This repository uses Codex for automated code generation. These guidelines tell 
 - `vendor/` – Frappe and other vendor apps managed as submodules.
 - `instructions/` – framework notes for Frappe and ERPNext.
 - `sample_data/` – reference payloads and docs.
-- `vendor-repos.txt` – list of framework repositories.
+- `vendor-repos.txt` – additional framework repositories to clone.
 - `template-repos.txt` – list of additional template repositories.
 
 ## Testing

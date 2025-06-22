@@ -71,15 +71,15 @@ Codex führt `git submodule update --remote apps/frappe` aus und commitet die Ä
 
 ## Prompt 7: Frappe-only Initialisierung
 
-"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **Update Vendor Apps**."
+"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`. Frappe und Bench sind bereits über `apps.json` eingebunden. Führe `./setup.sh` aus oder triggere das Workflow **Update Vendor Apps**."
 
-Codex aktualisiert `vendor-repos.txt`, klont nur Frappe und Bench und erzeugt eine neue `codex.json`.
+Codex aktualisiert `vendor-repos.txt`, nutzt die Angaben aus `apps.json` für Frappe und Bench und erzeugt eine neue `codex.json`.
 
 ---
 
 ## Prompt 8: ERPNext nachträglich hinzufügen
 
-"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **Update Vendor Apps**."
+"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **Update Vendor Apps**. Frappe und Bench bleiben über `apps.json` bestehen."
 
 Codex modifiziert `vendor-repos.txt`, klont ERPNext unter `vendor/` und aktualisiert `codex.json`.
 

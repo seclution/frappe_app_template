@@ -1,2 +1,2 @@
-https://github.com/frappe/frappe
-https://github.com/frappe/bench  # bench v5.x (optional)
+# Add additional framework repositories here (e.g. ERPNext).
+# Frappe and Bench are already included via `apps.json`.

@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://github.com/frappe/frappe",
+    "tag": "v15.71.0"
+  },
+  {
+    "url": "https://github.com/frappe/bench",
+    "tag": "v5.25.5"
+  }
+]

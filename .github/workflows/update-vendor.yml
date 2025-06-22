@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - apps.json
       - vendor-repos.txt
       - template-repos.txt
 
@@ -36,14 +37,14 @@ jobs:
         run: ./setup.sh
 
       - name: Update submodules
-        run: git submodule update --remote --init --recursive
+        run: git submodule update --init --recursive
 
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vendor .gitmodules codex.json vendor-repos.txt
-          git add template-repos.txt
+          git add vendor .gitmodules codex.json apps.json
+          git add vendor-repos.txt template-repos.txt
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else

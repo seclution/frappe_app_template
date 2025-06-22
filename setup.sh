@@ -6,7 +6,24 @@ echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 # Repos als Submodule klonen
 mkdir -p vendor
 
-# vendor repos aus vendor-repos.txt und template-repos.txt hinzufügen
+# vendor apps aus apps.json initialisieren
+if [ -f apps.json ]; then
+    jq -c '.[]' apps.json | while read -r entry; do
+        repo=$(echo "$entry" | jq -r '.url')
+        tag=$(echo "$entry" | jq -r '.tag')
+        name=$(basename "$repo" .git)
+        target="vendor/$name"
+        if [ -d "$target" ]; then
+            echo "ℹ️  Aktualisiere $target auf $tag"
+            git -C "$target" fetch --tags
+        else
+            git submodule add "$repo" "$target"
+        fi
+        git -C "$target" checkout "$tag"
+    done
+fi
+
+# weitere repos aus vendor-repos.txt und template-repos.txt hinzufügen
 for list in vendor-repos.txt template-repos.txt; do
     [ -f "$list" ] || continue
     while IFS= read -r line; do
