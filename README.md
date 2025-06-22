@@ -15,7 +15,10 @@ template with Codex. Detailed instructions for the Codex automation live in
 4. The *Update Vendor Apps* workflow clones the listed repositories and
    generates `codex.json`. You can still run `./setup.sh` locally if needed
    (make sure `jq` is installed).
-5. **Start Codex** with the prompt in `init_codex_prompt.md`.
+5. **Start your project** by editing `vendor-repos.txt` and
+   `template-repos.txt` to include all external repositories you need.
+   Run the *Update Vendor Apps* workflow or `./setup.sh` to clone them and
+   rebuild `codex.json`.
 6. The `CI` workflow runs the same setup and tests automatically.
 7. **Optional sample data** for external integrations lives in `sample_data/`.
 
@@ -33,7 +36,7 @@ This repository is a starting point for developing custom **Frappe** application
 4. To add ERPNext, append `https://github.com/frappe/erpnext` to
    `vendor-repos.txt` and trigger the workflow or run `./setup.sh` manually
    (requires `jq`).
-5. Review `init_codex_prompt.md` for the initial prompt used by Codex.
+5. Review `codex_prompt.md` for the default guidelines Codex follows.
 6. See [`prompts.md`](prompts.md) for instructions on adding more templates.
 7. Place any example payloads or external API docs under `sample_data/` for
    reference. The directory is indexed in `codex.json` when present.
