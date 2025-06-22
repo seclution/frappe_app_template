@@ -9,6 +9,9 @@ on:
       - vendor-repos.txt
       - template-repos.txt
 
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
