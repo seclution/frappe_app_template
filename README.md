@@ -28,7 +28,7 @@ template with Codex. Detailed instructions for the Codex automation live in
 8. **Start developing your app** inside this environment. The `CI` workflow
    runs the same setup and tests automatically.
 
-This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
+This repository is a starting point for developing custom **Frappe** applications. Additional frameworks like ERPNext can be included through template repositories. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
 
 ## Quickstart
 
@@ -37,11 +37,11 @@ This repository is a starting point for developing custom **Frappe** application
    workflow clones these repositories and regenerates `codex.json`. Run
    `./setup.sh` locally if you want to mirror the process (requires `jq`).
 3. Optional development templates can be listed in `template-repos.txt`.
-   They will be cloned alongside the framework repos and their instructions are
-   added to Codex automatically.
-4. To add ERPNext, append `https://github.com/frappe/erpnext` to
-   `vendor-repos.txt` and trigger the workflow or run `./setup.sh` manually
-   (requires `jq`).
+    They will be cloned alongside the framework repos and their instructions are
+    added to Codex automatically.
+4. Template repositories may ship their own `vendor-repos.txt`. The update
+    workflow merges those entries into the main list so all required vendor apps
+    are cloned automatically.
 5. Review `codex_prompt.md` for the default guidelines Codex follows.
 6. See [`prompts.md`](prompts.md) for instructions on adding more templates.
 7. Place any example payloads or external API docs under `sample_data/` for
@@ -51,14 +51,9 @@ This repository is a starting point for developing custom **Frappe** application
 
 Use `git submodule add <repo> vendor/<name>` to include additional Frappe apps.
 After adding a repository trigger the *Update Vendor Apps* workflow or run
-`./setup.sh` locally (requires `jq`). To add ERPNext manually:
-
-```bash
-git submodule add https://github.com/frappe/erpnext vendor/erpnext
-./setup.sh   # optional when working locally; requires jq
-```
-
-This clones ERPNext into `vendor/` and updates `codex.json`.
+`./setup.sh` locally (requires `jq`). When template repositories contain their
+own `vendor-repos.txt` the workflow automatically updates this list and clones
+the referenced apps.
 
 ## Vendor Repository Types
 
@@ -77,7 +72,7 @@ document when developing your app.
 
 ```
 apps/               # Your custom app lives here
-vendor/             # Frappe apps (ERPNext can be added manually)
+vendor/             # Frappe apps and additional frameworks
 instructions/       # Development guides
 codex.json          # Index of sources for Codex
 codex_prompt.md     # Main prompt for Codex

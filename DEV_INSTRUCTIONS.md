@@ -4,12 +4,12 @@ This repository uses Codex for automated code generation. These guidelines tell 
 
 ## Setup
 
-1. Add framework repositories such as Frappe or ERPNext to `vendor-repos.txt`.
+1. Add framework repositories such as Frappe to `vendor-repos.txt`.
 2. List additional template repositories in `template-repos.txt`. Their
-   instructions will be merged into `codex.json` automatically.
-3. The *Update Vendor Apps* workflow clones all repositories from both lists and
-   regenerates `codex.json`. Run `./setup.sh` locally for the same effect
-   (requires `jq`).
+    instructions and any `vendor-repos.txt` files are merged automatically.
+3. The *Update Vendor Apps* workflow clones all repositories from the merged
+    lists and regenerates `codex.json`. Run `./setup.sh` locally for the same
+    effect (requires `jq`).
 4. The CI workflow executes the same script on every push.
 5. Example payloads or external API docs belong in `sample_data/`.
 
