@@ -6,9 +6,9 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 1. Add framework repositories (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
 2. List template repositories that ship extra instructions in
    `template-repos.txt`.
-3. The *Update Vendor Apps* workflow clones all repositories and refreshes
-   `codex.json`. Run `../setup.sh` locally if you want to perform the same steps
-   manually.
+3. The *Update Vendor Apps* workflow clones all repositories, merges any
+   `vendor-repos.txt` from the templates and refreshes `codex.json`. Run
+   `../setup.sh` locally if you want to perform the same steps manually.
 4. The `CI` workflow executes the same script on every push.
 5. Store JSON example files and API docs in `../sample_data` when needed.
    The folder is indexed in `codex.json` automatically.
