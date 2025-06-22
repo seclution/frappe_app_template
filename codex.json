@@ -2,6 +2,9 @@
   "sources": [
     "apps/",
     "vendor/bench/",
+    "vendor/erpnext/",
+    "vendor/erpnext_app_template/",
+    "vendor/erpnext_app_template/instructions/",
     "vendor/frappe/",
     "instructions/",
     "sample_data/"

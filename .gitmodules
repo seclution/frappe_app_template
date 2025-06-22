@@ -4,3 +4,9 @@
 [submodule "vendor/bench"]
 	path = vendor/bench
 	url = https://github.com/frappe/bench
+[submodule "vendor/erpnext_app_template"]
+	path = vendor/erpnext_app_template
+	url = https://github.com/seclution/erpnext_app_template
+[submodule "vendor/erpnext"]
+	path = vendor/erpnext
+	url = https://github.com/frappe/erpnext
