@@ -1,0 +1,368 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/.github/workflows/update-vendor.yml b/.github/workflows/update-vendor.yml
+index b5f07dc91baacec7d8114cee7a21aa60f85a7d0d..41ddc34e786c43396847bbbb0d218f68030c0212 100644
+--- a/.github/workflows/update-vendor.yml
++++ b/.github/workflows/update-vendor.yml
+@@ -1,47 +1,49 @@
+ name: Update Vendor Apps
+ 
+ on:
+   schedule:
+     - cron: '0 3 * * 0'
+   workflow_dispatch:
+   push:
+     paths:
+       - vendor-repos.txt
++      - template-repos.txt
+ 
+ jobs:
+   update:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v3
+         with:
+           token: ${{ secrets.GITHUB_TOKEN }}
+           submodules: recursive
+ 
+       - name: Set up Python
+         uses: actions/setup-python@v4
+         with:
+           python-version: '3.x'
+ 
+       - name: Install dependencies
+         run: |
+           python -m pip install --upgrade pip
+           pip install -r requirements.txt
+ 
+       - name: Run setup script
+         run: ./setup.sh
+ 
+       - name: Update submodules
+         run: git submodule update --remote --init --recursive
+ 
+       - name: Commit changes
+         run: |
+           git config user.name "github-actions[bot]"
+           git config user.email "github-actions[bot]@users.noreply.github.com"
+           git add vendor .gitmodules codex.json vendor-repos.txt
++          git add template-repos.txt
+           if git diff --cached --quiet; then
+             echo "No changes to commit"
+           else
+             git commit -m "chore: update vendor apps"
+             git push
+           fi
+diff --git a/.gitmodules b/.gitmodules
+new file mode 100644
+index 0000000000000000000000000000000000000000..b625c041754b2a8d6b402cd1fcf7f8ea5f38c24f
+--- /dev/null
++++ b/.gitmodules
+@@ -0,0 +1,6 @@
++[submodule "vendor/frappe"]
++	path = vendor/frappe
++	url = https://github.com/frappe/frappe
++[submodule "vendor/bench"]
++	path = vendor/bench
++	url = https://github.com/frappe/bench
+diff --git a/DEV_INSTRUCTIONS.md b/DEV_INSTRUCTIONS.md
+index 5acd06a21f45edb044b58f3b6c9dbcbb150cdac5..b151a62ad307ad3ee6bdd1333b0a5c30cc41603f 100644
+--- a/DEV_INSTRUCTIONS.md
++++ b/DEV_INSTRUCTIONS.md
+@@ -1,27 +1,31 @@
+ # Developer Instructions for Codex
+ 
+ This repository uses Codex for automated code generation. These guidelines tell Codex how to work with the project.
+ 
+ ## Setup
+ 
+-1. Add any vendor repositories to `vendor-repos.txt`.
+-2. The *Update Vendor Apps* workflow clones vendor apps and regenerates
+-   `codex.json`. Run `./setup.sh` locally for the same effect.
+-3. The CI workflow executes the same script on every push.
+-4. Example payloads or external API docs belong in `sample_data/`.
++1. Add framework repositories such as Frappe or ERPNext to `vendor-repos.txt`.
++2. List additional template repositories in `template-repos.txt`. Their
++   instructions will be merged into `codex.json` automatically.
++3. The *Update Vendor Apps* workflow clones all repositories from both lists and
++   regenerates `codex.json`. Run `./setup.sh` locally for the same effect.
++4. The CI workflow executes the same script on every push.
++5. Example payloads or external API docs belong in `sample_data/`.
+ 
+ ## Repository Layout
+ 
+ - `apps/` – custom apps created in this project.
+ - `vendor/` – Frappe and other vendor apps managed as submodules.
+ - `instructions/` – framework notes for Frappe and ERPNext.
+ - `sample_data/` – reference payloads and docs.
++- `vendor-repos.txt` – list of framework repositories.
++- `template-repos.txt` – list of additional template repositories.
+ 
+ ## Testing
+ 
+ Install dependencies from `requirements.txt` and run `pytest -q`.
+ 
+ ```bash
+ pip install -r requirements.txt
+ pytest -q
+ ```
+diff --git a/README.md b/README.md
+index 4344b984f27f06a7e5631e6bd7d7d02004636f6a..2ffa68631deb3609b04792f6188b09c8429ad975 100644
+--- a/README.md
++++ b/README.md
+@@ -1,77 +1,97 @@
+ 
+ # Frappe App Template
+ 
+ **Important:** This project keeps its documentation in two separate files. This
+ `README.md` is written for human developers who want to build on top of the
+ template with Codex. Detailed instructions for the Codex automation live in
+ `DEV_INSTRUCTIONS.md`.
+ 
+ ## TL;DR – Using Codex
+ 
+ 1. **Clone this repo** or fork it for your own project.
+-2. **Add required vendor apps** to `vendor-repos.txt`.
+-3. The *Update Vendor Apps* workflow clones the listed repositories and
++2. **Add required framework repos** (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
++3. **Add optional template repos** to `template-repos.txt` when you want to
++   include additional instructions.
++4. The *Update Vendor Apps* workflow clones the listed repositories and
+    generates `codex.json`. You can still run `./setup.sh` locally if needed.
+-4. **Start Codex** with the prompt in `init_codex_prompt.md`.
+-5. The `CI` workflow runs the same setup and tests automatically.
+-6. **Optional sample data** for external integrations lives in `sample_data/`.
++5. **Start Codex** with the prompt in `init_codex_prompt.md`.
++6. The `CI` workflow runs the same setup and tests automatically.
++7. **Optional sample data** for external integrations lives in `sample_data/`.
+ 
+ This repository is a starting point for developing custom **Frappe** applications. ERPNext can be added manually if required. It bootstraps a local development environment, clones optional vendor apps and prepares a basic `codex.json` index for use with Codex. Sample payloads or interface documentation can be stored in the `sample_data/` folder.
+ 
+ ## Quickstart
+ 
+ 1. Clone this repository.
+ 2. By default `vendor-repos.txt` contains only Frappe. The *Update Vendor Apps*
+    workflow clones these repositories and regenerates `codex.json`. Run
+    `./setup.sh` locally if you want to mirror the process.
+-3. To add ERPNext, append `https://github.com/frappe/erpnext` to
++3. Optional development templates can be listed in `template-repos.txt`.
++   They will be cloned alongside the framework repos and their instructions are
++   added to Codex automatically.
++4. To add ERPNext, append `https://github.com/frappe/erpnext` to
+    `vendor-repos.txt` and trigger the workflow or run `./setup.sh` manually.
+-4. Review `init_codex_prompt.md` for the initial prompt used by Codex.
+-5. See [`prompts.md`](prompts.md) for instructions on adding more templates.
+-6. Place any example payloads or external API docs under `sample_data/` for
+-   reference.
++5. Review `init_codex_prompt.md` for the initial prompt used by Codex.
++6. See [`prompts.md`](prompts.md) for instructions on adding more templates.
++7. Place any example payloads or external API docs under `sample_data/` for
++   reference. The directory is indexed in `codex.json` when present.
+ 
+ ## Adding Vendor Apps
+ 
+ Use `git submodule add <repo> vendor/<name>` to include additional Frappe apps.
+ After adding a repository trigger the *Update Vendor Apps* workflow or run
+ `./setup.sh` locally. To add ERPNext manually:
+ 
+ ```bash
+ git submodule add https://github.com/frappe/erpnext vendor/erpnext
+ ./setup.sh   # optional when working locally
+ ```
+ 
+ This clones ERPNext into `vendor/` and updates `codex.json`.
+ 
++## Vendor Repository Types
++
++Two lists keep track of external sources:
++
++1. `vendor-repos.txt` – reference repositories for the framework itself such as
++   Frappe, ERPNext or HRMS.
++2. `template-repos.txt` – additional templates that include their own
++   development instructions.
++
++The update workflow clones both lists and adds any `instructions/` directories
++from the templates to `codex.json`. Follow those instructions together with this
++document when developing your app.
++
+ ## Repository Layout
+ 
+ ```
+ apps/               # Your custom app lives here
+ vendor/             # Frappe apps (ERPNext can be added manually)
+ instructions/       # Development guides
+ codex.json          # Index of sources for Codex
+ codex_prompt.md     # Main prompt for Codex
+ setup.sh            # Automated initialization script
++vendor-repos.txt    # Framework repositories like Frappe
++template-repos.txt  # Additional templates with instructions
+ sample_data/        # Example payloads and external API documentation
+ ```
+ 
+ ## Running Tests
+ 
+ Install the dependencies listed in `requirements.txt` and then execute the test suite with `pytest -q`:
+ 
+ ```bash
+ pip install -r requirements.txt
+ pytest -q
+ ```
+ 
+ The included sample test file is located in `tests/basic_integration_test.py`.
+ 
+ ## Further References
+ 
+ More information is available in the `instructions/` folder:
+ 
+ - [`instructions/frappe.md`](instructions/frappe.md) – notes on creating new
+   Frappe apps and useful links to the documentation.
+ - [`instructions/erpnext.md`](instructions/erpnext.md) – guidelines for working
+   with ERPNext modules and doctypes.
+diff --git a/codex.json b/codex.json
+index 8d0681f25bcc9749374073fbef2a3b6740324a8c..3b317e037fd62d1388b42d97d6a5252f7bc17f40 100644
+--- a/codex.json
++++ b/codex.json
+@@ -1,9 +1,9 @@
+ {
+   "sources": [
+     "apps/",
+-    "vendor/frappe/",
+     "vendor/bench/",
++    "vendor/frappe/",
+     "instructions/",
+     "sample_data/"
+   ]
+ }
+diff --git a/instructions/README.md b/instructions/README.md
+index 434802bdede882319214eb94352b30abd9b1cde0..f5b14829916e57bd3cbe0e8733a920aee8d137e1 100644
+--- a/instructions/README.md
++++ b/instructions/README.md
+@@ -1,15 +1,22 @@
+ # Development Instructions
+ 
+ This directory contains additional notes for Frappe and ERPNext. For the
+ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
+ 
+-1. List additional vendor repositories in `vendor-repos.txt`.
+-2. The *Update Vendor Apps* workflow clones them and refreshes `codex.json`. Run
+-   `../setup.sh` locally if you want to perform the same steps manually.
+-3. The `CI` workflow executes the same script on every push.
+-4. Store JSON example files and API docs in `../sample_data` when needed.
++1. Add framework repositories (Frappe/ERPNext/HRMS) to `vendor-repos.txt`.
++2. List template repositories that ship extra instructions in
++   `template-repos.txt`.
++3. The *Update Vendor Apps* workflow clones all repositories and refreshes
++   `codex.json`. Run `../setup.sh` locally if you want to perform the same steps
++   manually.
++4. The `CI` workflow executes the same script on every push.
++5. Store JSON example files and API docs in `../sample_data` when needed.
++   The folder is indexed in `codex.json` automatically.
++
++When template repositories are included, consult their `DEV_INSTRUCTIONS.md` or
++`instructions/` folders in addition to this documentation.
+ 
+ Refer to the following guides for framework-specific tips:
+ 
+ - [Frappe Notes](./frappe.md)
+ - [ERPNext Notes](./erpnext.md)
+diff --git a/pytest.ini b/pytest.ini
+new file mode 100644
+index 0000000000000000000000000000000000000000..5ee6477165727539aa0701c22b47da2ceaedeff5
+--- /dev/null
++++ b/pytest.ini
+@@ -0,0 +1,2 @@
++[pytest]
++testpaths = tests
+diff --git a/setup.sh b/setup.sh
+index f43a1f8550a0ba294a8216ce9e253ae860c21e0e..c0c75b0f3174aecb0d197361efe7f598bf5430f7 100755
+--- a/setup.sh
++++ b/setup.sh
+@@ -1,52 +1,60 @@
+ #!/bin/bash
+ set -e
+ 
+ echo "🔧 Initialisiere App-Entwicklungsumgebung..."
+ 
+ # Repos als Submodule klonen
+ mkdir -p vendor
+ 
+-# vendor repos aus vendor-repos.txt hinzufügen
+-if [ -f vendor-repos.txt ]; then
++# vendor repos aus vendor-repos.txt und template-repos.txt hinzufügen
++for list in vendor-repos.txt template-repos.txt; do
++    [ -f "$list" ] || continue
+     while IFS= read -r line; do
+         repo=$(echo "$line" | sed 's/#.*//' | xargs)
+         [ -z "$repo" ] && continue
+         name=$(basename "$repo" .git)
+         target="vendor/$name"
+         if [ -d "$target" ]; then
+             echo "ℹ️  $target bereits vorhanden, überspringe."
+         else
+             git submodule add "$repo" "$target"
+         fi
+         git submodule update --init --recursive "$target"
+-    done < vendor-repos.txt
+-fi
++    done < "$list"
++done
+ 
+ # ensure bench command is available
+ if ! command -v bench >/dev/null 2>&1; then
+     echo "ℹ️ 'bench' command not found. Installing frappe-bench..."
+     pip install frappe-bench
+ fi
+ 
+ # vorhandene Submodule initialisieren
+ git submodule update --init --recursive
+ 
+ # codex.json erzeugen
+ sources=("apps/")
+ for dir in vendor/*; do
+     [ -d "$dir" ] || continue
+     sources+=("$dir/")
++    # merge additional instructions from template repos
++    if [ -d "$dir/instructions" ]; then
++        sources+=("$dir/instructions/")
++    fi
+ done
+ sources+=("instructions/")
++if [ -d sample_data ]; then
++    sources+=("sample_data/")
++fi
+ 
+ printf '%s\n' "${sources[@]}" \
+     | jq -R . \
+     | jq -s '{sources: .}' > codex.json
+ 
+ guide="instructions/frappe.md"
+ if [ -f instructions/frappe_dev.md ]; then
+     guide="instructions/frappe_dev.md"
+ fi
+ 
+ echo "✅ Setup abgeschlossen."
+ echo "➡️  See $guide for next steps."
+diff --git a/template-repos.txt b/template-repos.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8c79f44039632cdc56064f6f716cb387dd81b91d
+--- /dev/null
++++ b/template-repos.txt
+@@ -0,0 +1 @@
++# Template repositories providing additional instructions
+diff --git a/vendor/bench b/vendor/bench
+new file mode 160000
+index 0000000000000000000000000000000000000000..064573beadb36e06e7e3be4c4e13a385d66a5ff9
+--- /dev/null
++++ b/vendor/bench
+@@ -0,0 +1 @@
++Subproject commit 064573beadb36e06e7e3be4c4e13a385d66a5ff9
+diff --git a/vendor/frappe b/vendor/frappe
+new file mode 160000
+index 0000000000000000000000000000000000000000..a677bb19ac41c5bff0012372d75253b927a94312
+--- /dev/null
++++ b/vendor/frappe
+@@ -0,0 +1 @@
++Subproject commit a677bb19ac41c5bff0012372d75253b927a94312
+ 
+EOF
+)

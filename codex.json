@@ -1,8 +1,8 @@
 {
   "sources": [
     "apps/",
-    "vendor/frappe/",
     "vendor/bench/",
+    "vendor/frappe/",
     "instructions/",
     "sample_data/"
   ]

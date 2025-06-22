@@ -1,0 +1,6 @@
+[submodule "vendor/frappe"]
+	path = vendor/frappe
+	url = https://github.com/frappe/frappe
+[submodule "vendor/bench"]
+	path = vendor/bench
+	url = https://github.com/frappe/bench

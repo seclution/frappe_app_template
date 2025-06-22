@@ -6,8 +6,9 @@ echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 # Repos als Submodule klonen
 mkdir -p vendor
 
-# vendor repos aus vendor-repos.txt hinzufügen
-if [ -f vendor-repos.txt ]; then
+# vendor repos aus vendor-repos.txt und template-repos.txt hinzufügen
+for list in vendor-repos.txt template-repos.txt; do
+    [ -f "$list" ] || continue
     while IFS= read -r line; do
         repo=$(echo "$line" | sed 's/#.*//' | xargs)
         [ -z "$repo" ] && continue
@@ -19,8 +20,8 @@ if [ -f vendor-repos.txt ]; then
             git submodule add "$repo" "$target"
         fi
         git submodule update --init --recursive "$target"
-    done < vendor-repos.txt
-fi
+    done < "$list"
+done
 
 # ensure bench command is available
 if ! command -v bench >/dev/null 2>&1; then
@@ -36,8 +37,15 @@ sources=("apps/")
 for dir in vendor/*; do
     [ -d "$dir" ] || continue
     sources+=("$dir/")
+    # merge additional instructions from template repos
+    if [ -d "$dir/instructions" ]; then
+        sources+=("$dir/instructions/")
+    fi
 done
 sources+=("instructions/")
+if [ -d sample_data ]; then
+    sources+=("sample_data/")
+fi
 
 printf '%s\n' "${sources[@]}" \
     | jq -R . \
