@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# ensure jq command is available
+if ! command -v jq >/dev/null 2>&1; then
+    echo "❌ 'jq' command not found. Please install jq and re-run this script." >&2
+    exit 1
+fi
+
 echo "🔧 Initialisiere App-Entwicklungsumgebung..."
 
 # vorhandene Submodule initialisieren
