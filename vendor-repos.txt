@@ -1,2 +1,2 @@
-https://github.com/frappe/frappe
 https://github.com/frappe/bench  # bench v5.x (optional)
+https://github.com/frappe/frappe
