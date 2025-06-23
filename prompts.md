@@ -14,8 +14,8 @@ Repos:
 - https://github.com/xyz/hrms
 ```
 
-Codex führt `setup.sh` aus, um die Verzeichnisse und `codex.json` zu erzeugen.
-In GitHub steht dafür das Workflow **Update Vendor Apps** bereit.
+Codex führt `setup.sh` aus, um die Verzeichnisse und `apps.json` zu erzeugen.
+In GitHub steht dafür das Workflow **clone-vendors** bereit.
 
 ---
 
@@ -71,23 +71,23 @@ Codex führt `git submodule update --remote apps/frappe` aus und commitet die Ä
 
 ## Prompt 7: Frappe-only Initialisierung
 
-"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `vendor-repos.txt`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **Update Vendor Apps**."
+"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `custom_vendors.json`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **clone-vendors**."
 
-Codex aktualisiert `vendor-repos.txt`, klont nur Frappe und Bench und erzeugt eine neue `codex.json`.
+Codex aktualisiert `custom_vendors.json`, klont nur Frappe und Bench und erzeugt eine neue `apps.json`.
 
 ---
 
 ## Prompt 8: ERPNext nachträglich hinzufügen
 
-"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `vendor-repos.txt` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **Update Vendor Apps**."
+"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `custom_vendors.json` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **clone-vendors**."
 
-Codex modifiziert `vendor-repos.txt`, klont ERPNext unter `vendor/` und aktualisiert `codex.json`.
+Codex modifiziert `custom_vendors.json`, klont ERPNext unter `vendor/` und aktualisiert `apps.json`.
 
 ---
 
 ## Prompt 9: Weitere App-Templates integrieren
 
-"Erweitere das Projekt mit diesen App-Templates. Trage sie in `vendor-repos.txt` ein und starte danach `./setup.sh` neu oder triggere das Workflow **Update Vendor Apps**." 
+"Erweitere das Projekt mit diesen App-Templates. Trage sie in `custom_vendors.json` ein und starte danach `./setup.sh` neu oder triggere das Workflow **clone-vendors**."
 
 ```
 Repos:
@@ -95,4 +95,4 @@ Repos:
 - https://github.com/example/app-template-d
 ```
 
-Codex ergänzt `vendor-repos.txt`, führt `setup.sh` erneut aus und holt die neuen Repositories nach `vendor/`.
+Codex ergänzt `custom_vendors.json`, führt `setup.sh` erneut aus und holt die neuen Repositories nach `vendor/`.
