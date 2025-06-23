@@ -17,6 +17,10 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     if [ ! -f "$PARENT_DIR/requirements.txt" ]; then
         cp "$SCRIPT_DIR/requirements.txt" "$PARENT_DIR/requirements.txt"
     fi
+    if [ -f "$SCRIPT_DIR/scripts/sync_templates.sh" ]; then
+        cp "$SCRIPT_DIR/scripts/sync_templates.sh" "$PARENT_DIR/sync_templates.sh"
+        chmod +x "$PARENT_DIR/sync_templates.sh"
+    fi
     CONFIG_TARGET="$PARENT_DIR"
 else
     CONFIG_TARGET="$SCRIPT_DIR"

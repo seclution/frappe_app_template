@@ -19,6 +19,21 @@ generate_codex_json() {
             sources+=("$dir/instructions/")
         fi
     done
+
+    if [ -f templates.txt ]; then
+        while IFS= read -r repo; do
+            repo="${repo%%#*}"
+            repo="${repo//[[:space:]]/}"
+            [ -z "$repo" ] && continue
+            name="$(basename "$repo" .git)"
+            dir="$name"
+            [ -d "$dir" ] || continue
+            sources+=("$dir/")
+            if [ -d "$dir/instructions" ]; then
+                sources+=("$dir/instructions/")
+            fi
+        done < templates.txt
+    fi
     sources+=("instructions/")
     if [ -d sample_data ]; then
         sources+=("sample_data/")
