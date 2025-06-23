@@ -8,4 +8,4 @@
 * Eigene REST-API-Endpunkte lassen sich über Whitelist-Methoden bereitstellen.
 * Für tiefergehende Anpassungen siehe die ERPNext-Dokumentation.
 
-Binde das ERPNext-Template als Submodul ein. Das Update-Vendor-Apps-Workflow sammelt dessen `vendor-repos.txt` ein und klont ERPNext automatisch.
+Binde das ERPNext-Template als Submodul ein. Das *clone-vendors* Workflow übernimmt dessen `custom_vendors.json` und klont ERPNext automatisch.
