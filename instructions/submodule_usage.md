@@ -17,7 +17,7 @@ Copy the configuration files from the template so you can adjust them:
 ```bash
 cp template/apps.json .
 cp template/vendor-repos.txt .
-cp template/template-repos.txt . # optional
+cp template/templates.txt . # optional
 ```
 
 Edit these files to add your own vendor apps or additional templates.

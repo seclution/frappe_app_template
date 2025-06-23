@@ -54,7 +54,7 @@ mkdir -p vendor
 git submodule update --init --recursive
 
 # Template-Repositories zuerst klonen
-if [ -f template-repos.txt ]; then
+if [ -f templates.txt ]; then
     while IFS= read -r line; do
         repo=$(echo "$line" | sed 's/#.*//' | xargs)
         [ -z "$repo" ] && continue
@@ -64,7 +64,7 @@ if [ -f template-repos.txt ]; then
             git submodule add "$repo" "$target"
         fi
         git submodule update --init --recursive "$target"
-    done < template-repos.txt
+    done < templates.txt
 fi
 
 # vendor-repos aus Subtemplates zusammenführen (rekursiv)
