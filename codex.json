@@ -1,4 +1,5 @@
 {
+  "_comment": "Directories indexed by Codex. Adjust paths as needed.",
   "sources": [
     "apps/",
     "vendor/bench/",

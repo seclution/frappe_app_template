@@ -47,4 +47,19 @@ if [ ! -f "$CONFIG_TARGET/templates.txt" ]; then
 TXT
 fi
 
+if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
+    cat > "$CONFIG_TARGET/codex.json" <<'JSON'
+{
+  "_comment": "Directories indexed by Codex. Adjust paths as needed.",
+  "sources": [
+    "apps/",
+    "vendor/bench/",
+    "vendor/frappe/",
+    "instructions/",
+    "sample_data/"
+  ]
+}
+JSON
+fi
+
 echo "✅ Setup complete."
