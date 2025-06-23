@@ -29,6 +29,8 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
    - `custom_vendors.json` can reference vendor apps directly.
    - Adjust Frappe or Bench versions in `apps.json` if required.
    - Place optional payloads under `sample_data/`.
+   When you include templates, look at their `DEV_INSTRUCTIONS.md` files and
+   combine those notes with this repository's instructions.
 5. **Commit everything** and push the repository to GitHub.
    ```bash
    git add .
@@ -52,6 +54,8 @@ After the **publish** workflow you can clone the `published` branch to install t
 ```
 apps/               # Custom apps
 vendor/             # Vendor apps and templates
+template_frappe/    # optional base template for Frappe
+template_erpnext/   # optional ERPNext template
 instructions/       # Development notes
 codex.json          # Index for Codex
 custom_vendors.json # Optional vendor definitions

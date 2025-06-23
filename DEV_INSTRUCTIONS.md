@@ -15,6 +15,9 @@ This repository uses Codex for automated code generation. These guidelines tell 
 4. The CI workflow only installs dependencies and runs tests. It no longer
    runs `./setup.sh` automatically.
 5. Example payloads or external API docs belong in `sample_data/`.
+6. If you include template repositories (such as `template_frappe` or
+   `template_erpnext`), also consult their respective `DEV_INSTRUCTIONS.md`
+   files. Combine those guidelines with the instructions here.
 
 ## Repository Layout
 
