@@ -4,7 +4,13 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
 
 ## Getting Started
 
-1. **Create a new repository** for your app and initialise it locally.
+1. **Create a new repository** for your app and initialise it locally:
+   ```bash
+   git init <appname>
+   cd <appname>
+   # optional: create and push a remote repository
+   # gh repo create <user>/<appname> --private --source=. --remote=origin --push
+   ```
 2. **Add this template as a submodule**:
    ```bash
    git submodule add https://github.com/seclution/frappe_app_template template
@@ -24,6 +30,11 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
    - Adjust Frappe or Bench versions in `apps.json` if required.
    - Place optional payloads under `sample_data/`.
 5. **Commit everything** and push the repository to GitHub.
+   ```bash
+   git add .
+   git commit -m "Initial setup"
+   git push -u origin main
+   ```
 
 ## Workflows
 
@@ -49,4 +60,4 @@ sample_data/        # Example payloads
 apps.json           # Generated list of all vendor apps
 ```
 
-For framework specific hints see the files in `instructions/`. Execute the tests with `pytest -q` whenever you update the environment.
+For framework specific hints see the files in `instructions/`.
