@@ -25,6 +25,28 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     done
 fi
 
+# Create example configuration files when missing
+CONFIG_TARGET="$SCRIPT_DIR"
+if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
+    CONFIG_TARGET="$PARENT_DIR"
+fi
+if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
+    cat > "$CONFIG_TARGET/custom_vendors.json" <<'EOF'
+{
+  "example_app": {
+    "repo": "https://github.com/example/example_app",
+    "tag": "v1.0.0"
+  }
+}
+EOF
+fi
+if [ ! -f "$CONFIG_TARGET/templates.txt" ]; then
+    cat > "$CONFIG_TARGET/templates.txt" <<'EOF'
+# Add template repository URLs here
+# https://github.com/example/template-a
+EOF
+fi
+
 # Repos als Submodule klonen
 mkdir -p vendor
 
