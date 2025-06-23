@@ -32,7 +32,6 @@ jobs:
       - name: Sync templates
         run: ./scripts/sync_templates.sh
 
-
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"

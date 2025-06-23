@@ -26,6 +26,7 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
    - `templates.txt`
    - `codex.json`
    - `scripts/sync_templates.sh`
+
 4. **Edit the configuration** files if needed:
    - `templates.txt` lists additional template repositories.
    - `custom_vendors.json` can reference vendor apps directly.
@@ -36,6 +37,7 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
 5. **Fetch template repositories** if you added any URLs to `templates.txt`:
    ```bash
    ./scripts/sync_templates.sh
+
    ```
 6. **Commit everything** and push the repository to GitHub.
    ```bash

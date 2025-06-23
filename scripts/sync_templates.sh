@@ -4,8 +4,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
-TEMPLATE_FILE="$ROOT_DIR/templates.txt"
-
 [ -f "$TEMPLATE_FILE" ] || { echo "templates.txt not found"; exit 1; }
 
 while IFS= read -r repo; do
