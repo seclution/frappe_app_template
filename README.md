@@ -15,12 +15,13 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
    ./setup.sh
    cd ..
    ```
-   The script copies GitHub workflows to your repository root and creates two configuration files with commented examples:
+   The script copies the available GitHub workflows to your repository root and creates two configuration files with commented examples:
    - `custom_vendors.json`
    - `templates.txt`
 4. **Edit the configuration** files if needed:
    - `templates.txt` lists additional template repositories.
    - `custom_vendors.json` can reference vendor apps directly.
+   - Adjust Frappe or Bench versions in `apps.json` if required.
    - Place optional payloads under `sample_data/`.
 5. **Commit everything** and push the repository to GitHub.
 
