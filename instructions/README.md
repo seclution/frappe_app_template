@@ -10,7 +10,8 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 3. The *Update Vendor Apps* workflow clones all repositories, merges any
    `vendor-repos.txt` from the templates and refreshes `codex.json`. Run
    `../setup.sh` locally if you want to perform the same steps manually.
-4. The `CI` workflow executes the same script on every push.
+4. The `CI` workflow only installs dependencies and runs tests. It no longer
+   executes `../setup.sh` automatically.
 5. Store JSON example files and API docs in `../sample_data` when needed.
    The folder is indexed in `codex.json` automatically.
 
