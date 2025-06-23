@@ -45,7 +45,7 @@ The following GitHub workflows orchestrate the environment after pushing:
 - **create-app-repo** – scaffolds a new app without using Bench. It records the framework versions and requirements in a temporary README and deletes itself after completion so the workflow can only run once.
 - **publish** – prepares a clean `published` branch by removing development artifacts (`.git*`, `template*`, `vendor/`, `apps.json`, `DEV_INSTRUCTIONS.md`, `custom_vendors.json`). Use this branch to distribute the final app.
 
-After the **publish** workflow you can clone the `published` branch to install and test the app in a standard Frappe environment.
+After the **publish** workflow you can clone the `published` branch to install the app in a standard Frappe environment.
 
 ## Directory Layout
 
