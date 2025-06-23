@@ -1,7 +1,0 @@
-{
-  "doctype": "DocType",
-  "name": "My Custom App Globals",
-  "module": "My Custom App",
-  "custom": 1,
-  "fields": []
-}
