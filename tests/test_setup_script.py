@@ -54,6 +54,10 @@ def test_setup_copies_workflows_to_parent(tmp_path):
 
     assert (main_repo / ".github" / "workflows" / "ci.yml").exists()
     assert (main_repo / ".github" / "workflows" / "update-vendor.yml").exists()
+    assert (main_repo / ".github" / "workflows" / "clone-templates.yml").exists()
+    assert (main_repo / ".github" / "workflows" / "clone-vendors.yml").exists()
+    assert (main_repo / ".github" / "workflows" / "create-app-repo.yml").exists()
+    assert (main_repo / ".github" / "workflows" / "publish.yml").exists()
 
 
 def test_setup_creates_config_files(tmp_path):
