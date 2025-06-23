@@ -16,7 +16,7 @@ Copy the configuration files from the template so you can adjust them:
 
 ```bash
 cp template/apps.json .
-cp template/vendor-repos.txt .
+cp template/custom_vendors.json .
 cp template/templates.txt . # optional
 ```
 
@@ -32,7 +32,7 @@ cd template
 cd ..
 ```
 
-Commit all generated files and push the repository to GitHub. Trigger the *Update Vendor Apps* workflow if you want to rebuild `codex.json` automatically.
+Commit all generated files and push the repository to GitHub. Trigger the *clone-vendors* workflow if you want to rebuild `apps.json` automatically.
 
 ## 3. Updating the Template
 
