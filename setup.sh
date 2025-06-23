@@ -21,6 +21,9 @@ fi
 # Ensure sample_data directory exists
 mkdir -p "$CONFIG_TARGET/sample_data"
 
+# Ensure vendor directory exists for workflows
+mkdir -p "$CONFIG_TARGET/vendor"
+
 # Create example configuration files if missing
 if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
     cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
