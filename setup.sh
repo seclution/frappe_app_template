@@ -1,136 +1,43 @@
 #!/bin/bash
 set -e
 
-# Load shared helper functions
+# Determine the script and parent directories
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-if [ -f "$SCRIPT_DIR/../scripts/common_setup.sh" ]; then
-    source "$SCRIPT_DIR/../scripts/common_setup.sh"
-else
-    source "$SCRIPT_DIR/scripts/common_setup.sh"
-fi
-
-echo "🔧 Initialisiere App-Entwicklungsumgebung..."
-
-# Copy GitHub workflow files to parent repository when executed inside a
-# submodule so that CI runs from the main repo
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# When used as a submodule, copy workflow files to the parent repository
 if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     for wf in "$SCRIPT_DIR"/.github/workflows/*.yml; do
         [ -f "$wf" ] || continue
         target="$PARENT_DIR/.github/workflows/$(basename "$wf")"
-        if [ ! -f "$target" ]; then
-            mkdir -p "$PARENT_DIR/.github/workflows"
-            cp "$wf" "$target"
-        fi
+        mkdir -p "$(dirname "$target")"
+        cp "$wf" "$target"
     done
+    CONFIG_TARGET="$PARENT_DIR"
+else
+    CONFIG_TARGET="$SCRIPT_DIR"
 fi
 
-# Create example configuration files when missing
-CONFIG_TARGET="$SCRIPT_DIR"
-if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
-    CONFIG_TARGET="$PARENT_DIR"
-fi
+# Ensure sample_data directory exists
+mkdir -p "$CONFIG_TARGET/sample_data"
+
+# Create example configuration files if missing
 if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
-    cat > "$CONFIG_TARGET/custom_vendors.json" <<'EOF'
+    cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
 {
   "example_app": {
     "repo": "https://github.com/example/example_app",
     "tag": "v1.0.0"
   }
 }
-EOF
+JSON
 fi
+
 if [ ! -f "$CONFIG_TARGET/templates.txt" ]; then
-    cat > "$CONFIG_TARGET/templates.txt" <<'EOF'
+    cat > "$CONFIG_TARGET/templates.txt" <<'TXT'
 # Add template repository URLs here
 # https://github.com/example/template-a
-EOF
+TXT
 fi
 
-# Repos als Submodule klonen
-mkdir -p vendor
-
-# vorhandene Submodule initialisieren
-git submodule update --init --recursive
-
-# Template-Repositories zuerst klonen
-if [ -f templates.txt ]; then
-    while IFS= read -r line; do
-        repo=$(echo "$line" | sed 's/#.*//' | xargs)
-        [ -z "$repo" ] && continue
-        name=$(basename "$repo" .git)
-        target="vendor/$name"
-        if [ ! -d "$target" ]; then
-            git submodule add "$repo" "$target"
-        fi
-        git submodule update --init --recursive "$target"
-    done < templates.txt
-fi
-
-# vendor-repos aus Subtemplates zusammenführen (rekursiv)
-touch vendor-repos.txt
-find vendor -type f -name vendor-repos.txt | while read file; do
-    while IFS= read -r repo; do
-        repo=$(echo "$repo" | sed 's/#.*//' | xargs)
-        [ -z "$repo" ] && continue
-        grep -qxF "$repo" vendor-repos.txt || echo "$repo" >> vendor-repos.txt
-    done < "$file"
-done
-sort -u vendor-repos.txt -o vendor-repos.txt
-
-# vendor apps aus apps.json verwenden
-if [ -f apps.json ]; then
-    jq -r 'to_entries[] | "\(.key) \(.value.repo) \(.value.tag)"' apps.json | while read name repo tag; do
-        target="vendor/$name"
-        if [ ! -d "$target" ]; then
-            git submodule add "$repo" "$target"
-        fi
-        git -C "$target" fetch --tags
-        git -C "$target" checkout "$tag"
-        git add "$target"
-    done
-fi
-
-# additional apps.json files from templates
-find vendor -maxdepth 2 -name apps.json | while read file; do
-    jq -r 'to_entries[] | "\(.key) \(.value.repo) \(.value.tag)"' "$file" | while read name repo tag; do
-        target="vendor/$name"
-        if [ ! -d "$target" ]; then
-            git submodule add "$repo" "$target"
-        fi
-        git -C "$target" fetch --tags
-        git -C "$target" checkout "$tag"
-        git add "$target"
-    done
-done
-
-# eigentliche vendor-Repos klonen
-if [ -f vendor-repos.txt ]; then
-    while IFS= read -r line; do
-        repo=$(echo "$line" | sed 's/#.*//' | xargs)
-        [ -z "$repo" ] && continue
-        name=$(basename "$repo" .git)
-        target="vendor/$name"
-        if [ ! -d "$target" ]; then
-            git submodule add "$repo" "$target"
-        fi
-        git submodule update --init --recursive "$target"
-    done < vendor-repos.txt
-fi
-
-# ensure bench command is available
-ensure_bench
-
-# vorhandene Submodule initialisieren
-git submodule update --init --recursive
-
-# codex.json erzeugen
-generate_codex_json
-
-guide="instructions/frappe.md"
-if [ -f instructions/frappe_dev.md ]; then
-    guide="instructions/frappe_dev.md"
-fi
-
-echo "✅ Setup abgeschlossen."
-echo "➡️  See $guide for next steps."
+echo "✅ Setup complete."
