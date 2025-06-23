@@ -5,7 +5,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# When used as a submodule, copy workflow files to the parent repository
+# When used as a submodule, copy workflow files (and requirements.txt) to the
+# parent repository
 if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     for wf in "$SCRIPT_DIR"/.github/workflows/*.yml; do
         [ -f "$wf" ] || continue
@@ -13,6 +14,9 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
         mkdir -p "$(dirname "$target")"
         cp "$wf" "$target"
     done
+    if [ ! -f "$PARENT_DIR/requirements.txt" ]; then
+        cp "$SCRIPT_DIR/requirements.txt" "$PARENT_DIR/requirements.txt"
+    fi
     CONFIG_TARGET="$PARENT_DIR"
 else
     CONFIG_TARGET="$SCRIPT_DIR"
