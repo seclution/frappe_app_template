@@ -6,7 +6,7 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 1. Default versions for Frappe and Bench reside in `../apps.json`. Add further
    framework repositories (ERPNext/HRMS) to `vendor-repos.txt` when needed.
 2. List template repositories that ship extra instructions in
-   `template-repos.txt`.
+   `templates.txt`.
 3. The *Update Vendor Apps* workflow clones all repositories, merges any
    `vendor-repos.txt` from the templates and refreshes `codex.json`. Run
    `../setup.sh` locally if you want to perform the same steps manually.

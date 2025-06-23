@@ -28,4 +28,4 @@ sites/*/public/
 # Keep configuration files under version control
 !apps.json
 !vendor-repos.txt
-!template-repos.txt
+!templates.txt
