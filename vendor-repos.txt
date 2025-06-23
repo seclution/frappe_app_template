@@ -1,2 +1,0 @@
-# Additional vendor repositories can be listed here.
-# Frappe and Bench versions are defined in apps.json.
