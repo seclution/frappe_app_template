@@ -52,6 +52,7 @@ The following GitHub workflows orchestrate the environment after pushing:
 
 - **clone-templates** – clones or updates all template repositories defined in `templates.txt`.
 - **clone-vendors** – pulls vendor apps from each template `apps.json` and from `custom_vendors.json`. It generates a consolidated `apps.json` in your repo root.
+- **update-vendor** – refreshes vendor apps on a schedule or when configuration files change.
 - **create-app-repo** – scaffolds a new app without using Bench. It records the framework versions and requirements in a temporary README and deletes itself after completion so the workflow can only run once.
 - **publish** – prepares a clean `published` branch by removing development artifacts (`.git*`, `template*`, `vendor/`, `apps.json`, `DEV_INSTRUCTIONS.md`, `custom_vendors.json`). Use this branch to distribute the final app.
 
