@@ -13,7 +13,7 @@ This repository acts as the base for building custom Frappe apps with **Codex**.
    ```
 2. **Add this template as a submodule**:
    ```bash
-   git submodule add https://github.com/seclution/frappe_app_template template
+   git submodule add https://github.com/seclution/frappe_app_template frappe_app_template
    ```
 3. **Run the setup script** inside the submodule:
    ```bash
