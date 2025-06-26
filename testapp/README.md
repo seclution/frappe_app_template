@@ -17,7 +17,7 @@ bench install-app testapp
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
 
 ```bash
-cd apps/testapp
+cd app
 pre-commit install
 ```
 
