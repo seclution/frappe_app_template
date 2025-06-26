@@ -21,6 +21,9 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
         cp -r "$SCRIPT_DIR/scripts" "$PARENT_DIR/"
         chmod +x "$PARENT_DIR"/scripts/*.sh
     fi
+    if [ "$PARENT_DIR" != "$SCRIPT_DIR" ] && [ ! -f "$PARENT_DIR/.gitignore" ] && [ -f "$SCRIPT_DIR/.gitignore" ]; then
+        cp "$SCRIPT_DIR/.gitignore" "$PARENT_DIR/.gitignore"
+    fi
     CONFIG_TARGET="$PARENT_DIR"
 else
     CONFIG_TARGET="$SCRIPT_DIR"
