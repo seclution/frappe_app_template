@@ -180,6 +180,9 @@ jobs:
           docstring-code-format = true
           EOF
 
+          # Include default ignore rules
+          cp "${{ github.workspace }}/.gitignore" "app/$APP/.gitignore"
+
       - name: Commit app
         run: |
           git config user.name "github-actions[bot]"
