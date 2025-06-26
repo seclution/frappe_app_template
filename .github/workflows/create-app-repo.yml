@@ -181,7 +181,7 @@ jobs:
           EOF
 
           # Include default ignore rules
-          cp "${{ github.workspace }}/.gitignore" "app/$APP/.gitignore"
+          cp "${{ github.workspace }}/.gitignore" "app/.gitignore"
 
       - name: Commit app
         run: |
