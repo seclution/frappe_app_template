@@ -54,7 +54,7 @@ The following GitHub workflows orchestrate the environment after pushing:
 - **clone-vendors** – pulls vendor apps from each template `apps.json` and from `custom_vendors.json`. It generates a consolidated `apps.json` in your repo root.
 - **update-vendor** – refreshes vendor apps on a schedule or when configuration files change.
 - **create-app-repo** – scaffolds a new Frappe app without using Bench. It recreates the default `bench new-app` layout with placeholder values and removes itself after committing the new app.
-- **publish** – prepares a clean `published` branch by removing development artifacts (`.git*`, `template*`, `vendor/`, `apps.json`, `DEV_INSTRUCTIONS.md`, `custom_vendors.json`) and all submodule metadata. The workflow removes any remaining template directories such as `frappe_app_template` or `erpnext_app_template` and deletes submodule folders listed in `.gitmodules` before purging the metadata. Use this branch to distribute the final app.
+- **publish** – prepares a clean `published` branch by removing development artifacts (`.git*`, `template*`, `vendor/`, `apps.json`, `DEV_INSTRUCTIONS.md`, `custom_vendors.json`) and all submodule metadata. The workflow removes any remaining template directories such as `frappe_app_template` or `erpnext_app_template` and deletes submodule folders listed in `.gitmodules` before purging the metadata. It then moves the contents of `app/` to the repository root so the branch only contains your app files. Use this branch to distribute the final app.
 
 After the **publish** workflow you can clone the `published` branch to install the app in a standard Frappe environment.
 
@@ -74,3 +74,4 @@ apps.json           # Generated list of all vendor apps
 ```
 
 For framework specific hints see the files in `instructions/`.
+When the **publish** workflow runs, everything inside `app/` is moved to the root of the `published` branch.
