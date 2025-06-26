@@ -1,6 +1,6 @@
 # Frappe App Template
 
-This repository acts as the base for building custom Frappe apps with **Codex**.  It is meant to be used as a Git submodule inside your own project.  All automation logic for Codex lives in `DEV_INSTRUCTIONS.md` while this README explains the manual steps.
+This repository acts as the base for building custom Frappe apps with **Codex**.  It is meant to be used as a Git submodule inside your own project.  All automation logic and development guidelines for Codex live in `DEV_INSTRUCTIONS.md` while this README explains the manual steps.  A sample prompt sequence can be found under `instructions/prompts.md`.
 
 ## Getting Started
 
@@ -73,5 +73,5 @@ sample_data/        # Example payloads
 apps.json           # Generated list of all vendor apps
 ```
 
-For framework specific hints see the files in `instructions/`.
+For framework specific hints see the files in `instructions/`. The directory also contains `prompts.md` with example prompts for Codex.
 When the **publish** workflow runs, everything inside `app/` is moved to the root of the `published` branch.
