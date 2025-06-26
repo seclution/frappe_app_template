@@ -56,7 +56,7 @@ if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
 {
   "_comment": "Directories indexed by Codex. Adjust paths as needed.",
   "sources": [
-    "apps/",
+    "app/",
     "vendor/bench/",
     "vendor/frappe/",
     "instructions/",

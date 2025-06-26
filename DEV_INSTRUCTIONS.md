@@ -21,7 +21,7 @@ This repository uses Codex for automated code generation. These guidelines tell 
 
 ## Repository Layout
 
-- `apps/` – custom apps created in this project.
+- `app/` – custom app created in this project.
 - `vendor/` – Frappe and other vendor apps managed as submodules.
 - `instructions/` – framework notes for Frappe and ERPNext.
 - `sample_data/` – reference payloads and docs.

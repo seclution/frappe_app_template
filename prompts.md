@@ -21,7 +21,7 @@ In GitHub steht dafür das Workflow **clone-vendors** bereit.
 
 ## Prompt 2: App Scaffold
 
-"Erzeuge in `apps/my_custom_app` ein Grundgerüst für eine Frappe App mit DocType `Project` und einfachem List View."
+"Erzeuge in `app/my_custom_app` ein Grundgerüst für eine Frappe App mit DocType `Project` und einfachem List View."
 
 Codex legt entsprechende Dateien in der App an.
 
@@ -31,7 +31,7 @@ Codex legt entsprechende Dateien in der App an.
 
 "Füge einen Server-Side Scripting Hook hinzu, der bei `on_submit` einer Sales Invoice ausgeführt wird." 
 
-Codex aktualisiert die `hooks.py` und erstellt eine neue Python-Funktion unter `apps/my_custom_app/my_custom_app/sales_invoice.py`.
+Codex aktualisiert die `hooks.py` und erstellt eine neue Python-Funktion unter `app/my_custom_app/my_custom_app/sales_invoice.py`.
 
 ---
 
@@ -57,7 +57,7 @@ Repos:
 - https://github.com/example/app-template-b
 ```
 
-Codex legt die Submodule unter `apps/` an.
+Codex legt die Submodule unter `vendor/` an.
 
 ---
 
@@ -65,7 +65,7 @@ Codex legt die Submodule unter `apps/` an.
 
 "Aktualisiere das Frappe-Submodule auf eine neuere Version."
 
-Codex führt `git submodule update --remote apps/frappe` aus und commitet die Änderungen.
+Codex führt `git submodule update --remote vendor/frappe` aus und commitet die Änderungen.
 
 ---
 

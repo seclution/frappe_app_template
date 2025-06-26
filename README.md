@@ -61,7 +61,7 @@ After the **publish** workflow you can clone the `published` branch to install t
 ## Directory Layout
 
 ```
-apps/               # Custom apps
+app/                # Custom app
 vendor/             # Vendor apps and templates
 template_frappe/    # optional base template for Frappe
 template_erpnext/   # optional ERPNext template
