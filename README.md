@@ -1,70 +1,63 @@
-# Frappe App Template
 
-This repository acts as the base for building custom Frappe apps with **Codex**.  It is meant to be used as a Git submodule inside your own project.  All automation logic and development guidelines for Codex live in `DEV_INSTRUCTIONS.md` while this README explains the manual steps.  A sample prompt sequence can be found under `instructions/prompts.md`.
+This repository acts as the base for building custom Frappe apps with **Codex**. Use it as a Git submodule inside your own project. Development guidelines live in `DEV_INSTRUCTIONS.md` while this README focuses on the manual setup.
 
-## Getting Started
+## Quick Start (Terminal)
 
-1. **Create a new repository** for your app and initialise it locally:
+1. **Create a repository**
+   - Start locally:
+     ```bash
+     git init <appname>
+     cd <appname>
+     ```
+   - or clone an empty repo created on GitHub:
+     ```bash
+     git clone https://github.com/<user>/<appname>.git
+     cd <appname>
+     ```
+2. **Add this template as submodule and run the setup**
    ```bash
-   git init <appname>
-   cd <appname>
-   # optional: create and push a remote repository
-   # gh repo create <user>/<appname> --private --source=. --remote=origin --push
+   git submodule add https://github.com/<thisRepo> frappe_app_template
+   cd frappe_app_template && ./setup.sh && cd ..
    ```
-2. **Add this template as a submodule**:
-   ```bash
-   git submodule add https://github.com/seclution/frappe_app_template frappe_app_template
-   ```
-3. **Run the setup script** inside the submodule:
-   ```bash
-   cd template
-   ./setup.sh
-   cd ..
-   ```
-   The script copies the available GitHub workflows, the `requirements.txt` file and the entire `scripts/` directory to your repository root. It also creates three configuration files with commented examples:
-   - `custom_vendors.json`
-   - `templates.txt`
-   - `codex.json`
-   - `scripts/sync_templates.sh` – synchronises template repositories as Git submodules
-
-4. **Edit the configuration** files if needed:
-   - `templates.txt` lists additional template repositories.
-   - `custom_vendors.json` can reference vendor apps directly.
-   - Adjust Frappe or Bench versions in `apps.json` if required.
-   - Place optional payloads under `sample_data/`.
-   When you include templates, look at their `DEV_INSTRUCTIONS.md` files and
-   combine those notes with this repository's instructions.
-5. **Synchronise template repositories as submodules** if you added any URLs to `templates.txt`:
-   ```bash
-   ./scripts/sync_templates.sh
-
-   ```
-6. **Commit everything** and push the repository to GitHub.
+   The script copies workflow files and configuration templates to your repo and creates `sample_data/` in the project root and under `/root`.
+3. **Adjust the configuration** if needed:
+   - `templates.txt` for additional templates.
+   - `custom_vendors.json` for vendor apps. The **clone-vendors** workflow
+     updates `vendor/` whenever this file, `templates.txt` or any `apps.json`
+     changes.
+     updates `vendor/` and regenerates `apps.json` whenever this file,
+     `templates.txt` or any `apps.json` changes. Removed entries are pruned
+     automatically.
+   - `apps.json` to pin Frappe or Bench versions.
+4. **Commit your changes**
    ```bash
    git add .
-   git commit -m "Initial setup"
-   git push -u origin main
+   git commit -m "chore: initial setup"
    ```
 
-## Workflows
+5. **Create the GitHub repository** (no push yet)
+   ```bash
+   gh repo create <user>/<appname> --private --source=. --remote=origin
+   ```
 
-The following GitHub workflows orchestrate the environment after pushing:
+6. **Enable workflow permissions**
+   - Open the repository on GitHub.
+   - Go to **Settings → Actions → General** and set **Workflow permissions** to **Read and write**.
 
-- **clone-templates** – clones or updates all template repositories defined in `templates.txt`.
-- **clone-vendors** – pulls vendor apps from each template `apps.json` and from `custom_vendors.json`. It generates a consolidated `apps.json` in your repo root.
-- **update-vendor** – refreshes vendor apps on a schedule or when configuration files change.
-- **create-app-repo** – scaffolds a new Frappe app without using Bench. It recreates the default `bench new-app` layout with placeholder values and removes itself after committing the new app.
-- **publish** – prepares a clean `published` branch by removing development artifacts (`.git*`, `template*`, `vendor/`, `apps.json`, `DEV_INSTRUCTIONS.md`, `custom_vendors.json`) and all submodule metadata. The workflow removes any remaining template directories such as `frappe_app_template` or `erpnext_app_template` and deletes submodule folders listed in `.gitmodules` before purging the metadata. It then moves the contents of `app/` to the repository root so the branch only contains your app files. Use this branch to distribute the final app.
+7. **Push and initialise**
+   ```bash
+   git push -u origin HEAD
+   ```
 
-After the **publish** workflow you can clone the `published` branch to install the app in a standard Frappe environment.
+   GitHub automatically runs **init_new_app_repo**, which sequentially triggers **clone-templates**, **clone-vendors**, **create-app-folder** and finally **publish**. The setup script isn't executed again here—you already ran it locally. Wait for the workflow to finish before continuing.
+
+Future commits trigger these workflows individually whenever their respective files change.
 
 ## Directory Layout
 
 ```
 app/                # Custom app
 vendor/             # Vendor apps and templates
-template_frappe/    # optional base template for Frappe
-template_erpnext/   # optional ERPNext template
 instructions/       # Development notes
 codex.json          # Index for Codex
 custom_vendors.json # Optional vendor definitions
@@ -73,5 +66,4 @@ sample_data/        # Example payloads
 apps.json           # Generated list of all vendor apps
 ```
 
-For framework specific hints see the files in `instructions/`. The directory also contains `prompts.md` with example prompts for Codex.
-When the **publish** workflow runs, everything inside `app/` is moved to the root of the `published` branch.
+For framework specific hints see the files in `instructions/`. When the **publish** workflow runs, everything inside `app/` is moved to the root of the `published` branch.
