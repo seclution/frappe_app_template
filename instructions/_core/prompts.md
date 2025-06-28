@@ -96,3 +96,11 @@ Repos:
 ```
 
 Codex ergänzt `custom_vendors.json`, führt `setup.sh` erneut aus und holt die neuen Repositories nach `vendor/`.
+
+---
+
+## Prompt 10: GitHub Workflows prüfen
+
+"Nach dem ersten Push an GitHub sind `create-app-folder` und `publish` nicht gelaufen. Überprüfe, ob der Branch `develop` heißt und die Workflow-Rechte auf **Read and write** stehen."
+
+Codex stellt sicher, dass auf `develop` gepusht wurde und weist darauf hin, die Berechtigungen unter *Settings → Actions → General* zu aktivieren.

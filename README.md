@@ -29,7 +29,7 @@ codex.json          # Index of active templates (Codex references this)
 
 1. **Create your project repository**
    ```bash
-   git init my-app
+   git init -b develop my-app
    cd my-app
    ```
 
@@ -61,8 +61,12 @@ codex.json          # Index of active templates (Codex references this)
 
 7. **Push and initialize**
    ```bash
-   git push -u origin HEAD
+   git push -u origin develop
    ```
+
+   If no workflows start, verify that you pushed to **develop** and that
+   **Read and write** workflow permissions are enabled in the repository
+   settings.
 
    GitHub will trigger the following workflows:
    - `init_new_app_repo`
