@@ -3,12 +3,12 @@ import subprocess
 from pathlib import Path
 
 
-def test_clone_vendors_prunes_obsolete_submodule(tmp_path):
+def test_update_vendors_prunes_obsolete_submodule(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     scripts_dir = repo_root / "scripts"
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
-    (tmp_scripts / "clone_vendors.sh").write_text((scripts_dir / "clone_vendors.sh").read_text())
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -34,7 +34,7 @@ def test_clone_vendors_prunes_obsolete_submodule(tmp_path):
     (tmp_path / "apps.json").write_text("{}")
     (tmp_path / "custom_vendors.json").write_text("{}")
 
-    subprocess.run(["bash", str(tmp_scripts / "clone_vendors.sh")], cwd=tmp_path, check=True)
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True)
 
     assert not (tmp_path / "vendor" / "dummy").exists()
     gitmodules = tmp_path / ".gitmodules"

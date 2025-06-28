@@ -8,7 +8,7 @@ Use these prompts to set up and extend a Frappe project with Codex. Replace URLs
 
 "Clone Frappe and Bench using the versions from `apps.json`. Afterwards run `setup.sh`."
 
-Codex runs the clone-vendors workflow or executes the script locally to generate `vendor/` and an updated `apps.json`.
+Codex runs the update-vendors workflow or executes the script locally to generate `vendor/` and an updated `apps.json`.
 
 ---
 
@@ -30,7 +30,7 @@ Codex updates `hooks.py` and adds the corresponding Python code under the app mo
 
 ## Prompt 4: Manage Submodules
 
-"Add `https://github.com/example/erpnext` as a submodule and update `custom_vendors.json`. Trigger the clone-vendors workflow." 
+"Add `https://github.com/example/erpnext` as a submodule and update `custom_vendors.json`. Trigger the update-vendors workflow."
 
 Codex adds the submodule under `vendor/` and refreshes the configuration.
 

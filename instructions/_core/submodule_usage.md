@@ -32,7 +32,7 @@ cd template
 cd ..
 ```
 
-Commit all generated files and push the repository to GitHub. Trigger the *clone-vendors* workflow if you want to rebuild `apps.json` automatically.
+Commit all generated files and push the repository to GitHub. Trigger the *update-vendors* workflow if you want to rebuild `apps.json` automatically.
 
 ## 3. Updating the Template
 

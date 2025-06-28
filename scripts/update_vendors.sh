@@ -159,4 +159,4 @@ sources_json=$(printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.')
 
 jq -n --argjson s "$sources_json" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s}' > "$ROOT_DIR/codex.json"
 
-echo -e "${GREEN}✅ Vendor repositories cloned.${RESET}"
+echo -e "${GREEN}✅ Vendor repositories updated.${RESET}"

@@ -9,7 +9,7 @@ This repository uses Codex for automated code generation. These guidelines tell 
 2. List additional template repositories in `templates.txt`. Their
     instructions, any `custom_vendors.json` files and potential `apps.json`
     definitions are merged automatically.
-3. The *clone-vendors* workflow clones all repositories from the merged
+3. The *update-vendors* workflow clones all repositories from the merged
     lists and regenerates `apps.json`. Run `./setup.sh` locally for the same
     effect (requires `jq`).
 4. The CI workflow only installs dependencies and runs tests. It no longer
