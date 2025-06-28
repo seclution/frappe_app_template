@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+export GIT_TERMINAL_PROMPT=0
 
 # Colors for output
 GREEN="\033[1;32m"
@@ -71,16 +72,34 @@ for app in "${!REPOS[@]}"; do
     echo -e "${BLUE}➡️  Processing $app ($tag)${RESET}"
 
     if grep -q "path = vendor/$app" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
-        git submodule update --init "vendor/$app"
+        if ! git submodule update --init "vendor/$app"; then
+            echo -e "${YELLOW}⚠️  Failed to update $app, skipping${RESET}"
+            unset 'REPOS[$app]' 'TAGS[$app]'
+            continue
+        fi
     else
-        git submodule add "$repo" "vendor/$app" || true
+        if ! git submodule add "$repo" "vendor/$app"; then
+            echo -e "${YELLOW}⚠️  Failed to add $app from $repo, skipping${RESET}"
+            unset 'REPOS[$app]' 'TAGS[$app]'
+            continue
+        fi
         changes=true
     fi
 
-    pushd "$target" >/dev/null
-    git fetch --tags
-    git checkout "$tag"
-    popd >/dev/null
+    if pushd "$target" >/dev/null; then
+        git fetch --tags || echo -e "${YELLOW}⚠️  Failed to fetch tags for $app${RESET}"
+        if ! git checkout "$tag"; then
+            echo -e "${YELLOW}⚠️  Tag $tag not found for $app, skipping${RESET}"
+            popd >/dev/null
+            unset 'REPOS[$app]' 'TAGS[$app]'
+            continue
+        fi
+        popd >/dev/null
+    else
+        echo -e "${YELLOW}⚠️  Missing directory for $app, skipping${RESET}"
+        unset 'REPOS[$app]' 'TAGS[$app]'
+        continue
+    fi
 done
 
 # prune submodules not present in current config
