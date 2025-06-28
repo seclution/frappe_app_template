@@ -185,7 +185,7 @@ sources+=("instructions/" "sample_data/")
 # preserve existing templates list from codex.json if present
 existing_templates="[]"
 if [ -f "$ROOT_DIR/codex.json" ]; then
-    existing_templates=$(jq -r '.templates // []' "$ROOT_DIR/codex.json" 2>/dev/null || echo "[]")
+    existing_templates=$(jq -r 'if (.templates|type=="array") then .templates else [] end' "$ROOT_DIR/codex.json" 2>/dev/null || echo "[]")
 fi
 
 sources_json=$(printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.')

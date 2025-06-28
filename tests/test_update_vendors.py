@@ -1,5 +1,6 @@
 import os
 import subprocess
+import json
 from pathlib import Path
 
 
@@ -88,3 +89,35 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     assert "oldapp" not in data
     custom = (tmp_path / "custom_vendors.json").read_text()
     assert "app1" in custom and "app2" in custom
+
+
+def test_update_vendors_normalizes_codex_json(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    dummy_repo = tmp_path / "dummy_repo"
+    dummy_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=dummy_repo, check=True)
+    (dummy_repo / "README.md").write_text("d")
+    subprocess.run(["git", "add", "README.md"], cwd=dummy_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=dummy_repo, check=True)
+
+    (tmp_path / "apps.json").write_text("{}")
+    (tmp_path / "custom_vendors.json").write_text(
+        "{\n  \"dummy\": {\"repo\": \"" + str(dummy_repo) + "\", \"tag\": \"v1\"}}"
+    )
+
+    codex = tmp_path / "codex.json"
+    codex.write_text('{"templates": {"foo": 1}, "sources": []}')
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads(codex.read_text())
+    assert isinstance(data["templates"], list)
+
