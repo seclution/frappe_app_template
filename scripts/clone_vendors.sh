@@ -2,6 +2,14 @@
 set -euo pipefail
 export GIT_TERMINAL_PROMPT=0
 
+# Prevent execution inside the frappe_app_template submodule
+toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+if [[ "$toplevel" == *"/frappe_app_template" ]]; then
+  echo "⛔ ERROR: You are inside the frappe_app_template submodule."
+  echo "💡 Please run this script from the root of your app repository, not from inside the template."
+  exit 1
+fi
+
 # Colors for output
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
