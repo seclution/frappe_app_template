@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - custom_vendors.json
+      - templates.txt
+      - '**/apps.json'
   workflow_dispatch:
 
 permissions:
