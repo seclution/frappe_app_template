@@ -12,11 +12,12 @@ fi
 # Determine the script and parent directories
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+WORKFLOW_TEMPLATE_DIR="$SCRIPT_DIR/workflow_templates"
 
 # When used as a submodule, copy workflow files (and requirements.txt) to the
 # parent repository
 if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
-    for wf in "$SCRIPT_DIR"/.github/workflows/*.yml; do
+    for wf in "$WORKFLOW_TEMPLATE_DIR"/*.yml; do
         [ -f "$wf" ] || continue
         target="$PARENT_DIR/.github/workflows/$(basename "$wf")"
         mkdir -p "$(dirname "$target")"

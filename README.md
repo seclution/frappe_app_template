@@ -15,7 +15,8 @@ vendor/             # Vendor apps and templates (added via templates.txt)
 instructions/       # All Codex instructions (core + per-template)
 sample_data/        # Example data payloads
 scripts/            # Project management scripts
-.github/workflows/  # GitHub automation
+.github/workflows/  # Active workflows (CI only)
+workflow_templates/ # GitHub workflow templates
 setup.sh            # Bootstrap script (run once after adding submodule)
 custom_vendors.json # Optional vendor definitions (for clone-vendors)
 templates.txt       # Template repo list (for clone-templates)
@@ -174,7 +175,7 @@ Test coverage includes:
 - Template operations (cloning & removing)
 - Bash scripts via subprocess
 
-CI is integrated using GitHub Actions (`.github/workflows/test.yml`)
+CI is integrated using GitHub Actions (`.github/workflows/ci.yml`)
 
 ---
 
