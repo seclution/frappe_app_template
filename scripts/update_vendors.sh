@@ -29,11 +29,11 @@ mkdir -p "$VENDOR_DIR"
 BASE_APPS=(bench frappe)
 
 
-# gather apps.json files from template directories only
+# gather apps.json files from submodules
 APP_FILES=()
 while IFS= read -r f; do
     APP_FILES+=("$f")
-done < <(find "$ROOT_DIR" -maxdepth 2 -path "*template*/apps.json" 2>/dev/null | sort)
+done < <(find "$ROOT_DIR" -mindepth 2 -maxdepth 3 -name apps.json 2>/dev/null | sort)
 
 # gather custom_vendors.json files as well
 CUSTOM_FILES=()
@@ -42,7 +42,7 @@ if [ -f "$ROOT_DIR/custom_vendors.json" ]; then
 fi
 while IFS= read -r f; do
     CUSTOM_FILES+=("$f")
-done < <(find "$ROOT_DIR" -maxdepth 2 -path "*template*/custom_vendors.json" 2>/dev/null | sort)
+done < <(find "$ROOT_DIR" -mindepth 2 -maxdepth 3 -name custom_vendors.json 2>/dev/null | sort)
 
 if [ "${#APP_FILES[@]}" -eq 0 ] && [ "${#CUSTOM_FILES[@]}" -eq 0 ]; then
     echo -e "${RED}❌ No vendor definition files found${RESET}"
