@@ -3,7 +3,7 @@ set -euo pipefail
 export GIT_TERMINAL_PROMPT=0
 
 # Prevent execution inside the frappe_app_template submodule
-toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+toplevel=$(git rev-parse --show-toplevel 2>/dev/null || true)
 if [[ "$toplevel" == *"/frappe_app_template" ]]; then
   echo "⛔ ERROR: You are inside the frappe_app_template submodule."
   echo "💡 Please run this script from the root of your app repository, not from inside the template."
@@ -113,6 +113,8 @@ done
 # prune submodules not present in current config
 if [ -f "$ROOT_DIR/.gitmodules" ]; then
     while IFS= read -r path; do
+        # only manage submodules under vendor/
+        [[ "$path" == vendor/* ]] || continue
         app="$(basename "$path")"
         if [ -z "${REPOS[$app]+x}" ]; then
             echo -e "${YELLOW}🗑 Removing obsolete submodule $app${RESET}"
