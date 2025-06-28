@@ -20,9 +20,9 @@ CODEX_JSON="$ROOT_DIR/codex.json"
 if [ ! -f "$CODEX_JSON" ]; then
     echo '{"templates":[],"sources":[]}' > "$CODEX_JSON"
 fi
-if ! jq -e '.templates' "$CODEX_JSON" >/dev/null 2>&1; then
+if ! jq -e '.templates and (.templates|type=="array")' "$CODEX_JSON" >/dev/null 2>&1; then
     tmp=$(mktemp)
-    jq '. + {templates: []}' "$CODEX_JSON" > "$tmp"
+    jq 'if .templates|type=="array" then . else . + {templates: []} end' "$CODEX_JSON" > "$tmp"
     mv "$tmp" "$CODEX_JSON"
 fi
 
