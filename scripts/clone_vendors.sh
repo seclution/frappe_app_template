@@ -25,8 +25,17 @@ while IFS= read -r f; do
     APP_FILES+=("$f")
 done < <(find "$ROOT_DIR" -maxdepth 2 -path "*template*/apps.json" 2>/dev/null | sort)
 
-if [ "${#APP_FILES[@]}" -eq 0 ]; then
-    echo -e "${RED}❌ No apps.json files found${RESET}"
+# gather custom_vendors.json files as well
+CUSTOM_FILES=()
+if [ -f "$ROOT_DIR/custom_vendors.json" ]; then
+    CUSTOM_FILES+=("$ROOT_DIR/custom_vendors.json")
+fi
+while IFS= read -r f; do
+    CUSTOM_FILES+=("$f")
+done < <(find "$ROOT_DIR" -maxdepth 2 -path "*template*/custom_vendors.json" 2>/dev/null | sort)
+
+if [ "${#APP_FILES[@]}" -eq 0 ] && [ "${#CUSTOM_FILES[@]}" -eq 0 ]; then
+    echo -e "${RED}❌ No vendor definition files found${RESET}"
     exit 1
 fi
 
@@ -41,7 +50,16 @@ for file in "${APP_FILES[@]}"; do
         REPOS["$name"]="$repo"
         TAGS["$name"]="$tag"
     done < <(jq -r 'to_entries[] | "\(.key)|\(.value.repo)|\(.value.branch // .value.tag)"' "$file")
- done
+done
+
+for file in "${CUSTOM_FILES[@]}"; do
+    echo -e "${BLUE}📄 Reading $file${RESET}"
+    while IFS='|' read -r name repo tag; do
+        [ -z "$name" ] && continue
+        REPOS["$name"]="$repo"
+        TAGS["$name"]="$tag"
+    done < <(jq -r 'to_entries[] | "\(.key)|\(.value.repo)|\(.value.tag // .value.branch)"' "$file")
+done
 
 changes=false
 
@@ -63,7 +81,34 @@ for app in "${!REPOS[@]}"; do
     git fetch --tags
     git checkout "$tag"
     popd >/dev/null
- done
+done
+
+# prune submodules not present in current config
+if [ -f "$ROOT_DIR/.gitmodules" ]; then
+    while IFS= read -r path; do
+        app="$(basename "$path")"
+        if [ -z "${REPOS[$app]+x}" ]; then
+            echo -e "${YELLOW}🗑 Removing obsolete submodule $app${RESET}"
+            git submodule deinit -f "$path" || true
+            git rm -f "$path" || true
+            rm -rf ".git/modules/$path" "$path"
+            changes=true
+        fi
+    done < <(git config --file "$ROOT_DIR/.gitmodules" --get-regexp path | awk '{print $2}')
+fi
+
+# prune leftover directories without submodules
+if [ -d "$VENDOR_DIR" ]; then
+    for dir in "$VENDOR_DIR"/*; do
+        [ -d "$dir" ] || continue
+        app="$(basename "$dir")"
+        if [ -z "${REPOS[$app]+x}" ]; then
+            echo -e "${YELLOW}🗑 Removing obsolete directory $dir${RESET}"
+            rm -rf "$dir"
+            changes=true
+        fi
+    done
+fi
 
 # rebuild apps.json
 filter='{}'
