@@ -188,13 +188,19 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add app
-          git commit -m "feat: scaffold app ${{ inputs.app-name }}"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "feat: scaffold app ${{ inputs.app-name }}"
+            git push
+          fi
 
       - name: Remove workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/create-app-folder.yml
-          git commit -m "chore: remove create-app-folder workflow"
-          git push
+          git rm .github/workflows/create-app-folder.yml 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: remove create-app-folder workflow"
+            git push
+          fi
