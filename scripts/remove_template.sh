@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Prevent execution inside the frappe_app_template submodule
-toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+toplevel=$(git rev-parse --show-toplevel 2>/dev/null || true)
 if [[ "$toplevel" == *"/frappe_app_template" ]]; then
   echo "⛔ ERROR: You are inside the frappe_app_template submodule."
   echo "💡 Please run this script from the root of your app repository, not from inside the template."
