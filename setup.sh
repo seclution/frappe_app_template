@@ -35,6 +35,48 @@ mkdir -p "$CONFIG_TARGET/sample_data"
 # Ensure vendor directory exists for workflows
 mkdir -p "$CONFIG_TARGET/vendor"
 
+# Ensure core instructions directory and README
+mkdir -p "$CONFIG_TARGET/instructions/_core"
+CORE_README="$CONFIG_TARGET/instructions/_core/README.md"
+if [ ! -f "$CORE_README" ]; then
+    cat > "$CORE_README" <<'EOF'
+# 📚 Codex Instructions System
+
+Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entwicklung.
+
+## Funktionsweise
+
+- Jedes App-Template enthält ein eigenes `instructions/`-Verzeichnis
+- Beim Clonen eines Templates (siehe `templates.txt`) werden diese nach `instructions/_<template-name>/` kopiert
+- Beim Entfernen eines Templates wird auch `instructions/_<template-name>/` gelöscht
+
+## Ziel
+
+Anhand dieser Anleitungen kann Codex automatisch passende Prompt-Ketten generieren, z. B.:
+
+> „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
+
+→ Erkennt Schlüsselwörter (`website`, `erpnext`)
+→ nutzt passende Inhalte aus:
+`_core/`, `_erpnext-website-template/`, `_erpnext-template/`
+
+## Beispielstruktur
+
+```
+instructions/
+├── _core/                     # Zentrale Hinweise (nie löschen)
+├── _erpnext-template/        # Von Template eingebracht
+├── _erpnext-website-template/
+│   ├── 00_overview.md
+│   └── prompts/
+│       ├── generate_webform.md
+│       └── sync_with_erpnext.md
+```
+
+Diese Dateien werden später von Codex ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+EOF
+fi
+
 # Create example configuration files if missing
 if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
     cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
@@ -64,9 +106,22 @@ if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
     "vendor/frappe/",
     "instructions/",
     "sample_data/"
-  ]
+  ],
+  "templates": []
 }
 JSON
+fi
+
+# ensure templates field exists
+if ! jq -e '.templates' "$CONFIG_TARGET/codex.json" >/dev/null 2>&1; then
+    tmp=$(mktemp)
+    jq '. + {templates: []}' "$CONFIG_TARGET/codex.json" > "$tmp"
+    mv "$tmp" "$CONFIG_TARGET/codex.json"
+fi
+
+# clone templates to provide instructions
+if [ -f "$CONFIG_TARGET/scripts/clone_templates.sh" ]; then
+    bash "$CONFIG_TARGET/scripts/clone_templates.sh"
 fi
 
 echo "✅ Setup complete."

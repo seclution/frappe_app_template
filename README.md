@@ -73,28 +73,24 @@ codex.json          # Index of active templates (Codex references this)
 
 ---
 
-## 🧠 Using Template Instructions
+## Using Template Instructions
 
-When you define template repositories in `templates.txt`, each one brings its own set of instructions (e.g. prompts, examples, patterns). These are copied into:
+When you list template repositories in `templates.txt`, each one brings its own set of development instructions.
+
+These are automatically copied into:
 
 ```
 instructions/_<template-name>/
 ```
 
-For example, the entry:
+You can now build Frappe apps by simply prompting Codex, e.g.:
 
-```text
-https://github.com/example/erpnext-website-template
-```
+> “Build a Frappe app with a website that stores customer project data in ERPNext.”
 
-will result in:
-
-```
-vendor/erpnext-website-template/
-instructions/_erpnext-website-template/
-```
-
-> These instruction modules are automatically referenced by Codex when building prompt sequences.
+Codex will automatically:
+- detect relevant templates by keyword (`website`, `erpnext`)
+- find matching instructions in `_core/`, `_erpnext-website-template/`, etc.
+- generate prompt sequences to scaffold your app
 
 ---
 
