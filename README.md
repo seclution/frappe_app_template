@@ -36,7 +36,7 @@ codex.json          # Index of active templates (Codex references this)
 2. **Add this template as submodule and run the setup**
    ```bash
    git submodule add https://github.com/<your-org>/frappe_app_template
-   cd frappe_app_template && ./setup.sh && cd ..
+   ./frappe_app_template/setup.sh && cd ..
    ```
 
 3. **Adjust the configuration**
