@@ -32,7 +32,7 @@ jobs:
             sleep 5
             RUN_ID=$(gh run list --workflow update-templates.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
           done
-          gh run watch "$RUN_ID"
+          gh run watch "$RUN_ID" --interval 30
           gh run view "$RUN_ID" --exit-status
       - name: Trigger and await create-app-folder
         env:
@@ -50,7 +50,7 @@ jobs:
             sleep 5
             RUN_ID=$(gh run list --workflow create-app-folder.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
           done
-          gh run watch "$RUN_ID"
+          gh run watch "$RUN_ID" --interval 30
           gh run view "$RUN_ID" --exit-status
       - name: Trigger and await publish
         env:
@@ -67,7 +67,7 @@ jobs:
             sleep 5
             RUN_ID=$(gh run list --workflow publish.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
           done
-          gh run watch "$RUN_ID"
+          gh run watch "$RUN_ID" --interval 30
           gh run view "$RUN_ID" --exit-status
       - name: Remove workflow
         run: |
