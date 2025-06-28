@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          submodules: false
       - name: Trigger and await clone-templates
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
