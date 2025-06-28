@@ -65,5 +65,5 @@ jobs:
             sleep 5
             RUN_ID=$(gh run list --workflow clone-vendors.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
           done
-          gh run watch "$RUN_ID"
+          gh run watch "$RUN_ID" --interval 30
           gh run view "$RUN_ID" --exit-status
