@@ -66,8 +66,7 @@ codex.json          # Index of active templates (Codex references this)
 
    GitHub will trigger the following workflows:
    - `init_new_app_repo`
-   - `clone-templates`
-   - `clone-vendors`
+   - `clone-templates` *(automatically triggers `clone-vendors`)*
    - `create-app-folder`
    - `publish`
 
@@ -139,7 +138,7 @@ This will trigger:
 1. Add its repo URL to `templates.txt`
 2. Run:
    ```bash
-   ./scripts/clone_templates.sh
+   ./scripts/sync_templates.sh
    ```
 3. This will:
    - Clone the repo into `vendor/<name>/`
@@ -148,15 +147,12 @@ This will trigger:
 
 ### Remove a Template
 
-Run:
+To remove a template, delete its repo entry from `templates.txt` and run:
 ```bash
-./scripts/remove_template.sh <template-name>
+./scripts/sync_templates.sh
 ```
-
-This will:
-- Remove the submodule
-- Delete its `instructions/_<template-name>/`
-- Update `codex.json`
+This will remove the corresponding submodule in `vendor/` and delete
+`instructions/_<template-name>/` automatically.
 
 ---
 
