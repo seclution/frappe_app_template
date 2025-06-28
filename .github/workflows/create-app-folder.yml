@@ -1,4 +1,4 @@
-name: create-app-repo
+name: create-app-folder
 
 on:
   workflow_dispatch:
@@ -195,6 +195,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/create-app-repo.yml
-          git commit -m "chore: remove create-app-repo workflow"
+          git rm .github/workflows/create-app-folder.yml
+          git commit -m "chore: remove create-app-folder workflow"
           git push
