@@ -6,5 +6,6 @@
     "vendor/frappe/",
     "instructions/",
     "sample_data/"
-  ]
+  ],
+  "templates": []
 }
