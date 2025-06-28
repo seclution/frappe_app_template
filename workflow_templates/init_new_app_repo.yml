@@ -26,7 +26,12 @@ jobs:
             -H "Authorization: Bearer $GH_TOKEN" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/clone-templates.yml/dispatches \
             -d '{"ref":"${{ github.ref_name }}"}'
-          RUN_ID=$(gh run list --workflow clone-templates.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          RUN_ID=""
+          echo "Waiting for clone-templates run to start..."
+          until [ -n "$RUN_ID" ]; do
+            sleep 5
+            RUN_ID=$(gh run list --workflow clone-templates.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
+          done
           gh run watch "$RUN_ID"
           gh run view "$RUN_ID" --exit-status
       - name: Trigger and await create-app-folder
@@ -39,7 +44,12 @@ jobs:
             -H "Authorization: Bearer $GH_TOKEN" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/create-app-folder.yml/dispatches \
             -d '{"ref":"${{ github.ref_name }}","inputs":{"app-name":"'$APP_NAME'"}}'
-          RUN_ID=$(gh run list --workflow create-app-folder.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          RUN_ID=""
+          echo "Waiting for create-app-folder run to start..."
+          until [ -n "$RUN_ID" ]; do
+            sleep 5
+            RUN_ID=$(gh run list --workflow create-app-folder.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
+          done
           gh run watch "$RUN_ID"
           gh run view "$RUN_ID" --exit-status
       - name: Trigger and await publish
@@ -51,7 +61,12 @@ jobs:
             -H "Authorization: Bearer $GH_TOKEN" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/publish.yml/dispatches \
             -d '{"ref":"${{ github.ref_name }}"}'
-          RUN_ID=$(gh run list --workflow publish.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          RUN_ID=""
+          echo "Waiting for publish run to start..."
+          until [ -n "$RUN_ID" ]; do
+            sleep 5
+            RUN_ID=$(gh run list --workflow publish.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
+          done
           gh run watch "$RUN_ID"
           gh run view "$RUN_ID" --exit-status
       - name: Remove workflow
