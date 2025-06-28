@@ -14,6 +14,7 @@ REPAIR_BROKEN_SUBMODULES="${REPAIR_BROKEN_SUBMODULES:-false}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/templates.txt}"
+CODEX_JSON="$ROOT_DIR/codex.json"
 
 echo -e "${BLUE}📄 Reading templates from: ${TEMPLATE_FILE}${RESET}"
 
@@ -29,12 +30,14 @@ sanitize_line() {
 
 cd "$ROOT_DIR"
 changes_made=false
+desired_templates=()
 
 while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     repo="$(sanitize_line "$raw_line")"
     [ -z "$repo" ] && continue
 
     name="$(basename "$repo" .git)"
+    desired_templates+=("$name")
     target="$name"  # nur relativer Pfad!
 
     echo -e "${BLUE}➡️  Processing: $repo${RESET}"
@@ -110,6 +113,30 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
         echo -e "${BLUE}📘 Found instructions in $target/instructions${RESET}"
     fi
 done < "$TEMPLATE_FILE"
+
+# --- Remove stale templates not listed in templates.txt ---
+if [ -f "$CODEX_JSON" ]; then
+    readarray -t tracked_templates < <(jq -r '.templates[]? // empty' "$CODEX_JSON")
+else
+    tracked_templates=()
+fi
+
+for tmpl in "${tracked_templates[@]}"; do
+    if [[ ! " ${desired_templates[@]} " =~ " $tmpl " ]]; then
+        echo -e "${YELLOW}🗑 Removing stale template $tmpl${RESET}"
+        if grep -q "path = vendor/$tmpl" .gitmodules 2>/dev/null; then
+            git submodule deinit -f "vendor/$tmpl" || true
+            git rm -f "vendor/$tmpl" || true
+            rm -rf ".git/modules/vendor/$tmpl"
+        fi
+        rm -rf "vendor/$tmpl" "instructions/_$tmpl"
+        if [ -f "$CODEX_JSON" ]; then
+            tmp=$(mktemp)
+            jq --arg n "$tmpl" 'if .templates then .templates |= map(select(. != $n)) else . end' "$CODEX_JSON" > "$tmp" && mv "$tmp" "$CODEX_JSON"
+        fi
+        changes_made=true
+    fi
+done
 
 if $changes_made; then
     echo -e "${GREEN}✅ Templates updated successfully.${RESET}"
