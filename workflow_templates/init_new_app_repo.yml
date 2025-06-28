@@ -76,5 +76,6 @@ jobs:
           git rm .github/workflows/init_new_app_repo.yml 2>/dev/null || true
           if ! git diff --cached --quiet; then
             git commit -m "chore: remove init_new_app_repo workflow"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
             git push
           fi
