@@ -32,3 +32,5 @@ instructions/
 ```
 
 Diese Dateien werden später von Codex ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+
+Weitere Hinweise zur Verwaltung des Repositorys findest du in [repo_mgmt.md](repo_mgmt.md).
