@@ -208,5 +208,6 @@ They will be picked up automatically on the next sync.
 - `instructions/_core/` must never be deleted. It contains essential instructions.
 - All other `instructions/_<template>/` folders are dynamic and come from templates.
 - The `setup.sh` script ensures everything is wired up correctly after cloning the template.
+- See [`repo_mgmt.md`](instructions/_core/repo_mgmt.md) for GitHub repository management tips.
 
 Happy prompting!
