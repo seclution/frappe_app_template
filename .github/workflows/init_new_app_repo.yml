@@ -49,3 +49,10 @@ jobs:
           RUN_ID=$(gh run list --workflow publish.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
           gh run watch "$RUN_ID"
           gh run view "$RUN_ID" --exit-status
+      - name: Remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/init_new_app_repo.yml
+          git commit -m "chore: remove init_new_app_repo workflow"
+          git push
