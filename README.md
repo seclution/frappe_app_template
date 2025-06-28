@@ -1,69 +1,183 @@
+# 🚀 Frappe App Template (Codex-enabled)
 
-This repository acts as the base for building custom Frappe apps with **Codex**. Use it as a Git submodule inside your own project. Development guidelines live in `DEV_INSTRUCTIONS.md` while this README focuses on the manual setup.
+This repository acts as the base for building custom Frappe apps with **Codex**.  
+It supports modular development via `app-templates`, automatic prompt generation, and reusable instructions for efficient Frappe-based development.
 
-## Quick Start (Terminal)
+Use this template as a Git submodule in your own project. Development guidelines live in `instructions/`, while this `README` focuses on the manual and Codex-integrated setup.
 
-1. **Create a repository**
-   - Start locally:
-     ```bash
-     git init <appname>
-     cd <appname>
-     ```
-   - or clone an empty repo created on GitHub:
-     ```bash
-     git clone https://github.com/<user>/<appname>.git
-     cd <appname>
-     ```
+---
+
+## 📦 Directory Layout
+
+```
+app/                # Custom app code
+vendor/             # Vendor apps and templates (added via templates.txt)
+instructions/       # All Codex instructions (core + per-template)
+sample_data/        # Example data payloads
+scripts/            # Project management scripts
+.github/workflows/  # GitHub automation
+setup.sh            # Bootstrap script (run once after adding submodule)
+custom_vendors.json # Optional vendor definitions (for clone-vendors)
+templates.txt       # Template repo list (for clone-templates)
+apps.json           # Generated list of all vendor apps
+codex.json          # Index of active templates (Codex references this)
+```
+
+---
+
+## ⚡ Quick Start (Terminal)
+
+1. **Create your project repository**
+   ```bash
+   git init my-app
+   cd my-app
+   ```
+
 2. **Add this template as submodule and run the setup**
    ```bash
-   git submodule add https://github.com/<thisRepo> frappe_app_template
+   git submodule add https://github.com/<your-org>/frappe_app_template
    cd frappe_app_template && ./setup.sh && cd ..
    ```
-   The script copies workflow files and configuration templates to your repo and creates `sample_data/` in the project root and under `/root`.
-3. **Adjust the configuration** if needed:
-   - `templates.txt` for additional templates.
-   - `custom_vendors.json` for vendor apps. The **clone-vendors** workflow
-     updates `vendor/` whenever this file, `templates.txt` or any `apps.json`
-     changes.
-     updates `vendor/` and regenerates `apps.json` whenever this file,
-     `templates.txt` or any `apps.json` changes. Removed entries are pruned
-     automatically.
-   - `apps.json` to pin Frappe or Bench versions.
-4. **Commit your changes**
+
+3. **Adjust the configuration**
+   - `templates.txt`: Add app templates (see below)
+   - `custom_vendors.json`: Add external Frappe apps (e.g. ERPNext)
+   - `apps.json`: Will be auto-generated
+
+4. **Commit your setup**
    ```bash
    git add .
-   git commit -m "chore: initial setup"
+   git commit -m "chore: initial Codex setup"
    ```
 
-5. **Create the GitHub repository** (no push yet)
+5. **Create the GitHub repository**
    ```bash
-   gh repo create <user>/<appname> --private --source=. --remote=origin
+   gh repo create my-org/my-app --private --source=. --remote=origin
    ```
 
 6. **Enable workflow permissions**
-   - Open the repository on GitHub.
-   - Go to **Settings → Actions → General** and set **Workflow permissions** to **Read and write**.
+   - Go to **GitHub → Settings → Actions → General**
+   - Set **Workflow permissions** to **Read and write**
 
-7. **Push and initialise**
+7. **Push and initialize**
    ```bash
    git push -u origin HEAD
    ```
 
-   GitHub automatically runs **init_new_app_repo**, which sequentially triggers **clone-templates**, **clone-vendors**, **create-app-folder** and finally **publish**. The setup script isn't executed again here—you already ran it locally. Wait for the workflow to finish before continuing.
+   GitHub will trigger the following workflows:
+   - `init_new_app_repo`
+   - `clone-templates`
+   - `clone-vendors`
+   - `create-app-folder`
+   - `publish`
 
-Future commits trigger these workflows individually whenever their respective files change.
+---
 
-## Directory Layout
+## 🧠 Using Template Instructions
+
+When you define template repositories in `templates.txt`, each one brings its own set of instructions (e.g. prompts, examples, patterns). These are copied into:
 
 ```
-app/                # Custom app
-vendor/             # Vendor apps and templates
-instructions/       # Development notes
-codex.json          # Index for Codex
-custom_vendors.json # Optional vendor definitions
-templates.txt       # Optional template list
-sample_data/        # Example payloads
-apps.json           # Generated list of all vendor apps
+instructions/_<template-name>/
 ```
 
-For framework specific hints see the files in `instructions/`. When the **publish** workflow runs, everything inside `app/` is moved to the root of the `published` branch.
+For example, the entry:
+
+```text
+https://github.com/example/erpnext-website-template
+```
+
+will result in:
+
+```
+vendor/erpnext-website-template/
+instructions/_erpnext-website-template/
+```
+
+> These instruction modules are automatically referenced by Codex when building prompt sequences.
+
+---
+
+## 🪄 Prompting Codex (with Instructions)
+
+Once the setup is complete, you can start using Codex to generate app scaffolding and logic.
+
+Here’s how it works:
+
+1. Codex scans the `instructions/` folder for:
+   - `_core/` → your global instructions (never deleted)
+   - `_template-name/` → from each submodule
+2. Based on your prompt, it matches keywords (e.g. `frappe app`, `website`, `erpnext`)
+3. Codex finds corresponding prompt examples inside `instructions/_*/prompts/`
+4. Codex builds and executes prompt chains automatically
+
+### 💬 Example
+
+> “Create a Frappe app with a website that records customer projects and syncs them to ERPNext.”
+
+This will trigger:
+- `_core/` → for general app setup
+- `_erpnext-template/` → for ERP integration
+- `_erpnext-website-template/` → for webform generation
+
+---
+
+## 🔁 Managing Templates
+
+### Add a Template
+
+1. Add its repo URL to `templates.txt`
+2. Run:
+   ```bash
+   ./scripts/clone_templates.sh
+   ```
+3. This will:
+   - Clone the repo into `vendor/<name>/`
+   - Copy its `instructions/` to `instructions/_<name>/`
+   - Add the template to `codex.json.templates[]`
+
+### Remove a Template
+
+Run:
+```bash
+./scripts/remove_template.sh <template-name>
+```
+
+This will:
+- Remove the submodule
+- Delete its `instructions/_<template-name>/`
+- Update `codex.json`
+
+---
+
+## 🛠️ Development with Codex
+
+Codex can now generate:
+
+- Doctypes
+- Hooks
+- REST endpoints
+- Webforms
+- Pages
+- ERP integrations
+- GitHub workflows
+- Prompts for deployment logic
+
+All based on the contents of `instructions/_*/prompts/`.
+
+To contribute more prompts, simply add them to:
+```
+vendor/<template>/instructions/prompts/*.md
+```
+
+They will be picked up automatically on the next sync.
+
+---
+
+## ✅ Final Notes
+
+- `instructions/_core/` must never be deleted. It contains essential instructions.
+- All other `instructions/_<template>/` folders are dynamic and come from templates.
+- The `setup.sh` script ensures everything is wired up correctly after cloning the template.
+
+Happy prompting!
