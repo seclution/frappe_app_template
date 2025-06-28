@@ -1,0 +1,51 @@
+name: init_new_app_repo
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Trigger and await clone-templates
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run clone-templates.yml --ref "${GITHUB_REF}"
+          RUN_ID=$(gh run list --workflow clone-templates.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          gh run watch "$RUN_ID"
+          gh run view "$RUN_ID" --exit-status
+      - name: Trigger and await clone-vendors
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run clone-vendors.yml --ref "${GITHUB_REF}"
+          RUN_ID=$(gh run list --workflow clone-vendors.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          gh run watch "$RUN_ID"
+          gh run view "$RUN_ID" --exit-status
+      - name: Trigger and await create-app-folder
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_NAME: ${{ github.event.repository.name }}
+        run: |
+          gh workflow run create-app-folder.yml --ref "${GITHUB_REF}" -f app-name="$APP_NAME"
+          RUN_ID=$(gh run list --workflow create-app-folder.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          gh run watch "$RUN_ID"
+          gh run view "$RUN_ID" --exit-status
+      - name: Trigger and await publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run publish.yml --ref "${GITHUB_REF}"
+          RUN_ID=$(gh run list --workflow publish.yml --branch "${GITHUB_REF_NAME}" -L 1 --json databaseId -q '.[0].databaseId')
+          gh run watch "$RUN_ID"
+          gh run view "$RUN_ID" --exit-status
