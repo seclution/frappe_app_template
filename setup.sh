@@ -26,6 +26,9 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     if [ ! -f "$PARENT_DIR/requirements.txt" ]; then
         cp "$SCRIPT_DIR/requirements.txt" "$PARENT_DIR/requirements.txt"
     fi
+    if [ ! -f "$PARENT_DIR/requirements-dev.txt" ] && [ -f "$SCRIPT_DIR/requirements-dev.txt" ]; then
+        cp "$SCRIPT_DIR/requirements-dev.txt" "$PARENT_DIR/requirements-dev.txt"
+    fi
     if [ -d "$SCRIPT_DIR/scripts" ]; then
         cp -r "$SCRIPT_DIR/scripts" "$PARENT_DIR/"
         chmod +x "$PARENT_DIR"/scripts/*.sh
