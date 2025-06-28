@@ -30,7 +30,7 @@ sanitize_line() {
 
 cd "$ROOT_DIR"
 changes_made=false
-desired_templates=()
+declare -a desired_templates=()
 
 while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     repo="$(sanitize_line "$raw_line")"
@@ -114,29 +114,16 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     fi
 done < "$TEMPLATE_FILE"
 
-# --- Remove stale templates not listed in templates.txt ---
+# remove templates present in codex.json but not in the desired list
 if [ -f "$CODEX_JSON" ]; then
-    readarray -t tracked_templates < <(jq -r '.templates[]? // empty' "$CODEX_JSON")
-else
-    tracked_templates=()
+    readarray -t current_templates < <(jq -r '.templates[]?' "$CODEX_JSON")
+    for tmpl in "${current_templates[@]}"; do
+        if [[ ! " ${desired_templates[*]} " =~ " ${tmpl} " ]]; then
+            bash "$SCRIPT_DIR/remove_template.sh" "$tmpl"
+            changes_made=true
+        fi
+    done
 fi
-
-for tmpl in "${tracked_templates[@]}"; do
-    if [[ ! " ${desired_templates[@]} " =~ " $tmpl " ]]; then
-        echo -e "${YELLOW}🗑 Removing stale template $tmpl${RESET}"
-        if grep -q "path = vendor/$tmpl" .gitmodules 2>/dev/null; then
-            git submodule deinit -f "vendor/$tmpl" || true
-            git rm -f "vendor/$tmpl" || true
-            rm -rf ".git/modules/vendor/$tmpl"
-        fi
-        rm -rf "vendor/$tmpl" "instructions/_$tmpl"
-        if [ -f "$CODEX_JSON" ]; then
-            tmp=$(mktemp)
-            jq --arg n "$tmpl" 'if .templates then .templates |= map(select(. != $n)) else . end' "$CODEX_JSON" > "$tmp" && mv "$tmp" "$CODEX_JSON"
-        fi
-        changes_made=true
-    fi
-done
 
 if $changes_made; then
     echo -e "${GREEN}✅ Templates updated successfully.${RESET}"
