@@ -46,3 +46,11 @@ jobs:
             git commit -m "chore: update templates"
             git push
           fi
+
+      - name: Trigger clone-vendors
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run clone-vendors.yml --ref "${GITHUB_REF}"
+          gh run watch
