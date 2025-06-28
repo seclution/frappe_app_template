@@ -14,6 +14,7 @@ REPAIR_BROKEN_SUBMODULES="${REPAIR_BROKEN_SUBMODULES:-false}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/templates.txt}"
+CODEX_JSON="$ROOT_DIR/codex.json"
 
 echo -e "${BLUE}📄 Reading templates from: ${TEMPLATE_FILE}${RESET}"
 
@@ -29,12 +30,14 @@ sanitize_line() {
 
 cd "$ROOT_DIR"
 changes_made=false
+declare -a desired_templates=()
 
 while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     repo="$(sanitize_line "$raw_line")"
     [ -z "$repo" ] && continue
 
     name="$(basename "$repo" .git)"
+    desired_templates+=("$name")
     target="$name"  # nur relativer Pfad!
 
     echo -e "${BLUE}➡️  Processing: $repo${RESET}"
@@ -110,6 +113,17 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
         echo -e "${BLUE}📘 Found instructions in $target/instructions${RESET}"
     fi
 done < "$TEMPLATE_FILE"
+
+# remove templates present in codex.json but not in the desired list
+if [ -f "$CODEX_JSON" ]; then
+    readarray -t current_templates < <(jq -r '.templates[]?' "$CODEX_JSON")
+    for tmpl in "${current_templates[@]}"; do
+        if [[ ! " ${desired_templates[*]} " =~ " ${tmpl} " ]]; then
+            bash "$SCRIPT_DIR/remove_template.sh" "$tmpl"
+            changes_made=true
+        fi
+    done
+fi
 
 if $changes_made; then
     echo -e "${GREEN}✅ Templates updated successfully.${RESET}"
