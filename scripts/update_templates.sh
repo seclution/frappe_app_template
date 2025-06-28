@@ -55,6 +55,11 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     if grep -q "path = $target" .gitmodules 2>/dev/null; then
         echo -e "${YELLOW}🔄 Submodule exists: $target. Checking...${RESET}"
 
+        # If the submodule was cloned without running `git submodule update --init`
+        # the directory may exist but not be populated with a working tree.
+        # Attempt to initialise it so further git commands succeed.
+        git submodule update --init "$target" >/dev/null 2>&1 || true
+
         if [ ! -d "$target" ]; then
             echo -e "${YELLOW}⚠️  Directory for submodule '$target' is missing!${RESET}"
             if [ "$REPAIR_BROKEN_SUBMODULES" = true ]; then
