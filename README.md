@@ -18,8 +18,8 @@ scripts/            # Project management scripts
 .github/workflows/  # Active workflows (CI only)
 workflow_templates/ # GitHub workflow templates
 setup.sh            # Bootstrap script (run once after adding submodule)
-custom_vendors.json # Optional vendor definitions (for clone-vendors)
-templates.txt       # Template repo list (for clone-templates)
+custom_vendors.json # Optional vendor definitions (for update-vendors)
+templates.txt       # Template repo list (for update-templates)
 apps.json           # Generated list of all vendor apps
 codex.json          # Index of active templates (Codex references this)
 ```
@@ -71,7 +71,7 @@ codex.json          # Index of active templates (Codex references this)
 
    GitHub will trigger the following workflows:
    - `init_new_app_repo`
-   - `clone-templates` *(automatically triggers `clone-vendors`)*
+   - `update-templates` *(automatically triggers `update-vendors`)*
    - `create-app-folder`
    - `publish`
 
@@ -143,7 +143,7 @@ This will trigger:
 1. Add its repo URL to `templates.txt`
 2. Run:
    ```bash
-   ./scripts/sync_templates.sh
+   ./scripts/update_templates.sh
    ```
 3. This will:
    - Clone the repo into `vendor/<name>/`
@@ -154,7 +154,7 @@ This will trigger:
 
 To remove a template, delete its repo entry from `templates.txt` and run:
 ```bash
-./scripts/sync_templates.sh
+./scripts/update_templates.sh
 ```
 This will remove the corresponding submodule in `vendor/` and delete
 `instructions/_<template-name>/` automatically.

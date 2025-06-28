@@ -7,7 +7,7 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
    vendor repositories (ERPNext/HRMS) to `custom_vendors.json` when needed.
 2. List template repositories that ship extra instructions in
    `templates.txt`.
-3. The *clone-vendors* workflow clones all repositories, merges any
+3. The *update-vendors* workflow clones all repositories, merges any
    `custom_vendors.json` from the templates and refreshes `apps.json`. Run
    `../setup.sh` locally if you want to perform the same steps manually.
 4. The `CI` workflow only installs dependencies and runs tests. It no longer

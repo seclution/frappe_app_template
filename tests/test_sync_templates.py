@@ -4,12 +4,12 @@ import subprocess
 from pathlib import Path
 
 
-def test_sync_templates_removes_unused(tmp_path):
+def test_update_templates_removes_unused(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     scripts_dir = repo_root / "scripts"
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
-    (tmp_scripts / "sync_templates.sh").write_text((scripts_dir / "sync_templates.sh").read_text())
+    (tmp_scripts / "update_templates.sh").write_text((scripts_dir / "update_templates.sh").read_text())
     (tmp_scripts / "remove_template.sh").write_text((scripts_dir / "remove_template.sh").read_text())
 
     vendor = tmp_path / "vendor" / "demo-template"
@@ -27,11 +27,11 @@ def test_sync_templates_removes_unused(tmp_path):
     templates = tmp_path / "templates.txt"
     templates.write_text("demo-template\n")
 
-    # run sync_templates with an empty templates file
+    # run update_templates with an empty templates file
     empty_list = tmp_path / "empty.txt"
     empty_list.write_text("\n")
     subprocess.run(
-        ["bash", str(tmp_scripts / "sync_templates.sh")],
+        ["bash", str(tmp_scripts / "update_templates.sh")],
         cwd=tmp_path,
         check=True,
         env={**os.environ, "TEMPLATE_FILE": str(empty_list)},

@@ -10,7 +10,7 @@
 
 Frappe und Bench werden über `../apps.json` verwaltet. Um weitere Frappe-Apps
 einzubinden, ergänze `custom_vendors.json` und trigger das Workflow
-**clone-vendors** oder führe `../setup.sh` manuell aus.
+**update-vendors** oder führe `../setup.sh` manuell aus.
 
 ## Prerequisites
 

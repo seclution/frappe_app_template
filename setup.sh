@@ -132,8 +132,8 @@ if ! jq -e '.templates' "$CONFIG_TARGET/codex.json" >/dev/null 2>&1; then
 fi
 
 # clone templates to provide instructions
-if [ -f "$CONFIG_TARGET/scripts/clone_templates.sh" ]; then
-    bash "$CONFIG_TARGET/scripts/clone_templates.sh"
+if [ -f "$CONFIG_TARGET/scripts/update_templates.sh" ]; then
+    bash "$CONFIG_TARGET/scripts/update_templates.sh"
 fi
 
 echo "✅ Setup complete."

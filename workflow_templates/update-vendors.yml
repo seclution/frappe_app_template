@@ -1,4 +1,4 @@
-name: clone-vendors
+name: update-vendors
 
 on:
   push:
@@ -33,8 +33,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Clone vendors
-        run: ./scripts/clone_vendors.sh
+      - name: Update vendors
+        run: ./scripts/update_vendors.sh
 
       - name: Commit changes
         run: |

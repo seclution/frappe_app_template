@@ -3,15 +3,15 @@
 Use GitHub Actions API calls to trigger dependent workflows instead of relying on `gh workflow run`.
 This avoids interactive CLI issues in CI environments.
 
-Example: trigger `clone-vendors.yml` from another workflow.
+Example: trigger `update-vendors.yml` from another workflow.
 
 ```yaml
-- name: Trigger clone-vendors via API
+- name: Trigger update-vendors via API
   run: |
     curl -X POST \
       -H "Accept: application/vnd.github+json" \
       -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-      https://api.github.com/repos/${{ github.repository }}/actions/workflows/clone-vendors.yml/dispatches \
+  https://api.github.com/repos/${{ github.repository }}/actions/workflows/update-vendors.yml/dispatches \
       -d '{"ref":"${{ github.ref_name }}"}'
 ```
 
@@ -23,7 +23,7 @@ with a longer refresh interval to avoid noisy logs:
 RUN_ID=""
 until [ -n "$RUN_ID" ]; do
   sleep 5
-  RUN_ID=$(gh run list --workflow clone-vendors.yml --branch "$GITHUB_REF_NAME" \
+  RUN_ID=$(gh run list --workflow update-vendors.yml --branch "$GITHUB_REF_NAME" \
     --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
 done
 gh run watch "$RUN_ID" --interval 30

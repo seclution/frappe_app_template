@@ -15,7 +15,7 @@ Repos:
 ```
 
 Codex führt `setup.sh` aus, um die Verzeichnisse und `apps.json` zu erzeugen.
-In GitHub steht dafür das Workflow **clone-vendors** bereit.
+In GitHub steht dafür das Workflow **update-vendors** bereit.
 
 ---
 
@@ -71,7 +71,7 @@ Codex führt `git submodule update --remote vendor/frappe` aus und commitet die 
 
 ## Prompt 7: Frappe-only Initialisierung
 
-"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `custom_vendors.json`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **clone-vendors**."
+"Starte das Projekt ausschließlich mit Frappe. Entferne ERPNext aus `custom_vendors.json`, behalte Frappe und Bench und führe `./setup.sh` aus oder triggere das Workflow **update-vendors**."
 
 Codex aktualisiert `custom_vendors.json`, klont nur Frappe und Bench und erzeugt eine neue `apps.json`.
 
@@ -79,7 +79,7 @@ Codex aktualisiert `custom_vendors.json`, klont nur Frappe und Bench und erzeugt
 
 ## Prompt 8: ERPNext nachträglich hinzufügen
 
-"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `custom_vendors.json` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **clone-vendors**."
+"Füge ERPNext jetzt hinzu. Trage `https://github.com/frappe/erpnext` in `custom_vendors.json` ein und rufe erneut `./setup.sh` auf oder starte das Workflow **update-vendors**."
 
 Codex modifiziert `custom_vendors.json`, klont ERPNext unter `vendor/` und aktualisiert `apps.json`.
 
@@ -87,7 +87,7 @@ Codex modifiziert `custom_vendors.json`, klont ERPNext unter `vendor/` und aktua
 
 ## Prompt 9: Weitere App-Templates integrieren
 
-"Erweitere das Projekt mit diesen App-Templates. Trage sie in `custom_vendors.json` ein und starte danach `./setup.sh` neu oder triggere das Workflow **clone-vendors**."
+"Erweitere das Projekt mit diesen App-Templates. Trage sie in `custom_vendors.json` ein und starte danach `./setup.sh` neu oder triggere das Workflow **update-vendors**."
 
 ```
 Repos:
