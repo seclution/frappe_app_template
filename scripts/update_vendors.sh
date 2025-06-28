@@ -181,8 +181,15 @@ for app in "${!REPOS[@]}"; do
  done
 sources+=("instructions/" "sample_data/")
 
+
+# preserve existing templates list from codex.json if present
+existing_templates="[]"
+if [ -f "$ROOT_DIR/codex.json" ]; then
+    existing_templates=$(jq -r '.templates // []' "$ROOT_DIR/codex.json" 2>/dev/null || echo "[]")
+fi
+
 sources_json=$(printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.')
 
-jq -n --argjson s "$sources_json" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s}' > "$ROOT_DIR/codex.json"
+jq -n --argjson s "$sources_json" --argjson t "$existing_templates" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s,"templates":$t}' > "$ROOT_DIR/codex.json"
 
 echo -e "${GREEN}✅ Vendor repositories updated.${RESET}"
