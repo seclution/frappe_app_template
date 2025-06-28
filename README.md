@@ -69,11 +69,14 @@ codex.json          # Index of active templates (Codex references this)
    **Read and write** workflow permissions are enabled in the repository
    settings.
 
-   GitHub will trigger the following workflows:
-   - `init_new_app_repo`
-   - `update-templates` *(automatically triggers `update-vendors`)*
-   - `create-app-folder`
-   - `publish`
+  GitHub will trigger the following workflows:
+  - `init_new_app_repo`
+  - `update-templates` *(automatically triggers `update-vendors` and waits for it to finish)*
+  - `create-app-folder`
+  - `publish`
+
+  The `update-vendors` workflow otherwise runs only when `custom_vendors.json` or
+  an `apps.json` file changes.
 
 ---
 
