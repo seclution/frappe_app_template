@@ -16,6 +16,16 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/templates.txt}"
 CODEX_JSON="$ROOT_DIR/codex.json"
 
+# ensure codex.json exists and has templates array
+if [ ! -f "$CODEX_JSON" ]; then
+    echo '{"templates":[],"sources":[]}' > "$CODEX_JSON"
+fi
+if ! jq -e '.templates' "$CODEX_JSON" >/dev/null 2>&1; then
+    tmp=$(mktemp)
+    jq '. + {templates: []}' "$CODEX_JSON" > "$tmp"
+    mv "$tmp" "$CODEX_JSON"
+fi
+
 echo -e "${BLUE}📄 Reading templates from: ${TEMPLATE_FILE}${RESET}"
 
 if [ ! -f "$TEMPLATE_FILE" ]; then
@@ -110,7 +120,15 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     fi
 
     if [ -d "$target/instructions" ]; then
-        echo -e "${BLUE}📘 Found instructions in $target/instructions${RESET}"
+        echo -e "${BLUE}📘 Syncing instructions from $target/instructions${RESET}"
+        mkdir -p "$ROOT_DIR/instructions/_$name"
+        rsync -a --delete "$target/instructions/" "$ROOT_DIR/instructions/_$name/"
+    fi
+
+    if ! jq -e --arg n "$name" '.templates | index($n)' "$CODEX_JSON" >/dev/null; then
+        tmp=$(mktemp)
+        jq --arg n "$name" '.templates += [$n]' "$CODEX_JSON" > "$tmp"
+        mv "$tmp" "$CODEX_JSON"
     fi
 done < "$TEMPLATE_FILE"
 
@@ -125,8 +143,18 @@ if [ -f "$CODEX_JSON" ]; then
     done
 fi
 
+# remove duplicates and sort templates list
+if [ -f "$CODEX_JSON" ]; then
+    tmp=$(mktemp)
+    jq '.templates |= sort | unique' "$CODEX_JSON" > "$tmp" && mv "$tmp" "$CODEX_JSON"
+fi
+
 if $changes_made; then
     echo -e "${GREEN}✅ Templates updated successfully.${RESET}"
+    # rebuild apps.json based on updated templates
+    if [ -f "$SCRIPT_DIR/update_vendors.sh" ]; then
+        bash "$SCRIPT_DIR/update_vendors.sh"
+    fi
 else
     echo -e "${YELLOW}ℹ️  No changes detected. Everything is up-to-date.${RESET}"
 fi
