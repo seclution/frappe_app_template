@@ -29,12 +29,28 @@ sanitize() {
 while IFS= read -r raw_line || [ -n "$raw_line" ]; do
     repo="$(sanitize "$raw_line")"
     [ -z "$repo" ] && continue
-    name="$(basename "$repo" .git)"
+
+    if [[ "$repo" == *@* ]]; then
+        url="${repo%@*}"
+        ref="${repo#*@}"
+        [ -z "$ref" ] && ref="main"
+    else
+        url="$repo"
+        ref="main"
+    fi
+
+    name="$(basename "$url" .git)"
     target="vendor/$name"
-    echo "--> processing $name"
+    echo "--> processing $name@$ref"
 
     if ! grep -q "path = $target" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
-        git submodule add "$repo" "$target" || true
+        git submodule add -b "$ref" "$url" "$target" || true
+    fi
+
+    # ensure correct ref is checked out
+    if [ -d "$target/.git" ]; then
+        git -C "$target" fetch --tags origin || true
+        git -C "$target" checkout "$ref" || git -C "$target" checkout "origin/$ref" || true
     fi
 
     if [ -d "$target/instructions" ]; then

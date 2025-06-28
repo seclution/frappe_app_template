@@ -92,6 +92,20 @@ Codex will automatically:
 - find matching instructions in `_core/`, `_erpnext-website-template/`, etc.
 - generate prompt sequences to scaffold your app
 
+## 🔖 Submodules with Branch or Tag
+
+You can define templates with a specific branch or tag:
+
+```
+https://github.com/example/template-a@main
+https://github.com/example/template-b@v1.0.2
+```
+
+When cloned, each submodule will:
+- point to the given branch/tag
+- appear in `.gitmodules` under `vendor/<name>`
+- check out the correct revision using `git submodule update --remote`
+
 ---
 
 ## 🪄 Prompting Codex (with Instructions)
@@ -143,6 +157,24 @@ This will:
 - Remove the submodule
 - Delete its `instructions/_<template-name>/`
 - Update `codex.json`
+
+---
+
+## ✅ Testing
+
+This project supports automated testing using `pytest`. After cloning:
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+Test coverage includes:
+- JSON logic (e.g. codex.json validation)
+- Template operations (cloning & removing)
+- Bash scripts via subprocess
+
+CI is integrated using GitHub Actions (`.github/workflows/test.yml`)
 
 ---
 
