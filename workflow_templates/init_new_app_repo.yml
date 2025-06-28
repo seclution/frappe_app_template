@@ -73,6 +73,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/init_new_app_repo.yml
-          git commit -m "chore: remove init_new_app_repo workflow"
-          git push
+          git rm .github/workflows/init_new_app_repo.yml 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: remove init_new_app_repo workflow"
+            git push
+          fi
