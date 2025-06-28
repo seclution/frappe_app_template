@@ -25,11 +25,12 @@ VENDOR_DIR="$ROOT_DIR/vendor"
 
 mkdir -p "$VENDOR_DIR"
 
-# gather apps.json files from root and template directories
+# list of base apps defined in apps.json
+BASE_APPS=(bench frappe)
+
+
+# gather apps.json files from template directories only
 APP_FILES=()
-if [ -f "$ROOT_DIR/apps.json" ]; then
-    APP_FILES+=("$ROOT_DIR/apps.json")
-fi
 while IFS= read -r f; do
     APP_FILES+=("$f")
 done < <(find "$ROOT_DIR" -maxdepth 2 -path "*template*/apps.json" 2>/dev/null | sort)
@@ -51,6 +52,20 @@ fi
 # associative arrays for repo url and tag
 declare -A REPOS
 declare -A TAGS
+declare -A CUSTOM_REPOS
+declare -A CUSTOM_TAGS
+
+# read base apps from apps.json
+if [ -f "$ROOT_DIR/apps.json" ]; then
+    for base in "${BASE_APPS[@]}"; do
+        if jq -e --arg app "$base" '.[$app]' "$ROOT_DIR/apps.json" >/dev/null 2>&1; then
+            repo=$(jq -r --arg app "$base" '.[$app].repo' "$ROOT_DIR/apps.json")
+            tag=$(jq -r --arg app "$base" '.[$app].branch // .[$app].tag' "$ROOT_DIR/apps.json")
+            REPOS["$base"]="$repo"
+            TAGS["$base"]="$tag"
+        fi
+    done
+fi
 
 for file in "${APP_FILES[@]}"; do
     echo -e "${BLUE}📄 Reading $file${RESET}"
@@ -67,6 +82,8 @@ for file in "${CUSTOM_FILES[@]}"; do
         [ -z "$name" ] && continue
         REPOS["$name"]="$repo"
         TAGS["$name"]="$tag"
+        CUSTOM_REPOS["$name"]="$repo"
+        CUSTOM_TAGS["$name"]="$tag"
     done < <(jq -r 'to_entries[] | "\(.key)|\(.value.repo)|\(.value.tag // .value.branch)"' "$file")
 done
 
@@ -146,7 +163,16 @@ for app in "${!REPOS[@]}"; do
     tag="${TAGS[$app]}"
     filter="$filter | .[\"$app\"]={repo:\"$repo\",branch:\"$tag\"}"
  done
- jq -n "$filter" > "$ROOT_DIR/apps.json"
+jq -n "$filter" > "$ROOT_DIR/apps.json"
+
+# rebuild custom_vendors.json
+custom_filter='{}'
+for app in "${!CUSTOM_REPOS[@]}"; do
+    repo="${CUSTOM_REPOS[$app]}"
+    tag="${CUSTOM_TAGS[$app]}"
+    custom_filter="$custom_filter | .[\"$app\"]={repo:\"$repo\",tag:\"$tag\"}"
+done
+jq -n "$custom_filter" > "$ROOT_DIR/custom_vendors.json"
 
 # rebuild codex.json
 sources=("app/")
