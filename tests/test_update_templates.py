@@ -11,7 +11,7 @@ def test_update_templates_empty(tmp_path):
 
     codex = tmp_path / "codex.json"
     codex.write_text(json.dumps({"templates": [], "sources": []}))
-    templates = tmp_path / "templates.txt"
+    templates = tmp_path / "vendors.txt"
     templates.write_text("\n")
 
     subprocess.run(["bash", str(tmp_scripts / "update_templates.sh")], cwd=tmp_path, check=True)
@@ -29,7 +29,7 @@ def test_update_templates_normalizes_templates_field(tmp_path):
 
     codex = tmp_path / "codex.json"
     codex.write_text('{"templates": {"foo": 1}, "sources": []}')
-    templates = tmp_path / "templates.txt"
+    templates = tmp_path / "vendors.txt"
     templates.write_text("\n")
 
     subprocess.run(["bash", str(tmp_scripts / "update_templates.sh")], cwd=tmp_path, check=True)

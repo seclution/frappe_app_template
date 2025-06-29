@@ -16,11 +16,11 @@ Copy the configuration files from the template so you can adjust them:
 
 ```bash
 cp template/apps.json .
-cp template/custom_vendors.json .
-cp template/templates.txt . # optional
+cp template/vendors.txt .
+cp template/vendor_profiles/integration_profiles.json .
 ```
 
-Edit these files to add your own vendor apps or additional templates.
+Edit these files to add your desired vendor slugs and integration profiles.
 
 ## 2. Initialising the Environment
 

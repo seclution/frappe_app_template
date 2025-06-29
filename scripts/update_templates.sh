@@ -13,7 +13,7 @@ REPAIR_BROKEN_SUBMODULES="${REPAIR_BROKEN_SUBMODULES:-false}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/templates.txt}"
+TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/vendors.txt}"
 CODEX_JSON="$ROOT_DIR/codex.json"
 
 # ensure codex.json exists and has templates array
@@ -26,10 +26,10 @@ if ! jq -e '.templates and (.templates|type=="array")' "$CODEX_JSON" >/dev/null 
     mv "$tmp" "$CODEX_JSON"
 fi
 
-echo -e "${BLUE}📄 Reading templates from: ${TEMPLATE_FILE}${RESET}"
+echo -e "${BLUE}📄 Reading vendors from: ${TEMPLATE_FILE}${RESET}"
 
 if [ ! -f "$TEMPLATE_FILE" ]; then
-    echo -e "${RED}❌ templates.txt not found: $TEMPLATE_FILE${RESET}"
+    echo -e "${RED}❌ vendors.txt not found: $TEMPLATE_FILE${RESET}"
     exit 1
 fi
 

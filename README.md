@@ -150,6 +150,14 @@ git add . && git commit -m "chore: setup"
 git remote add origin ... && git push -u origin develop
 ```
 
+Jedes App-Repository sollte folgenden Hinweis enthalten:
+
+> Diese App basiert auf dem zentralen `frappe_app_template`.
+> Eingebundene Vendoren stehen in vendors.txt.
+> Anleitungen wurden automatisch übernommen.
+> codex.json ist aktiv und wird bei jedem Commit aktualisiert.
+> Erkenntnisse aus dieser App werden regelmäßig zurück in das zentrale Template synchronisiert.
+
 ## ✨ Fazit
 
 Dieses Repository ist das zentrale Fundament zur Entwicklung modularer, wartbarer und kontextoptimierter Frappe-Projekte. Alle Submodule, Anleitungssysteme und Automatisierungen zielen auf einen sauberen Codex-Kontext ab. Neue Erkenntnisse können strukturiert in `.incoming/` zur Verfügung gestellt werden – ganz ohne Submodule pushen zu müssen.

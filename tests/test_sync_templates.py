@@ -24,7 +24,7 @@ def test_update_templates_removes_unused(tmp_path):
     codex.write_text(json.dumps({"templates": ["demo-template"], "sources": []}))
 
     # initial templates list containing the template
-    templates = tmp_path / "templates.txt"
+    templates = tmp_path / "vendors.txt"
     templates.write_text("demo-template\n")
 
     # run update_templates with an empty templates file

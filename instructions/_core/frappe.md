@@ -8,9 +8,10 @@
 * API-Aufrufe erfolgen über Whitelist-Methoden oder die REST API.
 * Weitere Details findest du in der offiziellen Frappe-Dokumentation.
 
-Frappe und Bench werden über `../apps.json` verwaltet. Um weitere Frappe-Apps
-einzubinden, ergänze `custom_vendors.json` und trigger das Workflow
-**update-vendors** oder führe `../setup.sh` manuell aus.
+Frappe und Bench werden über `../apps.json` verwaltet. Um zusätzliche Apps
+einzubinden, trage ihren Slug in `../vendors.txt` ein. Die Zuordnung zu Git-URL
+und Branch erfolgt über `../vendor_profiles/integration_profiles.json`.
+Starte anschließend **update-vendors** oder führe `../setup.sh` aus.
 
 ## Prerequisites
 

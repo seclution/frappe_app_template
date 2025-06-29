@@ -11,7 +11,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/templates.txt}"
+TEMPLATE_FILE="${TEMPLATE_FILE:-$ROOT_DIR/vendors.txt}"
 VENDOR_DIR="$ROOT_DIR/vendor"
 INSTRUCTIONS_DIR="$ROOT_DIR/instructions"
 CODEX_JSON="$ROOT_DIR/codex.json"

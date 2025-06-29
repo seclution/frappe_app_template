@@ -30,7 +30,7 @@ Codex updates `hooks.py` and adds the corresponding Python code under the app mo
 
 ## Prompt 4: Manage Submodules
 
-"Add `https://github.com/example/erpnext` as a submodule and update `custom_vendors.json`. Trigger the update-vendors workflow."
+"Add `erpnext` to `vendors.txt` and trigger the update-vendors workflow."
 
 Codex adds the submodule under `vendor/` and refreshes the configuration.
 
