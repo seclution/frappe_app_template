@@ -18,17 +18,17 @@ jobs:
       - name: Generate codex.json
         run: |
           python - <<'PY'
-import os, json
-paths = []
-for base in ['instructions', 'vendor', 'app']:
-    if os.path.isdir(base):
-        for root, dirs, files in os.walk(base):
-            for name in dirs+files:
-                p = os.path.join(root, name)
-                paths.append(p)
-with open('codex.json', 'w') as f:
-    json.dump({'paths': paths}, f)
-PY
+          import os, json
+          paths = []
+          for base in ['instructions', 'vendor', 'app']:
+              if os.path.isdir(base):
+                  for root, dirs, files in os.walk(base):
+                      for name in dirs+files:
+                          p = os.path.join(root, name)
+                          paths.append(p)
+          with open('codex.json', 'w') as f:
+              json.dump({'paths': paths}, f)
+          PY
 
       - name: Extract codex gitlog
         run: |
