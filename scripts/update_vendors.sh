@@ -19,19 +19,36 @@ CODEX_JSON="$ROOT_DIR/codex.json"
 mkdir -p "$VENDOR_DIR"
 
 # read vendors list
-readarray -t VENDORS < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | xargs -r)
+readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*$/d')
 
-# load integration profiles
+# load integration profiles and manual entries
 declare -A REPOS
 declare -A BRANCHES
-for slug in "${VENDORS[@]}"; do
-  profile_file=$(find "$PROFILES_DIR" -name "$slug.json" -print -quit 2>/dev/null || true)
-  if [[ -n "$profile_file" ]]; then
-    repo=$(jq -r '.url // empty' "$profile_file" 2>/dev/null)
-    branch=$(jq -r '.branch // .tag // ""' "$profile_file" 2>/dev/null)
+for line in "${RAW_LINES[@]}"; do
+  IFS='|' read -r part1 part2 part3 <<< "$line"
+  slug=""
+  repo=""
+  branch=""
+  if [[ -n "$part3" ]]; then
+    slug="$part1"
+    repo="$part2"
+    branch="$part3"
+  elif [[ -n "$part2" ]]; then
+    if [[ "$part1" =~ ^(https?|file):// || "$part1" =~ ^git@ ]]; then
+      slug="$(basename "$part1" .git)"
+      repo="$part1"
+      branch="$part2"
+    else
+      slug="$part1"
+      repo="$part2"
+    fi
   else
-    repo=""
-    branch=""
+    slug="$part1"
+    profile_file=$(find "$PROFILES_DIR" -name "$slug.json" -print -quit 2>/dev/null || true)
+    if [[ -n "$profile_file" ]]; then
+      repo=$(jq -r '.url // empty' "$profile_file" 2>/dev/null)
+      branch=$(jq -r '.branch // .tag // ""' "$profile_file" 2>/dev/null)
+    fi
   fi
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
