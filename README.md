@@ -43,7 +43,6 @@ frappe_app_template/
 ├── workflow_templates/
 │   ├── init_new_app_repo.yml
 │   ├── publish.yml
-│   ├── create-app-folder.yml
 │   └── ...
 │
 ├── .github/
@@ -136,6 +135,7 @@ git init -b develop my_app && cd my_app
 
 git submodule add https://github.com/your-org/frappe_app_template
 ./frappe_app_template/setup.sh
+# erstellt auch sofort das App-Verzeichnis
 
 nano vendors.txt
 # z. B. erpnext, website
