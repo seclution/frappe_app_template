@@ -33,7 +33,9 @@ def test_update_vendors_prunes_obsolete_submodule(tmp_path):
     assert (tmp_path / "vendor" / "dummy").exists()
 
     (tmp_path / "apps.json").write_text("{}")
-    (tmp_path / "custom_vendors.json").write_text("{}")
+    (tmp_path / "vendors.txt").write_text("")
+    (tmp_path / "vendor_profiles").mkdir()
+    (tmp_path / "vendor_profiles" / "integration_profiles.json").write_text("{}")
 
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True)
 
@@ -72,23 +74,22 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     # root config has outdated apps.json which should be ignored
     (tmp_path / "apps.json").write_text("{\n  \"oldapp\": {\"repo\": \"file://old\", \"branch\": \"main\"}\n}")
 
-    (tmp_path / "custom_vendors.json").write_text(
-        "{\n  \"app1\": {\"repo\": \"" + str(app1_repo) + "\", \"tag\": \"v1\"}}"
-    )
-
-    template_dir = tmp_path / "demo-template"
-    template_dir.mkdir()
-    (template_dir / "custom_vendors.json").write_text(
-        "{\n  \"app2\": {\"repo\": \"" + str(app2_repo) + "\", \"tag\": \"v2\"}}"
-    )
+    (tmp_path / "vendors.txt").write_text("app1\napp2\n")
+    profiles = {
+        "app1": {"url": str(app1_repo), "branch": "v1"},
+        "app2": {"url": str(app2_repo), "branch": "v2"}
+    }
+    prof_dir = tmp_path / "vendor_profiles"
+    prof_dir.mkdir()
+    (prof_dir / "integration_profiles.json").write_text(json.dumps(profiles))
 
     env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
     data = (tmp_path / "apps.json").read_text()
     assert "oldapp" not in data
-    custom = (tmp_path / "custom_vendors.json").read_text()
-    assert "app1" in custom and "app2" in custom
+    profiles = json.loads((tmp_path / "vendor_profiles" / "integration_profiles.json").read_text())
+    assert "app1" in profiles and "app2" in profiles
 
 
 def test_update_vendors_normalizes_codex_json(tmp_path):
@@ -108,9 +109,11 @@ def test_update_vendors_normalizes_codex_json(tmp_path):
     subprocess.run(["git", "commit", "-m", "init"], cwd=dummy_repo, check=True)
 
     (tmp_path / "apps.json").write_text("{}")
-    (tmp_path / "custom_vendors.json").write_text(
-        "{\n  \"dummy\": {\"repo\": \"" + str(dummy_repo) + "\", \"tag\": \"v1\"}}"
-    )
+    (tmp_path / "vendors.txt").write_text("dummy")
+    prof = {"dummy": {"url": str(dummy_repo), "branch": "v1"}}
+    prof_dir = tmp_path / "vendor_profiles"
+    prof_dir.mkdir()
+    (prof_dir / "integration_profiles.json").write_text(json.dumps(prof))
 
     codex = tmp_path / "codex.json"
     codex.write_text('{"templates": {"foo": 1}, "sources": []}')

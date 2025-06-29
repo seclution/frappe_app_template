@@ -5,7 +5,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entw
 ## Funktionsweise
 
 - Jedes App-Template enthält ein eigenes `instructions/`-Verzeichnis
-- Beim Clonen eines Templates (siehe `templates.txt`) werden diese nach `instructions/_<template-name>/` kopiert
+- Beim Clonen eines Templates (siehe `vendors.txt`) werden diese nach `instructions/_<slug>/` kopiert
 - Beim Entfernen eines Templates wird auch `instructions/_<template-name>/` gelöscht
 
 ## Ziel

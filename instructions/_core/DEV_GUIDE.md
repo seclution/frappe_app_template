@@ -3,12 +3,11 @@
 This directory contains additional notes for Frappe and ERPNext. For the
 automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 
-1. Default versions for Frappe and Bench reside in `../apps.json`. Add further
-   vendor repositories (ERPNext/HRMS) to `custom_vendors.json` when needed.
-2. List template repositories that ship extra instructions in
-   `templates.txt`.
-3. The *update-vendors* workflow clones all repositories, merges any
-   `custom_vendors.json` from the templates and refreshes `apps.json`. Run
+1. Default versions for Frappe and Bench reside in `../apps.json`.
+2. List active vendor slugs in `../vendors.txt`. Their profiles are defined in
+   `../vendor_profiles/integration_profiles.json`.
+3. The *update-vendors* workflow clones all listed repositories and refreshes
+   `apps.json`. Run
    `../setup.sh` locally if you want to perform the same steps manually.
 4. The `CI` workflow only installs dependencies and runs tests. It no longer
    executes `../setup.sh` automatically.

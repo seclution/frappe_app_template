@@ -59,7 +59,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entw
 ## Funktionsweise
 
 - Jedes App-Template enthält ein eigenes `instructions/`-Verzeichnis
-- Beim Clonen eines Templates (siehe `templates.txt`) werden diese nach `instructions/_<template-name>/` kopiert
+- Beim Clonen eines Templates (siehe `vendors.txt`) werden diese nach `instructions/_<slug>/` kopiert
 - Beim Entfernen eines Templates wird auch `instructions/_<template-name>/` gelöscht
 
 ## Ziel
@@ -90,22 +90,20 @@ EOF
 fi
 
 # Create example configuration files if missing
-if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
-    cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
+if [ ! -f "$CONFIG_TARGET/vendors.txt" ]; then
+    echo "example_app" > "$CONFIG_TARGET/vendors.txt"
+fi
+
+if [ ! -f "$CONFIG_TARGET/vendor_profiles/integration_profiles.json" ]; then
+    mkdir -p "$CONFIG_TARGET/vendor_profiles"
+    cat > "$CONFIG_TARGET/vendor_profiles/integration_profiles.json" <<'JSON'
 {
   "example_app": {
-    "repo": "https://github.com/example/example_app",
-    "tag": "v1.0.0"
+    "url": "https://github.com/example/example_app",
+    "branch": "v1.0.0"
   }
 }
 JSON
-fi
-
-if [ ! -f "$CONFIG_TARGET/templates.txt" ]; then
-    cat > "$CONFIG_TARGET/templates.txt" <<'TXT'
-# Add template repository URLs here
-# https://github.com/example/template-a
-TXT
 fi
 
 if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
