@@ -5,6 +5,10 @@ on:
     branches: [ develop ]
   workflow_dispatch:
 
+concurrency:
+  group: push-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: write
@@ -34,24 +38,11 @@ jobs:
           done
           gh run watch "$RUN_ID" --interval 30
           gh run view "$RUN_ID" --exit-status
-      - name: Trigger and await create-app-folder
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_NAME: ${{ github.event.repository.name }}
+      - name: Create app folder
         run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/create-app-folder.yml/dispatches \
-            -d '{"ref":"${{ github.ref_name }}","inputs":{"app-name":"'$APP_NAME'"}}'
-          RUN_ID=""
-          echo "Waiting for create-app-folder run to start..."
-          until [ -n "$RUN_ID" ]; do
-            sleep 5
-            RUN_ID=$(gh run list --workflow create-app-folder.yml --branch "${GITHUB_REF_NAME}" --json databaseId,status -q 'map(select(.status=="queued" or .status=="in_progress"))[0].databaseId')
-          done
-          gh run watch "$RUN_ID" --interval 30
-          gh run view "$RUN_ID" --exit-status
+          APP_NAME=${{ github.event.repository.name }}
+          export APP_NAME
+          bash ./setup.sh
       - name: Trigger and await publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

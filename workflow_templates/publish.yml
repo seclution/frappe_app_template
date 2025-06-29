@@ -3,6 +3,10 @@ name: publish
 on:
   workflow_dispatch:
 
+concurrency:
+  group: push-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

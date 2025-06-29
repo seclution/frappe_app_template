@@ -5,6 +5,10 @@ on:
     branches: [develop]
   pull_request:
 
+concurrency:
+  group: push-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test:
     if: github.event_name != 'push' || github.actor != 'github-actions[bot]'

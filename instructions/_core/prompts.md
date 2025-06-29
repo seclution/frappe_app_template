@@ -101,6 +101,6 @@ Codex ergänzt `vendors.txt`, führt `setup.sh` erneut aus und holt die neuen Re
 
 ## Prompt 10: GitHub Workflows prüfen
 
-"Nach dem ersten Push an GitHub sind `create-app-folder` und `publish` nicht gelaufen. Überprüfe, ob der Branch `develop` heißt und die Workflow-Rechte auf **Read and write** stehen."
+"Nach dem ersten Push an GitHub ist `publish` nicht gelaufen. Überprüfe, ob der Branch `develop` heißt und die Workflow-Rechte auf **Read and write** stehen. Das App-Verzeichnis wird jetzt bereits lokal durch `setup.sh` erzeugt."
 
 Codex stellt sicher, dass auf `develop` gepusht wurde und weist darauf hin, die Berechtigungen unter *Settings → Actions → General* zu aktivieren.
