@@ -45,9 +45,23 @@ for slug in "${!REPOS[@]}"; do
   target="$VENDOR_DIR/$slug"
   echo "➡️  Processing $slug ($branch)"
   if grep -q "path = vendor/$slug" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
-    git submodule update --init "vendor/$slug"
+    if ! git submodule update --init "vendor/$slug"; then
+      echo "❌ Failed to update $slug" >&2
+      continue
+    fi
   else
-    git submodule add "$repo" "vendor/$slug" && changes=true
+    if git submodule add "$repo" "vendor/$slug"; then
+      changes=true
+    else
+      echo "❌ Failed to clone $slug from $repo" >&2
+      git config --remove-section "submodule.vendor/$slug" 2>/dev/null || true
+      rm -rf "$target"
+      continue
+    fi
+  fi
+  if [ ! -d "$target" ]; then
+    echo "⚠️  Missing directory for $slug" >&2
+    continue
   fi
   pushd "$target" >/dev/null
   git fetch --tags >/dev/null 2>&1 || true
