@@ -119,3 +119,31 @@ def test_update_vendors_normalizes_codex_json(tmp_path):
     data = json.loads(codex.read_text())
     assert isinstance(data["templates"], list)
 
+
+def test_update_vendors_accepts_manual_entry(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    manual_repo = tmp_path / "manual_repo"
+    manual_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=manual_repo, check=True)
+    (manual_repo / "README.md").write_text("manual")
+    subprocess.run(["git", "add", "README.md"], cwd=manual_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=manual_repo, check=True)
+
+    (tmp_path / "apps.json").write_text("{}")
+    (tmp_path / "vendors.txt").write_text(f"custom|{manual_repo}|main")
+    (tmp_path / "vendor_profiles").mkdir()
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads((tmp_path / "apps.json").read_text())
+    assert "custom" in data
+    assert data["custom"]["branch"] == "main"
+    assert (tmp_path / "vendor" / "custom").exists()

@@ -1,3 +1,11 @@
+# Format:
+# slug                          -> nutzt vendor_profiles/<kategorie>/<slug>.json
+# slug|https://repo.url|branch  -> manuelles Repo
+# https://repo.url|branch       -> slug wird aus dem Repo-Namen abgeleitet
+#
+# Vendor-Profile befinden sich unter vendor_profiles/ und koennen angepasst werden.
+# Nach Aenderungen ./scripts/update_vendors.sh ausfuehren.
+
 # Liste aktiver Vendor-Slugs
 # Zum Aktivieren eines Vendors einfach den Slug ohne "#" in eine neue Zeile schreiben.
 # Beispiele:
@@ -64,6 +72,8 @@
 # prometheus
 # grafana
 # uptime-kuma
+# Beispiel: manuelle Einbindung
+# myaddon|https://github.com/me/myaddon|main
 # zabbix
 # librenms
 
