@@ -9,6 +9,7 @@ Dies ist ein **`template_base`**-Repository.
 * Es wird **nicht selbst gepublished** (`publish_enabled: false`)
 * Dient als Submodul in App-Repos
 * Enthält: Setup-Tools, Referenz-App, globale Instructions, Indexing-Mechanismen, Workflow-Templates
+* Zudem liegt unter `doku/` eine Sammlung projektbegleitender Dokumente.
 
 ## 📁 Projektstruktur
 
@@ -23,6 +24,11 @@ frappe_app_template/
 │       ├── erpnext.md
 │       ├── prompts.md
 │       └── ...
+│
+├── doku/
+│   ├── overview.md
+│   ├── user_story_template.md
+│   └── guide_doctype_listing.md
 │
 ├── scripts/                            # Setup- & Sync-Werkzeuge
 │   ├── bootstrap_project.sh            # initialisiert neues App-Repo
