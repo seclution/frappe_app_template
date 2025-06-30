@@ -24,6 +24,11 @@ readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*
 # load integration profiles and manual entries
 declare -A REPOS
 declare -A BRANCHES
+# track vendor slugs
+recognized=()
+installed=()
+updated=()
+removed=()
 for line in "${RAW_LINES[@]}"; do
   IFS='|' read -r part1 part2 part3 <<< "$line"
   slug=""
@@ -53,6 +58,7 @@ for line in "${RAW_LINES[@]}"; do
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
     BRANCHES[$slug]="$branch"
+    recognized+=("$slug")
   else
     echo "⚠️  Unknown vendor: $slug" >&2
   fi
@@ -72,9 +78,11 @@ for slug in "${!REPOS[@]}"; do
       echo "❌ Failed to update $slug" >&2
       continue
     fi
+    updated+=("$slug")
   else
     if git submodule add "$repo" "vendor/$slug"; then
       changes=true
+      installed+=("$slug")
     else
       echo "❌ Failed to clone $slug from $repo" >&2
       git config --remove-section "submodule.vendor/$slug" 2>/dev/null || true
@@ -109,6 +117,7 @@ if [ -f "$ROOT_DIR/.gitmodules" ]; then
       git submodule deinit -f "$path" || true
       git rm -f "$path" || true
       rm -rf "$ROOT_DIR/.git/modules/$path" "$VENDOR_DIR/$name"
+      removed+=("$name")
       changes=true
     fi
   done < <(git config --file "$ROOT_DIR/.gitmodules" --get-regexp path | awk '{print $2}')
@@ -120,6 +129,7 @@ for dir in "$VENDOR_DIR"/*; do
   if [[ -z "${REPOS[$name]+x}" ]]; then
     echo "🗑 Removing obsolete directory $dir"
     rm -rf "$dir"
+    removed+=("$name")
     changes=true
   fi
 done
@@ -145,4 +155,18 @@ fi
 sources_json=$(printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.')
 jq -n --argjson s "$sources_json" --argjson t "$existing_templates" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s,"templates":$t}' > "$CODEX_JSON"
 
-echo "✅ Vendor repositories updated."
+summary_parts=()
+if [ ${#installed[@]} -gt 0 ]; then
+  summary_parts+=("Installed: ${installed[*]}")
+fi
+if [ ${#updated[@]} -gt 0 ]; then
+  summary_parts+=("Updated: ${updated[*]}")
+fi
+if [ ${#removed[@]} -gt 0 ]; then
+  summary_parts+=("Removed: ${removed[*]}")
+fi
+if [ ${#recognized[@]} -gt 0 ]; then
+  summary_parts+=("Recognized: ${recognized[*]}")
+fi
+summary="$(IFS=' | '; echo "${summary_parts[*]}")"
+echo "$summary"
