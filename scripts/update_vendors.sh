@@ -59,6 +59,20 @@ readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*
 # load integration profiles and manual entries
 declare -A REPOS
 declare -A BRANCHES
+declare -A APP_INFO
+# preload entries from existing apps.json so manual apps persist
+if [ -f "$ROOT_DIR/apps.json" ]; then
+  while IFS= read -r slug; do
+    repo=$(jq -r ".\"$slug\".repo // empty" "$ROOT_DIR/apps.json")
+    branch=$(jq -r ".\"$slug\".branch // empty" "$ROOT_DIR/apps.json")
+    commit=$(jq -r ".\"$slug\".commit // empty" "$ROOT_DIR/apps.json")
+    if [[ -n "$repo" ]]; then
+      REPOS[$slug]="$repo"
+      BRANCHES[$slug]="$branch"
+      APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
+    fi
+  done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
+fi
 # track vendor slugs
 recognized=()
 installed=()
@@ -99,8 +113,21 @@ for line in "${RAW_LINES[@]}"; do
   fi
 done
 
+# load additional repositories from custom_vendors.json
+CUSTOM_VENDORS="$ROOT_DIR/custom_vendors.json"
+if [ -f "$CUSTOM_VENDORS" ]; then
+  while IFS= read -r slug; do
+    repo=$(jq -r ".\"$slug\".repo // empty" "$CUSTOM_VENDORS")
+    branch=$(jq -r ".\"$slug\".branch // .\"$slug\".tag // empty" "$CUSTOM_VENDORS")
+    if [[ -n "$repo" ]]; then
+      REPOS[$slug]="$repo"
+      BRANCHES[$slug]="$branch"
+      recognized+=("$slug")
+    fi
+  done < <(jq -r 'keys[]' "$CUSTOM_VENDORS" 2>/dev/null)
+fi
+
 # track resulting apps.json entries
-declare -A APP_INFO
 changes=false
 
 for slug in "${!REPOS[@]}"; do

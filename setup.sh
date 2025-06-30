@@ -106,6 +106,21 @@ if [ ! -f "$CONFIG_TARGET/vendors.txt" ]; then
     cp "$SCRIPT_DIR/vendors.txt" "$CONFIG_TARGET/vendors.txt"
 fi
 
+if [ ! -f "$CONFIG_TARGET/apps.json" ]; then
+    cp "$SCRIPT_DIR/apps.json" "$CONFIG_TARGET/apps.json"
+fi
+
+if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
+    cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
+{
+  "example_app": {
+    "repo": "https://github.com/example/example_app",
+    "branch": "v1.0.0"
+  }
+}
+JSON
+fi
+
 if [ ! -f "$CONFIG_TARGET/vendor_profiles/examples/example_app.json" ]; then
     mkdir -p "$CONFIG_TARGET/vendor_profiles/examples"
     cat > "$CONFIG_TARGET/vendor_profiles/examples/example_app.json" <<'JSON'
