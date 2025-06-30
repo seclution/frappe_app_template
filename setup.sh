@@ -36,9 +36,15 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
     if [ "$PARENT_DIR" != "$SCRIPT_DIR" ] && [ ! -f "$PARENT_DIR/.gitignore" ] && [ -f "$SCRIPT_DIR/.gitignore" ]; then
         cp "$SCRIPT_DIR/.gitignore" "$PARENT_DIR/.gitignore"
     fi
+
     CONFIG_TARGET="$PARENT_DIR"
 else
     CONFIG_TARGET="$SCRIPT_DIR"
+fi
+
+# Ensure .gitmodules exists so that workflows using submodules don't fail
+if [ ! -f "$CONFIG_TARGET/.gitmodules" ]; then
+    git submodule init 2>/dev/null || touch "$CONFIG_TARGET/.gitmodules"
 fi
 
 # Determine app name
