@@ -31,3 +31,13 @@ If Codex suggests wrong files or incomplete steps:
 - Check the docs in `instructions/_core/` to see if they already cover your topic.
 - Rerun `generate_codex_by_scenario.py` after updating scenarios or instructions.
 
+
+## 5. Inspecting the active Codex context
+
+Run `scripts/print_codex_context.py` to see which files are prioritised for a scenario and which prompt template it suggests:
+
+```bash
+python scripts/print_codex_context.py --scenario my-scenario
+```
+
+The script reads `codex.json` and the chosen markdown file under `instructions/_scenarios/`. It prints the referenced paths with their index positions and shows the suggested prompt template from the scenario file.
