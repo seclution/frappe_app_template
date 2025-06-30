@@ -17,6 +17,41 @@ PROFILES_DIR="${PROFILES_DIR:-$ROOT_DIR/vendor_profiles}"
 CODEX_JSON="$ROOT_DIR/codex.json"
 
 mkdir -p "$VENDOR_DIR"
+cd "$ROOT_DIR"
+
+# ensure frappe_app_template submodule exists and is up to date
+TEMPLATE_DIR="$ROOT_DIR/frappe_app_template"
+TEMPLATE_URL="${TEMPLATE_URL:-https://github.com/seclution/frappe_app_template}"
+
+check_template() {
+  if grep -q "path = $(basename "$TEMPLATE_DIR")" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
+    git submodule update --init "$TEMPLATE_DIR" >/dev/null 2>&1 || true
+  fi
+
+  if [ ! -d "$TEMPLATE_DIR/.git" ]; then
+    if [[ "${GIT_ALLOW_PROTOCOL:-https}" != *"https"* ]]; then
+      echo "⚠️  Template missing and HTTPS disallowed. Skipping clone." >&2
+      return
+    fi
+    echo "➕ Adding template submodule" >&2
+    git submodule add "$TEMPLATE_URL" "$TEMPLATE_DIR" || return
+    git submodule update --init "$TEMPLATE_DIR" >/dev/null 2>&1 || true
+  else
+    if [[ "${GIT_ALLOW_PROTOCOL:-https}" == *"https"* ]]; then
+      pushd "$TEMPLATE_DIR" >/dev/null
+      git fetch origin >/dev/null 2>&1 || true
+      local_head=$(git rev-parse HEAD)
+      remote_head=$(git rev-parse origin/HEAD 2>/dev/null || git rev-parse origin/master 2>/dev/null || echo "")
+      popd >/dev/null
+      if [ -n "$remote_head" ] && [ "$local_head" != "$remote_head" ]; then
+        echo "⬆️  Updating template submodule" >&2
+        git submodule update --remote "$TEMPLATE_DIR" >/dev/null 2>&1 || true
+      fi
+    fi
+  fi
+}
+
+check_template
 
 # read vendors list
 readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*$/d')
