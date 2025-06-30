@@ -87,6 +87,9 @@ for line in "${RAW_LINES[@]}"; do
     path="vendor/${slug}${branch:+-$sanitized}"
     PATHS[$slug]="$path"
     recognized+=("$slug")
+  elif [[ -n "${REPOS[$slug]:-}" ]]; then
+    # slug already defined in apps.json, reuse existing repo
+    recognized+=("$slug")
   else
     echo "⚠️  Unknown vendor: $slug" >&2
   fi
