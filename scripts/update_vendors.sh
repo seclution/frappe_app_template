@@ -45,6 +45,12 @@ if [ -f "$ROOT_DIR/apps.json" ]; then
       ref="${branch:-$tag}"
       sanitized=${ref//\//_}
       path="vendor/${slug}${ref:+-$sanitized}"
+      if [ -f "$ROOT_DIR/.gitmodules" ]; then
+        existing=$(grep -E "path = vendor/${slug}.*" "$ROOT_DIR/.gitmodules" 2>/dev/null | awk '{print $3}' | head -n1)
+        if [[ -n "$existing" ]]; then
+          path="$existing"
+        fi
+      fi
       PATHS[$slug]="$path"
     fi
   done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
@@ -105,6 +111,12 @@ for line in "${RAW_LINES[@]}"; do
     ref="${branch:-$tag}"
     sanitized=${ref//\//_}
     path="vendor/${slug}${ref:+-$sanitized}"
+    if [ -f "$ROOT_DIR/.gitmodules" ]; then
+      existing=$(grep -E "path = vendor/${slug}.*" "$ROOT_DIR/.gitmodules" 2>/dev/null | awk '{print $3}' | head -n1)
+      if [[ -n "$existing" ]]; then
+        path="$existing"
+      fi
+    fi
     PATHS[$slug]="$path"
     recognized+=("$slug")
   else
@@ -125,6 +137,12 @@ if [ -f "$CUSTOM_VENDORS" ]; then
       ref="${branch:-$tag}"
       sanitized=${ref//\//_}
       path="vendor/${slug}${ref:+-$sanitized}"
+      if [ -f "$ROOT_DIR/.gitmodules" ]; then
+        existing=$(grep -E "path = vendor/${slug}.*" "$ROOT_DIR/.gitmodules" 2>/dev/null | awk '{print $3}' | head -n1)
+        if [[ -n "$existing" ]]; then
+          path="$existing"
+        fi
+      fi
       PATHS[$slug]="$path"
       recognized+=("$slug")
     fi
@@ -144,9 +162,19 @@ for slug in "${!REPOS[@]}"; do
   if grep -q "path = $path" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
     if ! git submodule update --init "$path"; then
       echo "❌ Failed to update $slug" >&2
-      continue
+      git submodule deinit -f "$path" 2>/dev/null || true
+      git rm -f "$path" 2>/dev/null || true
+      rm -rf "$ROOT_DIR/.git/modules/$path" "$target"
+      if git submodule add -f "$repo" "$path"; then
+        changes=true
+        installed+=("$slug")
+      else
+        echo "❌ Failed to re-add $slug from $repo" >&2
+        continue
+      fi
+    else
+      updated+=("$slug")
     fi
-    updated+=("$slug")
   else
     if git submodule add -f "$repo" "$path"; then
       changes=true
