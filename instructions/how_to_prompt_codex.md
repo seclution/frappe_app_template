@@ -41,3 +41,8 @@ python scripts/print_codex_context.py --scenario my-scenario
 ```
 
 The script reads `codex.json` and the chosen markdown file under `instructions/_scenarios/`. It prints the referenced paths with their index positions and shows the suggested prompt template from the scenario file.
+## 6. Automatic context and file management
+
+Before executing any prompt, Codex should read the available documentation and the indexing strategy described in `codex.json`. Adjust the list of indexed paths when repositories grow to avoid excessive context size.
+
+Codex may create or extend configuration files such as `Price Settings` automatically. Similarly, when a new algorithm, scraping routine or API integration is required, Codex should scaffold sensible defaults or generate the necessary code once the feature is introduced.
