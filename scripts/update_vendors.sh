@@ -27,6 +27,7 @@ readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*
 # load integration profiles and manual entries
 declare -A REPOS
 declare -A BRANCHES
+declare -A TAGS
 declare -A APP_INFO
 declare -A PATHS
 
@@ -34,13 +35,16 @@ if [ -f "$ROOT_DIR/apps.json" ]; then
   while IFS= read -r slug; do
     repo=$(jq -r ".\"$slug\".repo // empty" "$ROOT_DIR/apps.json")
     branch=$(jq -r ".\"$slug\".branch // empty" "$ROOT_DIR/apps.json")
+    tag=$(jq -r ".\"$slug\".tag // empty" "$ROOT_DIR/apps.json")
     commit=$(jq -r ".\"$slug\".commit // empty" "$ROOT_DIR/apps.json")
     if [[ -n "$repo" ]]; then
       REPOS[$slug]="$repo"
       BRANCHES[$slug]="$branch"
-      APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
-      sanitized=${branch//\//_}
-      path="vendor/${slug}${branch:+-$sanitized}"
+      TAGS[$slug]="$tag"
+      APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg tag "$tag" --arg commit "$commit" '{repo:$repo,branch:$branch,tag:$tag,commit:$commit}')"
+      ref="${branch:-$tag}"
+      sanitized=${ref//\//_}
+      path="vendor/${slug}${ref:+-$sanitized}"
       PATHS[$slug]="$path"
     fi
   done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
@@ -52,11 +56,17 @@ updated=()
 removed=()
 
 for line in "${RAW_LINES[@]}"; do
-  IFS='|' read -r part1 part2 part3 <<< "$line"
+  IFS='|' read -r part1 part2 part3 part4 <<< "$line"
   slug=""
   repo=""
   branch=""
-  if [[ -n "$part3" ]]; then
+  tag=""
+  if [[ -n "$part4" ]]; then
+    slug="$part1"
+    repo="$part2"
+    branch="$part3"
+    tag="$part4"
+  elif [[ -n "$part3" ]]; then
     slug="$part1"
     repo="$part2"
     branch="$part3"
@@ -77,14 +87,17 @@ for line in "${RAW_LINES[@]}"; do
     fi
     if [[ -n "$profile_file" ]]; then
       repo=$(jq -r '.url // empty' "$profile_file" 2>/dev/null)
-      branch=$(jq -r '.branch // .tag // ""' "$profile_file" 2>/dev/null)
+      branch=$(jq -r '.branch // empty' "$profile_file" 2>/dev/null)
+      tag=$(jq -r '.tag // empty' "$profile_file" 2>/dev/null)
     fi
   fi
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
     BRANCHES[$slug]="$branch"
-    sanitized=${branch//\//_}
-    path="vendor/${slug}${branch:+-$sanitized}"
+    TAGS[$slug]="$tag"
+    ref="${branch:-$tag}"
+    sanitized=${ref//\//_}
+    path="vendor/${slug}${ref:+-$sanitized}"
     PATHS[$slug]="$path"
     recognized+=("$slug")
   elif [[ -n "${REPOS[$slug]:-}" ]]; then
@@ -99,12 +112,15 @@ CUSTOM_VENDORS="$ROOT_DIR/custom_vendors.json"
 if [ -f "$CUSTOM_VENDORS" ]; then
   while IFS= read -r slug; do
     repo=$(jq -r ".\"$slug\".repo // empty" "$CUSTOM_VENDORS")
-    branch=$(jq -r ".\"$slug\".branch // .\"$slug\".tag // empty" "$CUSTOM_VENDORS")
+    branch=$(jq -r ".\"$slug\".branch // empty" "$CUSTOM_VENDORS")
+    tag=$(jq -r ".\"$slug\".tag // empty" "$CUSTOM_VENDORS")
     if [[ -n "$repo" ]]; then
       REPOS[$slug]="$repo"
       BRANCHES[$slug]="$branch"
-      sanitized=${branch//\//_}
-      path="vendor/${slug}${branch:+-$sanitized}"
+      TAGS[$slug]="$tag"
+      ref="${branch:-$tag}"
+      sanitized=${ref//\//_}
+      path="vendor/${slug}${ref:+-$sanitized}"
       PATHS[$slug]="$path"
       recognized+=("$slug")
     fi
@@ -116,9 +132,11 @@ changes=false
 for slug in "${!REPOS[@]}"; do
   repo="${REPOS[$slug]}"
   branch="${BRANCHES[$slug]}"
+  tag="${TAGS[$slug]}"
   path="${PATHS[$slug]}"
   target="$ROOT_DIR/$path"
-  echo "➡️  Processing $slug ($branch)"
+  ref="${branch:-$tag}"
+  echo "➡️  Processing $slug ($ref)"
   if grep -q "path = $path" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
     if ! git submodule update --init "$path"; then
       echo "❌ Failed to update $slug" >&2
@@ -141,11 +159,16 @@ for slug in "${!REPOS[@]}"; do
     continue
   fi
   pushd "$target" >/dev/null
-  git fetch origin "$branch" --tags >/dev/null 2>&1 || git fetch --tags >/dev/null 2>&1 || true
-  git checkout "$branch" >/dev/null 2>&1 || git checkout "origin/$branch" >/dev/null 2>&1 || true
+  if [[ -n "$branch" ]]; then
+    git fetch origin "$branch" --tags >/dev/null 2>&1 || git fetch --tags >/dev/null 2>&1 || true
+    git checkout "$branch" >/dev/null 2>&1 || git checkout "origin/$branch" >/dev/null 2>&1 || true
+  elif [[ -n "$tag" ]]; then
+    git fetch origin "tag" "$tag" >/dev/null 2>&1 || git fetch --tags >/dev/null 2>&1 || true
+    git checkout "tags/$tag" >/dev/null 2>&1 || git checkout "$tag" >/dev/null 2>&1 || true
+  fi
   commit=$(git rev-parse HEAD)
   popd >/dev/null
-  APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
+  APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg tag "$tag" --arg commit "$commit" '{repo:$repo,branch:$branch,tag:$tag,commit:$commit}')"
   if [ -d "$target/instructions" ]; then
     mkdir -p "$ROOT_DIR/instructions/_$slug"
     rsync -a --delete "$target/instructions/" "$ROOT_DIR/instructions/_$slug/"
