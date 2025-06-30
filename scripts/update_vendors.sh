@@ -24,31 +24,13 @@ cd "$ROOT_DIR"
 # read vendors list
 readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*$/d')
 
-# load integration profiles and manual entries
+# integration data
 declare -A REPOS
 declare -A BRANCHES
 declare -A TAGS
 declare -A APP_INFO
 declare -A PATHS
-
-if [ -f "$ROOT_DIR/apps.json" ]; then
-  while IFS= read -r slug; do
-    repo=$(jq -r ".\"$slug\".repo // empty" "$ROOT_DIR/apps.json")
-    branch=$(jq -r ".\"$slug\".branch // empty" "$ROOT_DIR/apps.json")
-    tag=$(jq -r ".\"$slug\".tag // empty" "$ROOT_DIR/apps.json")
-    commit=$(jq -r ".\"$slug\".commit // empty" "$ROOT_DIR/apps.json")
-    if [[ -n "$repo" ]]; then
-      REPOS[$slug]="$repo"
-      BRANCHES[$slug]="$branch"
-      TAGS[$slug]="$tag"
-      APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg tag "$tag" --arg commit "$commit" '{repo:$repo,branch:$branch,tag:$tag,commit:$commit}')"
-      ref="${branch:-$tag}"
-      sanitized=${ref//\//_}
-      path="vendor/${slug}${ref:+-$sanitized}"
-      PATHS[$slug]="$path"
-    fi
-  done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
-fi
+declare -A KEEP
 
 recognized=()
 installed=()
@@ -92,12 +74,6 @@ for line in "${RAW_LINES[@]}"; do
     fi
   fi
 
-  if [[ -n "${REPOS[$slug]:-}" ]]; then
-    # Keep existing configuration from apps.json
-    recognized+=("$slug")
-    continue
-  fi
-
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
     BRANCHES[$slug]="$branch"
@@ -106,7 +82,7 @@ for line in "${RAW_LINES[@]}"; do
     sanitized=${ref//\//_}
     path="vendor/${slug}${ref:+-$sanitized}"
     PATHS[$slug]="$path"
-    recognized+=("$slug")
+    KEEP[$slug]=1
   else
     echo "⚠️  Unknown vendor: $slug" >&2
   fi
@@ -126,14 +102,36 @@ if [ -f "$CUSTOM_VENDORS" ]; then
       sanitized=${ref//\//_}
       path="vendor/${slug}${ref:+-$sanitized}"
       PATHS[$slug]="$path"
-      recognized+=("$slug")
+      KEEP[$slug]=1
     fi
   done < <(jq -r 'keys[]' "$CUSTOM_VENDORS" 2>/dev/null)
 fi
 
+# merge existing apps.json entries
+if [ -f "$ROOT_DIR/apps.json" ]; then
+  while IFS= read -r slug; do
+    repo=$(jq -r ".\"$slug\".repo // empty" "$ROOT_DIR/apps.json")
+    branch=$(jq -r ".\"$slug\".branch // empty" "$ROOT_DIR/apps.json")
+    tag=$(jq -r ".\"$slug\".tag // empty" "$ROOT_DIR/apps.json")
+    commit=$(jq -r ".\"$slug\".commit // empty" "$ROOT_DIR/apps.json")
+    ref="${branch:-$tag}"
+    sanitized=${ref//\//_}
+    path="vendor/${slug}${ref:+-$sanitized}"
+    PATHS[$slug]="$path"
+    if [[ -n "${KEEP[$slug]:-}" ]]; then
+      REPOS[$slug]="$repo"
+      BRANCHES[$slug]="$branch"
+      TAGS[$slug]="$tag"
+      APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg tag "$tag" --arg commit "$commit" '{repo:$repo,branch:$branch,tag:$tag,commit:$commit}')"
+    fi
+  done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
+fi
+
+recognized=("${!KEEP[@]}")
+
 changes=false
 
-for slug in "${!REPOS[@]}"; do
+for slug in "${recognized[@]}"; do
   repo="${REPOS[$slug]}"
   branch="${BRANCHES[$slug]}"
   tag="${TAGS[$slug]}"
@@ -186,7 +184,10 @@ for slug in "${!REPOS[@]}"; do
   fi
 done
 
-recognized_paths=("${PATHS[@]}")
+recognized_paths=()
+for slug in "${recognized[@]}"; do
+  recognized_paths+=("${PATHS[$slug]}")
+done
 
 if [ -f "$ROOT_DIR/.gitmodules" ]; then
   while IFS= read -r path; do
@@ -229,13 +230,13 @@ for dir in "$VENDOR_DIR"/*; do
 done
 
 jq_filter='{}'
-for slug in "${!APP_INFO[@]}"; do
+for slug in "${recognized[@]}"; do
   jq_filter="$jq_filter | .[\"$slug\"]=${APP_INFO[$slug]}"
 done
 jq -n "$jq_filter" > "$ROOT_DIR/apps.json"
 
 sources=("app/")
-for slug in "${!APP_INFO[@]}"; do
+for slug in "${recognized[@]}"; do
   sources+=("${PATHS[$slug]}/")
  done
 sources+=("instructions/" "sample_data/")
