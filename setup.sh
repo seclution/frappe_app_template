@@ -119,7 +119,6 @@ if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
   }
 }
 JSON
-    echo '{}' > "$CONFIG_TARGET/custom_vendors.json"
 fi
 
 
