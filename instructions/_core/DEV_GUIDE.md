@@ -5,8 +5,10 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 
 1. Default versions for Frappe and Bench reside in `../apps.json`.
 2. List active vendor slugs in `../vendors.txt`. Passende Profil-Dateien liegen
-   unter `../vendor_profiles/<kategorie>/<slug>.json`. Du kannst auch eigene
-   Repositories direkt in `../apps.json` oder `../custom_vendors.json` hinterlegen.
+   unter `../vendor_profiles/<kategorie>/<slug>.json` oder im Template-Pfad
+   `../frappe_app_template/vendor_profiles/<kategorie>/<slug>.json`. Du kannst
+   auch eigene Repositories direkt in `../apps.json` oder `../custom_vendors.json`
+   hinterlegen.
 3. The *update-vendors* workflow clones all listed repositories and refreshes
    `apps.json`. Run
    `../setup.sh` locally if you want to perform the same steps manually.

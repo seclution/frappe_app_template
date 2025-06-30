@@ -7,6 +7,15 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 VENDOR_DIR="$ROOT_DIR/vendor"
 VENDORS_FILE="${VENDORS_FILE:-$ROOT_DIR/vendors.txt}"
 PROFILES_DIR="${PROFILES_DIR:-$ROOT_DIR/vendor_profiles}"
+
+# fallback to template-provided profiles when none exist in the project
+if [ ! -d "$PROFILES_DIR" ]; then
+  if [ -d "$ROOT_DIR/frappe_app_template/vendor_profiles" ]; then
+    PROFILES_DIR="$ROOT_DIR/frappe_app_template/vendor_profiles"
+  elif [ -d "$ROOT_DIR/template/vendor_profiles" ]; then
+    PROFILES_DIR="$ROOT_DIR/template/vendor_profiles"
+  fi
+fi
 CODEX_JSON="$ROOT_DIR/codex.json"
 
 mkdir -p "$VENDOR_DIR"
