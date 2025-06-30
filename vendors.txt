@@ -77,4 +77,7 @@
 # zabbix
 # librenms
 
-example_app
+# Core Frappe framework
+frappe
+# Bench CLI for managing Frappe apps
+bench
