@@ -92,20 +92,20 @@ Unter `vendor_profiles/` liegen JSON-Dateien pro Vendor, z. B.:
 vendor_profiles/erp_business/erpnext.json
 {
   "url": "https://github.com/frappe/erpnext",
-  "branch": "version-15"
+  "tag": "v15.0.0"
 }
 ```
 
 Diese Profile werden beim Einrichten neuer Repositories genutzt, um die passenden Submodule zu klonen.
 Beim ersten Ausführen von `setup.sh` wird zudem automatisch eine leere `.gitmodules`-Datei erzeugt (bzw. `git submodule init` ausgeführt), falls diese noch nicht existiert.
 
-Frappe und Bench sind bereits in `apps.json` hinterlegt und werden bei jeder Ausführung von `update_vendors.sh` automatisch aktualisiert. Weitere Apps fügst du über `vendors.txt` hinzu. Dort kannst du entweder nur einen Slug eintragen – dann greift die passende Datei unter `vendor_profiles/` (oder im Template‑Unterordner `frappe_app_template/vendor_profiles/`, falls kein lokaler Ordner vorhanden) – oder ein eigenes Repository inklusive Branch. Zusätzlich kannst du beliebige Repositories direkt in `apps.json` oder `custom_vendors.json` angeben; diese werden beim nächsten `update_vendors.sh` berücksichtigt:
+Frappe und Bench sind bereits in `apps.json` hinterlegt und werden bei jeder Ausführung von `update_vendors.sh` automatisch aktualisiert. Weitere Apps fügst du über `vendors.txt` hinzu. Dort kannst du entweder nur einen Slug eintragen – dann greift die passende Datei unter `vendor_profiles/` (oder im Template‑Unterordner `frappe_app_template/vendor_profiles/`, falls kein lokaler Ordner vorhanden) – oder ein eigenes Repository inklusive Branch oder Tag. Zusätzlich kannst du beliebige Repositories direkt in `apps.json` oder `custom_vendors.json` angeben; diese werden beim nächsten `update_vendors.sh` berücksichtigt:
 
 ```text
 # slug aus vendor_profiles
 erpnext
-# manuelles Repository
-myaddon|https://github.com/me/myaddon|develop
+# manuelles Repository (optional mit Tag)
+myaddon|https://github.com/me/myaddon|develop|v1.0
 ```
 
 Passe bei Bedarf die JSON-Dateien unter `vendor_profiles/` an und starte danach `./scripts/update_vendors.sh` oder den Workflow **update-vendors**. Existiert kein solcher Ordner, nutzt das Skript automatisch die Profile aus dem Template‑Verzeichnis.

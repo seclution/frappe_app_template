@@ -204,3 +204,35 @@ def test_update_vendors_uses_custom_vendors_json(tmp_path):
     data = json.loads((tmp_path / "apps.json").read_text())
     assert "extra" in data
     assert (tmp_path / "vendor" / "extra-main").exists()
+
+
+def test_update_vendors_supports_tag(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    tag_repo = tmp_path / "tag_repo"
+    tag_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=tag_repo, check=True)
+    (tag_repo / "README.md").write_text("tag")
+    subprocess.run(["git", "add", "README.md"], cwd=tag_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=tag_repo, check=True)
+    subprocess.run(["git", "tag", "v1.0"], cwd=tag_repo, check=True)
+
+    (tmp_path / "apps.json").write_text("{}")
+    (tmp_path / "vendors.txt").write_text("tagtest")
+    prof_dir = tmp_path / "vendor_profiles"
+    prof_dir.mkdir()
+    (prof_dir / "tagtest.json").write_text(json.dumps({"url": str(tag_repo), "tag": "v1.0"}))
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads((tmp_path / "apps.json").read_text())
+    assert "tagtest" in data
+    assert data["tagtest"]["tag"] == "v1.0"
+    assert (tmp_path / "vendor" / "tagtest-v1.0").exists()
