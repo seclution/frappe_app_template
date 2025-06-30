@@ -2,13 +2,6 @@
 set -euo pipefail
 export GIT_TERMINAL_PROMPT=0
 
-# Prevent execution inside the template submodule
-repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
-if [[ "$repo_root" == *"/frappe_app_template" ]]; then
-  echo "⛔ ERROR: Run this script from your app repository, not inside the template." >&2
-  exit 1
-fi
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 VENDOR_DIR="$ROOT_DIR/vendor"
@@ -19,40 +12,6 @@ CODEX_JSON="$ROOT_DIR/codex.json"
 mkdir -p "$VENDOR_DIR"
 cd "$ROOT_DIR"
 
-# ensure frappe_app_template submodule exists and is up to date
-TEMPLATE_DIR="$ROOT_DIR/frappe_app_template"
-TEMPLATE_URL="${TEMPLATE_URL:-https://github.com/seclution/frappe_app_template}"
-
-check_template() {
-  if grep -q "path = $(basename "$TEMPLATE_DIR")" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
-    git submodule update --init "$TEMPLATE_DIR" >/dev/null 2>&1 || true
-  fi
-
-  if [ ! -d "$TEMPLATE_DIR/.git" ]; then
-    if [[ "${GIT_ALLOW_PROTOCOL:-https}" != *"https"* ]]; then
-      echo "⚠️  Template missing and HTTPS disallowed. Skipping clone." >&2
-      return
-    fi
-    echo "➕ Adding template submodule" >&2
-    git submodule add "$TEMPLATE_URL" "$TEMPLATE_DIR" || return
-    git submodule update --init "$TEMPLATE_DIR" >/dev/null 2>&1 || true
-  else
-    if [[ "${GIT_ALLOW_PROTOCOL:-https}" == *"https"* ]]; then
-      pushd "$TEMPLATE_DIR" >/dev/null
-      git fetch origin >/dev/null 2>&1 || true
-      local_head=$(git rev-parse HEAD)
-      remote_head=$(git rev-parse origin/HEAD 2>/dev/null || git rev-parse origin/master 2>/dev/null || echo "")
-      popd >/dev/null
-      if [ -n "$remote_head" ] && [ "$local_head" != "$remote_head" ]; then
-        echo "⬆️  Updating template submodule" >&2
-        git submodule update --remote "$TEMPLATE_DIR" >/dev/null 2>&1 || true
-      fi
-    fi
-  fi
-}
-
-check_template
-
 # read vendors list
 readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*$/d')
 
@@ -60,7 +19,8 @@ readarray -t RAW_LINES < <(grep -v '^#' "$VENDORS_FILE" 2>/dev/null | sed '/^\s*
 declare -A REPOS
 declare -A BRANCHES
 declare -A APP_INFO
-# preload entries from existing apps.json so manual apps persist
+declare -A PATHS
+
 if [ -f "$ROOT_DIR/apps.json" ]; then
   while IFS= read -r slug; do
     repo=$(jq -r ".\"$slug\".repo // empty" "$ROOT_DIR/apps.json")
@@ -70,14 +30,18 @@ if [ -f "$ROOT_DIR/apps.json" ]; then
       REPOS[$slug]="$repo"
       BRANCHES[$slug]="$branch"
       APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
+      sanitized=${branch//\//_}
+      path="vendor/${slug}${branch:+-$sanitized}"
+      PATHS[$slug]="$path"
     fi
   done < <(jq -r 'keys[]' "$ROOT_DIR/apps.json" 2>/dev/null)
 fi
-# track vendor slugs
+
 recognized=()
 installed=()
 updated=()
 removed=()
+
 for line in "${RAW_LINES[@]}"; do
   IFS='|' read -r part1 part2 part3 <<< "$line"
   slug=""
@@ -107,13 +71,15 @@ for line in "${RAW_LINES[@]}"; do
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
     BRANCHES[$slug]="$branch"
+    sanitized=${branch//\//_}
+    path="vendor/${slug}${branch:+-$sanitized}"
+    PATHS[$slug]="$path"
     recognized+=("$slug")
   else
     echo "⚠️  Unknown vendor: $slug" >&2
   fi
 done
 
-# load additional repositories from custom_vendors.json
 CUSTOM_VENDORS="$ROOT_DIR/custom_vendors.json"
 if [ -f "$CUSTOM_VENDORS" ]; then
   while IFS= read -r slug; do
@@ -122,32 +88,35 @@ if [ -f "$CUSTOM_VENDORS" ]; then
     if [[ -n "$repo" ]]; then
       REPOS[$slug]="$repo"
       BRANCHES[$slug]="$branch"
+      sanitized=${branch//\//_}
+      path="vendor/${slug}${branch:+-$sanitized}"
+      PATHS[$slug]="$path"
       recognized+=("$slug")
     fi
   done < <(jq -r 'keys[]' "$CUSTOM_VENDORS" 2>/dev/null)
 fi
 
-# track resulting apps.json entries
 changes=false
 
 for slug in "${!REPOS[@]}"; do
   repo="${REPOS[$slug]}"
   branch="${BRANCHES[$slug]}"
-  target="$VENDOR_DIR/$slug"
+  path="${PATHS[$slug]}"
+  target="$ROOT_DIR/$path"
   echo "➡️  Processing $slug ($branch)"
-  if grep -q "path = vendor/$slug" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
-    if ! git submodule update --init "vendor/$slug"; then
+  if grep -q "path = $path" "$ROOT_DIR/.gitmodules" 2>/dev/null; then
+    if ! git submodule update --init "$path"; then
       echo "❌ Failed to update $slug" >&2
       continue
     fi
     updated+=("$slug")
   else
-    if git submodule add "$repo" "vendor/$slug"; then
+    if git submodule add "$repo" "$path"; then
       changes=true
       installed+=("$slug")
     else
       echo "❌ Failed to clone $slug from $repo" >&2
-      git config --remove-section "submodule.vendor/$slug" 2>/dev/null || true
+      git config --remove-section "submodule.$path" 2>/dev/null || true
       rm -rf "$target"
       continue
     fi
@@ -162,26 +131,32 @@ for slug in "${!REPOS[@]}"; do
   commit=$(git rev-parse HEAD)
   popd >/dev/null
   APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
-  # sync instructions
   if [ -d "$target/instructions" ]; then
     mkdir -p "$ROOT_DIR/instructions/_$slug"
     rsync -a --delete "$target/instructions/" "$ROOT_DIR/instructions/_$slug/"
   fi
 done
 
-# prune removed vendors
+recognized_paths=("${PATHS[@]}")
+
 if [ -f "$ROOT_DIR/.gitmodules" ]; then
   while IFS= read -r path; do
     [[ "$path" == vendor/* ]] || continue
-    name="$(basename "$path")"
-    if [[ -z "${REPOS[$name]+x}" ]]; then
-      echo "🗑 Removing obsolete submodule $name"
+    keep=false
+    for rp in "${recognized_paths[@]}"; do
+      if [[ "$path" == "$rp" ]]; then
+        keep=true
+        break
+      fi
+    done
+    if ! $keep; then
+      echo "🗑 Removing obsolete submodule $path"
       git submodule deinit -f "$path" 2>/dev/null || true
       if [[ -e "$path" ]]; then
         git rm -f "$path" 2>/dev/null || true
       fi
-      rm -rf "$ROOT_DIR/.git/modules/$path" "$VENDOR_DIR/$name"
-      removed+=("$name")
+      rm -rf "$ROOT_DIR/.git/modules/$path" "$ROOT_DIR/$path"
+      removed+=("$(basename "$path")")
       changes=true
     fi
   done < <(git config --file "$ROOT_DIR/.gitmodules" --get-regexp path | awk '{print $2}')
@@ -189,26 +164,30 @@ fi
 
 for dir in "$VENDOR_DIR"/*; do
   [ -d "$dir" ] || continue
-  name="$(basename "$dir")"
-  if [[ -z "${REPOS[$name]+x}" ]]; then
+  keep=false
+  for rp in "${recognized_paths[@]}"; do
+    if [[ "$dir" == "$ROOT_DIR/$rp" ]]; then
+      keep=true
+      break
+    fi
+  done
+  if ! $keep; then
     echo "🗑 Removing obsolete directory $dir"
     rm -rf "$dir"
-    removed+=("$name")
+    removed+=("$(basename "$dir")")
     changes=true
   fi
 done
 
-# build apps.json
 jq_filter='{}'
 for slug in "${!APP_INFO[@]}"; do
   jq_filter="$jq_filter | .[\"$slug\"]=${APP_INFO[$slug]}"
 done
 jq -n "$jq_filter" > "$ROOT_DIR/apps.json"
 
-# update codex.json
 sources=("app/")
 for slug in "${!APP_INFO[@]}"; do
-  sources+=("vendor/$slug/")
+  sources+=("${PATHS[$slug]}/")
  done
 sources+=("instructions/" "sample_data/")
 existing_templates="[]"
