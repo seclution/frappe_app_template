@@ -273,3 +273,49 @@ def test_update_vendors_preserves_existing_apps_json(tmp_path):
     data = json.loads((tmp_path / "apps.json").read_text())
     assert data["demo"]["repo"] == str(original_repo)
     assert data["demo"]["branch"] == "main"
+
+
+def test_update_vendors_sources_order(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    dummy_repo = tmp_path / "dummy_repo3"
+    dummy_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=dummy_repo, check=True)
+    (dummy_repo / "README.md").write_text("d")
+    subprocess.run(["git", "add", "README.md"], cwd=dummy_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=dummy_repo, check=True)
+
+    (tmp_path / "apps.json").write_text("{}")
+    (tmp_path / "vendors.txt").write_text("dummy3")
+    prof_dir = tmp_path / "vendor_profiles"
+    prof_dir.mkdir()
+    (prof_dir / "dummy3.json").write_text(json.dumps({"url": str(dummy_repo), "branch": "main"}))
+
+    scenarios = tmp_path / "instructions" / "_scenarios"
+    scenarios.mkdir(parents=True)
+    (scenarios / "one.md").write_text("1")
+    (scenarios / "two.md").write_text("2")
+
+    (tmp_path / "app" / "module" / "sub").mkdir(parents=True)
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads((tmp_path / "codex.json").read_text())
+    expected = [
+        "instructions/_scenarios/one.md",
+        "instructions/_scenarios/two.md",
+        "app/",
+        "app/module/",
+        "app/module/sub/",
+        "vendor/dummy3-main/",
+        "instructions/",
+        "sample_data/",
+    ]
+    assert data["sources"] == expected

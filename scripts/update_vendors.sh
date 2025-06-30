@@ -235,10 +235,32 @@ for slug in "${recognized[@]}"; do
 done
 jq -n "$jq_filter" > "$ROOT_DIR/apps.json"
 
-sources=("app/")
+sources=()
+
+# prepend scenario files if available
+if [ -d "instructions/_scenarios" ]; then
+  while IFS= read -r f; do
+    sources+=("$f")
+  done < <(find instructions/_scenarios -type f | sort)
+fi
+
+# include full depth of app directory
+if [ -d "app" ]; then
+  while IFS= read -r d; do
+    sources+=("${d}/")
+  done < <(find app -type d | sort)
+fi
+
+# include full depth of vendor directories
 for slug in "${recognized[@]}"; do
-  sources+=("${PATHS[$slug]}/")
- done
+  path="${PATHS[$slug]}"
+  if [ -d "$path" ]; then
+    while IFS= read -r d; do
+      sources+=("${d}/")
+    done < <(find "$path" -type d | sort)
+  fi
+done
+
 sources+=("instructions/" "sample_data/")
 existing_templates="[]"
 if [ -f "$CODEX_JSON" ]; then

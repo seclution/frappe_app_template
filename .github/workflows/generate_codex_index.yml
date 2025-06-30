@@ -23,15 +23,32 @@ jobs:
         run: |
           python - <<'PY'
           import os, json
-          paths = []
-          for base in ['instructions', 'vendor', 'app']:
-              if os.path.isdir(base):
-                  for root, dirs, files in os.walk(base):
-                      for name in dirs+files:
-                          p = os.path.join(root, name)
-                          paths.append(p)
+
+          sources = []
+
+          scenarios = os.path.join('instructions', '_scenarios')
+          if os.path.isdir(scenarios):
+              for root, _, files in os.walk(scenarios):
+                  for name in sorted(files):
+                      sources.append(os.path.join(root, name))
+
+          if os.path.isdir('app'):
+              for root, dirs, _ in os.walk('app'):
+                  dirs.sort()
+                  sources.append(root.rstrip('/') + '/')
+
+          if os.path.isdir('vendor'):
+              for entry in sorted(os.listdir('vendor')):
+                  vend_path = os.path.join('vendor', entry)
+                  if os.path.isdir(vend_path):
+                      for root, dirs, _ in os.walk(vend_path):
+                          dirs.sort()
+                          sources.append(root.rstrip('/') + '/')
+
+          sources.extend(['instructions/', 'sample_data/'])
+
           with open('codex.json', 'w') as f:
-              json.dump({'paths': paths}, f)
+              json.dump({'sources': sources}, f)
           PY
 
       - name: Extract codex gitlog
