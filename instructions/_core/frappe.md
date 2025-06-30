@@ -10,7 +10,8 @@
 
 Frappe und Bench werden über `../apps.json` verwaltet. Um zusätzliche Apps
 einzubinden, trage ihren Slug in `../vendors.txt` ein. Die Zuordnung zu Git-URL
-und Branch erfolgt über passende JSON-Dateien unter `../vendor_profiles/`.
+und Branch erfolgt über passende JSON-Dateien unter `../vendor_profiles/` oder
+im Template-Verzeichnis `../frappe_app_template/vendor_profiles/`.
 Alternativ kannst du ein Repository direkt in `../apps.json` hinterlegen, um es
 beim nächsten Lauf von **update-vendors** einzubinden. Oder trage es in
 `../custom_vendors.json` ein. Starte anschließend **update-vendors** oder führe

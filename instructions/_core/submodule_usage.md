@@ -18,8 +18,9 @@ Copy the configuration files from the template so you can adjust them:
 cp template/apps.json .
 cp template/custom_vendors.json .
 cp template/vendors.txt .
-cp -r template/vendor_profiles .
 ```
+
+`update_vendors.sh` falls back to `template/vendor_profiles/` when no `vendor_profiles/` directory exists in your project. Create the folder if you want to override or extend the provided profiles.
 
 Edit these files to add your desired vendor slugs and integration profiles.
 

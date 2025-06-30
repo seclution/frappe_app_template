@@ -9,5 +9,6 @@
 * Für tiefergehende Anpassungen siehe die ERPNext-Dokumentation.
 
 Füge ERPNext als Vendor-Slug in `../vendors.txt` hinzu. Die nötige URL steht in
-`../vendor_profiles/erp_business/erpnext.json`. Anschließend synchronisiert
-*update-vendors* das Submodul automatisch.
+`../vendor_profiles/erp_business/erpnext.json` oder im Template-Verzeichnis
+`../frappe_app_template/vendor_profiles/erp_business/erpnext.json`.
+Anschließend synchronisiert *update-vendors* das Submodul automatisch.
