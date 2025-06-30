@@ -128,7 +128,6 @@ done
 jq_filter='{}'
 for slug in "${!APP_INFO[@]}"; do
   jq_filter="$jq_filter | .[\"$slug\"]=${APP_INFO[$slug]}"
-  SOURCES+=("vendor/$slug/")
 done
 jq -n "$jq_filter" > "$ROOT_DIR/apps.json"
 
