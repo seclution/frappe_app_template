@@ -121,15 +121,6 @@ if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
 JSON
 fi
 
-if [ ! -f "$CONFIG_TARGET/vendor_profiles/examples/example_app.json" ]; then
-    mkdir -p "$CONFIG_TARGET/vendor_profiles/examples"
-    cat > "$CONFIG_TARGET/vendor_profiles/examples/example_app.json" <<'JSON'
-{
-  "url": "https://github.com/example/example_app",
-  "branch": "v1.0.0"
-}
-JSON
-fi
 
 if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
     cat > "$CONFIG_TARGET/codex.json" <<'JSON'
