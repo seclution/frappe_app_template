@@ -266,8 +266,10 @@ existing_templates="[]"
 if [ -f "$CODEX_JSON" ]; then
   existing_templates=$(jq -r 'if (.templates|type=="array") then .templates else [] end' "$CODEX_JSON" 2>/dev/null || echo "[]")
 fi
-sources_json=$(printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.')
-jq -n --argjson s "$sources_json" --argjson t "$existing_templates" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s,"templates":$t}' > "$CODEX_JSON"
+tmp_sources=$(mktemp)
+printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.' > "$tmp_sources"
+jq -n --argjson t "$existing_templates" --slurpfile s "$tmp_sources" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s[0],"templates":$t}' > "$CODEX_JSON"
+rm "$tmp_sources"
 
 summary_parts=()
 if [ ${#installed[@]} -gt 0 ]; then
