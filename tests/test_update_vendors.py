@@ -83,7 +83,7 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
     data = json.loads((tmp_path / "apps.json").read_text())
-    assert "oldapp" in data
+    assert "oldapp" not in data
     assert (tmp_path / "vendor_profiles" / "test" / "app1.json").exists()
     assert (tmp_path / "vendor_profiles" / "test" / "app2.json").exists()
 
@@ -149,7 +149,7 @@ def test_update_vendors_accepts_manual_entry(tmp_path):
     assert (tmp_path / "vendor" / "custom-main").exists()
 
 
-def test_update_vendors_uses_apps_json_entries(tmp_path):
+def test_update_vendors_removes_unlisted_apps(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     scripts_dir = repo_root / "scripts"
     tmp_scripts = tmp_path / "scripts"
@@ -173,8 +173,8 @@ def test_update_vendors_uses_apps_json_entries(tmp_path):
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
     data = json.loads((tmp_path / "apps.json").read_text())
-    assert "manual" in data
-    assert (tmp_path / "vendor" / "manual-main").exists()
+    assert "manual" not in data
+    assert not (tmp_path / "vendor" / "manual-main").exists()
 
 
 def test_update_vendors_uses_custom_vendors_json(tmp_path):
