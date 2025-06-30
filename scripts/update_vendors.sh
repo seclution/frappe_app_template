@@ -91,6 +91,13 @@ for line in "${RAW_LINES[@]}"; do
       tag=$(jq -r '.tag // empty' "$profile_file" 2>/dev/null)
     fi
   fi
+
+  if [[ -n "${REPOS[$slug]:-}" ]]; then
+    # Keep existing configuration from apps.json
+    recognized+=("$slug")
+    continue
+  fi
+
   if [[ -n "$repo" ]]; then
     REPOS[$slug]="$repo"
     BRANCHES[$slug]="$branch"
@@ -99,9 +106,6 @@ for line in "${RAW_LINES[@]}"; do
     sanitized=${ref//\//_}
     path="vendor/${slug}${ref:+-$sanitized}"
     PATHS[$slug]="$path"
-    recognized+=("$slug")
-  elif [[ -n "${REPOS[$slug]:-}" ]]; then
-    # slug already defined in apps.json, reuse existing repo
     recognized+=("$slug")
   else
     echo "⚠️  Unknown vendor: $slug" >&2
