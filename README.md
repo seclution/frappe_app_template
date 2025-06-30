@@ -79,10 +79,17 @@ frappe_app_template/
 ├── codex.json                          # Codex-Datei-Index (autogeneriert)
 ├── .codex_gitlog.json                  # Commit-Historie mit #codex:-Tags
 ├── vendors.txt                         # aktive Vendor-Slugs (z. B. erpnext, website)
+├── project_meta.yml                    # Steuerung des Repo-Typs etc.
+├── pricing_settings.yml                # Parameter für Preiskalkulationen
+
 └── README.md
 ```
 
 Alle Workflows orientieren sich an der jeweiligen `project_meta.yml` eines App-Repositories. Templates selbst werden nicht veröffentlicht.
+
+## 📈 `pricing_settings.yml`
+
+In dieser optionalen Datei hinterlegst du Schätzwerte für typische Aufgaben wie Doctypes oder Webseiten. Externe Tools können die Werte nutzen, um Angebote zu kalkulieren. Hinterlege hier nur unsensible Daten und niemals vertrauliche Stundensätze.
 
 ## 💡 Codex-Prinzipien
 
