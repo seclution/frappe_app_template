@@ -111,6 +111,14 @@ if [ ! -f "$CONFIG_TARGET/apps.json" ]; then
 fi
 
 if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
+    cat > "$CONFIG_TARGET/custom_vendors.json" <<'JSON'
+{
+  "example_app": {
+    "repo": "https://github.com/example/example_app",
+    "branch": "v1.0.0"
+  }
+}
+JSON
     echo '{}' > "$CONFIG_TARGET/custom_vendors.json"
 fi
 
