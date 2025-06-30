@@ -1,0 +1,31 @@
+name: generate-mermaid
+
+on:
+  push:
+    paths:
+      - 'doku/**/*.mmd'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: recursive
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli
+      - name: Generate diagrams
+        run: ./scripts/generate_diagrams.sh
+      - name: Commit diagrams
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add doku/**/*.svg
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update diagrams"
+            git push
+          fi

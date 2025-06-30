@@ -172,6 +172,17 @@ Jedes App-Repository sollte folgenden Hinweis enthalten:
 > codex.json ist aktiv und wird bei jedem Commit aktualisiert.
 > Erkenntnisse aus dieser App werden regelmäßig zurück in das zentrale Template synchronisiert.
 
+## 📈 Mermaid-Diagramme
+
+Legge `.mmd`-Dateien im Ordner `doku/` an und generiere die SVGs mit
+
+```bash
+./scripts/generate_diagrams.sh
+```
+
+Die Vorlage `workflow_templates/generate-mermaid.yml` automatisiert die Aktualisierung in GitHub Actions.
+
+
 ## ✨ Fazit
 
 Dieses Repository ist das zentrale Fundament zur Entwicklung modularer, wartbarer und kontextoptimierter Frappe-Projekte. Alle Submodule, Anleitungssysteme und Automatisierungen zielen auf einen sauberen Codex-Kontext ab. Neue Erkenntnisse können strukturiert in `.incoming/` zur Verfügung gestellt werden – ganz ohne Submodule pushen zu müssen.
