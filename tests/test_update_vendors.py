@@ -146,7 +146,7 @@ def test_update_vendors_accepts_manual_entry(tmp_path):
     data = json.loads((tmp_path / "apps.json").read_text())
     assert "custom" in data
     assert data["custom"]["branch"] == "main"
-    assert (tmp_path / "vendor" / "custom").exists()
+    assert (tmp_path / "vendor" / "custom-main").exists()
 
 
 def test_update_vendors_uses_apps_json_entries(tmp_path):
@@ -174,7 +174,7 @@ def test_update_vendors_uses_apps_json_entries(tmp_path):
 
     data = json.loads((tmp_path / "apps.json").read_text())
     assert "manual" in data
-    assert (tmp_path / "vendor" / "manual").exists()
+    assert (tmp_path / "vendor" / "manual-main").exists()
 
 
 def test_update_vendors_uses_custom_vendors_json(tmp_path):
@@ -203,4 +203,4 @@ def test_update_vendors_uses_custom_vendors_json(tmp_path):
 
     data = json.loads((tmp_path / "apps.json").read_text())
     assert "extra" in data
-    assert (tmp_path / "vendor" / "extra").exists()
+    assert (tmp_path / "vendor" / "extra-main").exists()
