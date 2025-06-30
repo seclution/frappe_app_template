@@ -141,7 +141,7 @@ fi
 # Create app skeleton if missing
 APP_DIR="$CONFIG_TARGET/app/$APP_NAME"
 if [ ! -d "$APP_DIR" ]; then
-    mkdir -p "$APP_DIR/{config,templates,$APP_NAME}"
+    mkdir -p "$APP_DIR"/{config,templates,"$APP_NAME"}
     echo "__version__ = '0.0.1'" > "$APP_DIR/__init__.py"
     echo "$APP_NAME" > "$APP_DIR/modules.txt"
     cat > "$APP_DIR/hooks.py" <<EOF
