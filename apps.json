@@ -1,10 +1,10 @@
 {
   "bench": {
     "repo": "https://github.com/frappe/bench",
-    "branch": "v5.2.1"
+    "branch": "v5.24.0"
   },
   "frappe": {
     "repo": "https://github.com/frappe/frappe",
-    "branch": "v13.3.0"
+    "branch": "version-15"
   }
 }
