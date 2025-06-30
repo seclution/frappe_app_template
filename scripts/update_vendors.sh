@@ -87,6 +87,9 @@ for line in "${RAW_LINES[@]}"; do
     path="vendor/${slug}${branch:+-$sanitized}"
     PATHS[$slug]="$path"
     recognized+=("$slug")
+  elif [[ -n "${REPOS[$slug]:-}" ]]; then
+    # slug already defined in apps.json, reuse existing repo
+    recognized+=("$slug")
   else
     echo "⚠️  Unknown vendor: $slug" >&2
   fi
@@ -138,8 +141,8 @@ for slug in "${!REPOS[@]}"; do
     continue
   fi
   pushd "$target" >/dev/null
-  git fetch --tags >/dev/null 2>&1 || true
-  git checkout "$branch" >/dev/null 2>&1 || git checkout "$branch" || true
+  git fetch origin "$branch" --tags >/dev/null 2>&1 || git fetch --tags >/dev/null 2>&1 || true
+  git checkout "$branch" >/dev/null 2>&1 || git checkout "origin/$branch" >/dev/null 2>&1 || true
   commit=$(git rev-parse HEAD)
   popd >/dev/null
   APP_INFO[$slug]="$(jq -n --arg repo "$repo" --arg branch "$branch" --arg commit "$commit" '{repo:$repo,branch:$branch,commit:$commit}')"
