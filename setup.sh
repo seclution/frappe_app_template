@@ -133,10 +133,6 @@ if ! jq -e '.templates' "$CONFIG_TARGET/codex.json" >/dev/null 2>&1; then
     mv "$tmp" "$CONFIG_TARGET/codex.json"
 fi
 
-# clone templates to provide instructions
-if [ -f "$CONFIG_TARGET/scripts/update_templates.sh" ]; then
-    bash "$CONFIG_TARGET/scripts/update_templates.sh"
-fi
 
 # Create app skeleton if missing
 APP_DIR="$CONFIG_TARGET/app/$APP_NAME"

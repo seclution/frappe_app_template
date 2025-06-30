@@ -26,8 +26,6 @@ jobs:
           python -m pip install -r requirements-dev.txt
       - name: Run pytest
         run: pytest -v
-      - name: Run update_templates
-        run: bash ./scripts/update_templates.sh
       - name: Shellcheck
         run: |
           shellcheck scripts/*.sh || true

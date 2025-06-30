@@ -27,7 +27,6 @@ frappe_app_template/
 ├── scripts/                            # Setup- & Sync-Werkzeuge
 │   ├── bootstrap_project.sh            # initialisiert neues App-Repo
 │   ├── update_vendors.sh               # synchronisiert vendors.txt → apps.json → Submodule
-│   ├── update_templates.sh
 │   └── ...
 │
 ├── vendor_profiles/                    # zentrale Vendordefinitionen nach Kategorien
@@ -38,7 +37,7 @@ frappe_app_template/
 │   └── example_payload.json
 │
 ├── tests/
-│   └── test_update_templates.py
+│   └── test_update_vendors.py
 │
 ├── workflow_templates/
 │   ├── init_new_app_repo.yml
