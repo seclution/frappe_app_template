@@ -64,8 +64,10 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
             echo -e "${YELLOW}⚠️  Directory for submodule '$target' is missing!${RESET}"
             if [ "$REPAIR_BROKEN_SUBMODULES" = true ]; then
                 echo -e "${YELLOW}🛠 Attempting to remove and re-add broken submodule $target...${RESET}"
-                git submodule deinit -f "$target" || true
-                git rm -f "$target" || true
+                git submodule deinit -f "$target" 2>/dev/null || true
+                if [[ -e "$target" ]]; then
+                    git rm -f "$target" 2>/dev/null || true
+                fi
                 rm -rf ".git/modules/$target"
                 git add .gitmodules || true
                 git commit -am "Remove broken submodule $target" || true
