@@ -72,6 +72,9 @@ for line in "${RAW_LINES[@]}"; do
   else
     slug="$part1"
     profile_file=$(find "$PROFILES_DIR" -name "$slug.json" -print -quit 2>/dev/null || true)
+    if [[ -z "$profile_file" && -d "$SCRIPT_DIR/../vendor_profiles" ]]; then
+      profile_file=$(find "$SCRIPT_DIR/../vendor_profiles" -name "$slug.json" -print -quit 2>/dev/null || true)
+    fi
     if [[ -n "$profile_file" ]]; then
       repo=$(jq -r '.url // empty' "$profile_file" 2>/dev/null)
       branch=$(jq -r '.branch // .tag // ""' "$profile_file" 2>/dev/null)
@@ -120,7 +123,7 @@ for slug in "${!REPOS[@]}"; do
     fi
     updated+=("$slug")
   else
-    if git submodule add "$repo" "$path"; then
+    if git submodule add -f "$repo" "$path"; then
       changes=true
       installed+=("$slug")
     else
