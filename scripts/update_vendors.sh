@@ -106,8 +106,10 @@ if [ -f "$ROOT_DIR/.gitmodules" ]; then
     name="$(basename "$path")"
     if [[ -z "${REPOS[$name]+x}" ]]; then
       echo "🗑 Removing obsolete submodule $name"
-      git submodule deinit -f "$path" || true
-      git rm -f "$path" || true
+      git submodule deinit -f "$path" 2>/dev/null || true
+      if [[ -e "$path" ]]; then
+        git rm -f "$path" 2>/dev/null || true
+      fi
       rm -rf "$ROOT_DIR/.git/modules/$path" "$VENDOR_DIR/$name"
       changes=true
     fi
