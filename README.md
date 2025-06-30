@@ -1,6 +1,16 @@
 # 🚀 Frappe App Template (Codex-Optimiert)
 
-Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit OpenAI Codex zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
+Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit OpenAI Codex zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
+
+## 🚀 Getting Started
+
+1. Klone dieses Repository oder binde es als Submodul in dein App-Projekt ein.
+2. Führe `./setup.sh` aus, um das Grundgerüst und die benötigten Ordner anzulegen.
+3. Trage aktive Vendoren in `vendors.txt` ein und starte `./scripts/update_vendors.sh`.
+4. Installiere Entwickler-Abhängigkeiten mit `pip install -r requirements-dev.txt` und prüfe alles über `pytest`.
+5. Lies die [DEV_INSTRUCTIONS.md](./DEV_INSTRUCTIONS.md) und die Hinweise im Ordner [instructions/_core](instructions/_core/README.md).
+
+Weitere Beispiele für Daten und Schnittstellen findest du im [sample_data/README.md](sample_data/README.md).
 
 ## 📂 Strukturtyp
 
@@ -9,6 +19,7 @@ Dies ist ein **`template_base`**-Repository.
 * Es wird **nicht selbst gepublished** (`publish_enabled: false`)
 * Dient als Submodul in App-Repos
 * Enthält: Setup-Tools, Referenz-App, globale Instructions, Indexing-Mechanismen, Workflow-Templates
+* Zudem liegt unter `doku/` eine Sammlung projektbegleitender Dokumente.
 
 ## 📁 Projektstruktur
 
@@ -23,6 +34,11 @@ frappe_app_template/
 │       ├── erpnext.md
 │       ├── prompts.md
 │       └── ...
+│
+├── doku/
+│   ├── overview.md
+│   ├── user_story_template.md
+│   └── guide_doctype_listing.md
 │
 ├── scripts/                            # Setup- & Sync-Werkzeuge
 │   ├── bootstrap_project.sh            # initialisiert neues App-Repo
@@ -65,18 +81,11 @@ frappe_app_template/
 ├── vendors.txt                         # aktive Vendor-Slugs (z. B. erpnext, website)
 ├── project_meta.yml                    # Steuerung des Repo-Typs etc.
 ├── pricing_settings.yml                # Parameter für Preiskalkulationen
+
 └── README.md
 ```
 
-## 📜 `project_meta.yml`
-
-```yaml
-repo_type: template_base
-publish_enabled: false
-codex_tracked: true
-```
-
-Alle Workflows orientieren sich an dieser Datei. Templates werden niemals gepublished.
+Alle Workflows orientieren sich an der jeweiligen `project_meta.yml` eines App-Repositories. Templates selbst werden nicht veröffentlicht.
 
 ## 📈 `pricing_settings.yml`
 
@@ -169,6 +178,17 @@ Jedes App-Repository sollte folgenden Hinweis enthalten:
 > Anleitungen wurden automatisch übernommen.
 > codex.json ist aktiv und wird bei jedem Commit aktualisiert.
 > Erkenntnisse aus dieser App werden regelmäßig zurück in das zentrale Template synchronisiert.
+
+## 📈 Mermaid-Diagramme
+
+Legge `.mmd`-Dateien im Ordner `doku/` an und generiere die SVGs mit
+
+```bash
+./scripts/generate_diagrams.sh
+```
+
+Die Vorlage `workflow_templates/generate-mermaid.yml` automatisiert die Aktualisierung in GitHub Actions.
+
 
 ## ✨ Fazit
 
