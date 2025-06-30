@@ -262,14 +262,22 @@ for slug in "${recognized[@]}"; do
 done
 
 sources+=("instructions/" "sample_data/")
-existing_templates="[]"
-if [ -f "$CODEX_JSON" ]; then
-  existing_templates=$(jq -r 'if (.templates|type=="array") then .templates else [] end' "$CODEX_JSON" 2>/dev/null || echo "[]")
-fi
 tmp_sources=$(mktemp)
-printf '%s\n' "${sources[@]}" | jq -R '.' | jq -s '.' > "$tmp_sources"
-jq -n --argjson t "$existing_templates" --slurpfile s "$tmp_sources" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s[0],"templates":$t}' > "$CODEX_JSON"
-rm "$tmp_sources"
+{
+  for src in "${sources[@]}"; do
+    printf '%s\n' "$src"
+  done
+} | jq -R -s 'split("\n")[:-1]' > "$tmp_sources"
+
+tmp_templates=$(mktemp)
+if [ -f "$CODEX_JSON" ]; then
+  jq -r 'if (.templates|type=="array") then .templates else [] end' "$CODEX_JSON" 2>/dev/null > "$tmp_templates" || echo "[]" > "$tmp_templates"
+else
+  echo "[]" > "$tmp_templates"
+fi
+
+jq -n --slurpfile s "$tmp_sources" --slurpfile t "$tmp_templates" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s[0],"templates":$t[0]}' > "$CODEX_JSON"
+rm "$tmp_sources" "$tmp_templates"
 
 summary_parts=()
 if [ ${#installed[@]} -gt 0 ]; then
