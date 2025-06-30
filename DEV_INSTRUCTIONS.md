@@ -26,6 +26,7 @@ This repository uses Codex for automated code generation. These guidelines tell 
 - `sample_data/` – reference payloads and docs.
 - `vendors.txt` – active vendor slugs.
 - `vendor_profiles/` – library of vendor profile JSON files.
+- `framework/` under `vendor_profiles/` stores core framework profiles like Frappe and Bench.
 - `apps.json` – default vendor apps and their versions.
 
 ## Additional Guidelines
