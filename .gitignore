@@ -27,5 +27,6 @@ sites/*/public/
 
 # Keep configuration files under version control
 !apps.json
+!custom_vendors.json
 !vendors.txt
 !vendor_profiles/**

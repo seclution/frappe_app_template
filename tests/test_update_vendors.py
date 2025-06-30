@@ -82,8 +82,8 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
-    data = (tmp_path / "apps.json").read_text()
-    assert "oldapp" not in data
+    data = json.loads((tmp_path / "apps.json").read_text())
+    assert "oldapp" in data
     assert (tmp_path / "vendor_profiles" / "test" / "app1.json").exists()
     assert (tmp_path / "vendor_profiles" / "test" / "app2.json").exists()
 
@@ -147,3 +147,60 @@ def test_update_vendors_accepts_manual_entry(tmp_path):
     assert "custom" in data
     assert data["custom"]["branch"] == "main"
     assert (tmp_path / "vendor" / "custom").exists()
+
+
+def test_update_vendors_uses_apps_json_entries(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    manual_repo = tmp_path / "manual_repo2"
+    manual_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=manual_repo, check=True)
+    (manual_repo / "README.md").write_text("manual")
+    subprocess.run(["git", "add", "README.md"], cwd=manual_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=manual_repo, check=True)
+
+    (tmp_path / "apps.json").write_text(json.dumps({"manual": {"repo": str(manual_repo), "branch": "main"}}))
+    (tmp_path / "vendors.txt").write_text("")
+    (tmp_path / "vendor_profiles").mkdir()
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads((tmp_path / "apps.json").read_text())
+    assert "manual" in data
+    assert (tmp_path / "vendor" / "manual").exists()
+
+
+def test_update_vendors_uses_custom_vendors_json(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_dir = repo_root / "scripts"
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True)
+
+    custom_repo = tmp_path / "custom_repo"
+    custom_repo.mkdir()
+    subprocess.run(["git", "init"], cwd=custom_repo, check=True)
+    (custom_repo / "README.md").write_text("custom")
+    subprocess.run(["git", "add", "README.md"], cwd=custom_repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=custom_repo, check=True)
+
+    (tmp_path / "apps.json").write_text("{}")
+    (tmp_path / "vendors.txt").write_text("")
+    (tmp_path / "custom_vendors.json").write_text(json.dumps({"extra": {"repo": str(custom_repo), "branch": "main"}}))
+    (tmp_path / "vendor_profiles").mkdir()
+
+    env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
+    subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
+
+    data = json.loads((tmp_path / "apps.json").read_text())
+    assert "extra" in data
+    assert (tmp_path / "vendor" / "extra").exists()

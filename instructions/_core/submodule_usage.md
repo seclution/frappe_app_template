@@ -16,6 +16,7 @@ Copy the configuration files from the template so you can adjust them:
 
 ```bash
 cp template/apps.json .
+cp template/custom_vendors.json .
 cp template/vendors.txt .
 cp -r template/vendor_profiles .
 ```
