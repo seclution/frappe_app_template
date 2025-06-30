@@ -97,7 +97,7 @@ fi
 
 # Create example configuration files if missing
 if [ ! -f "$CONFIG_TARGET/vendors.txt" ]; then
-    echo "example_app" > "$CONFIG_TARGET/vendors.txt"
+    cp "$SCRIPT_DIR/vendors.txt" "$CONFIG_TARGET/vendors.txt"
 fi
 
 if [ ! -f "$CONFIG_TARGET/vendor_profiles/examples/example_app.json" ]; then
