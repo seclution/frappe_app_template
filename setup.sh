@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if ! command -v jq >/dev/null 2>&1; then
+  echo "❌ jq is required but not installed. Please install jq and retry." >&2
+  exit 1
+fi
+
 # Prevent execution inside the frappe_app_template submodule
 toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
 if [[ "$toplevel" == *"/frappe_app_template" ]]; then
