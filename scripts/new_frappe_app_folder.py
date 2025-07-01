@@ -146,7 +146,7 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
-    create_app(Path(args.root) / args.app_name, args.app_name)
+    create_app(Path(args.root), args.app_name)
 
 
 if __name__ == "__main__":
