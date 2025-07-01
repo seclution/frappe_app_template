@@ -1,5 +1,10 @@
 #!/bin/bash
 set -euo pipefail
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "❌ jq is required but not installed. Please install jq and retry." >&2
+  exit 1
+fi
 export GIT_TERMINAL_PROMPT=0
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
