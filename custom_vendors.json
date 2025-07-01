@@ -1,2 +1,8 @@
 {
+    "nmb_tools": {
+    "repo": "https://github.com/Freddyslim/nmb_tools",
+    "branch": "develop",
+    "tag": "",
+    "commit": ""
+  }
 }
