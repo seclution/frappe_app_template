@@ -208,7 +208,7 @@ requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
 EOF
 
-    cat > "$CONFIG_TARGET/setup.py" <<EOF
+    cat > "$CONFIG_TARGET/app/setup.py" <<EOF
 from setuptools import find_packages, setup
 
 with open("app/$APP_NAME/__init__.py") as f:
