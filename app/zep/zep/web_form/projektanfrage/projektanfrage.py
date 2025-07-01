@@ -1,11 +1,6 @@
-# Placeholder web form module for Projektanfrage
-
 import frappe
 
-
 def get_context(context):
-    """Return context for the projektanfrage web form."""
-    context.update({
-        "message": "Hello from Projektanfrage web form"
-    })
+    """Context for projektanfrage web form"""
+    context.no_cache = 1
     return context
