@@ -10,5 +10,11 @@
     "branch": "",
     "tag": "v5.25.7",
     "commit": "6f9a09624f2298b11cc824b85b7e81bc5bdf3ee3"
+  },
+  "nmb_tools": {
+    "repo": "https://github.com/Freddyslim/nmb_tools",
+    "branch": "develop",
+    "tag": "",
+    "commit": "63c9109a872bdff4219e6ef494764771c73872a3"
   }
 }

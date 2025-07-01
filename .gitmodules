@@ -10,3 +10,6 @@
 [submodule "vendor/bench-v5.25.7"]
 	path = vendor/bench-v5.25.7
 	url = https://github.com/frappe/bench
+[submodule "vendor/nmb_tools-develop"]
+	path = vendor/nmb_tools-develop
+	url = https://github.com/Freddyslim/nmb_tools
