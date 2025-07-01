@@ -39,3 +39,7 @@ The following tips keep all custom apps consistent:
 - **Vendor submodules**: Add Frappe and any other framework apps under `vendor/`. Maintain slugs in `vendors.txt` and run `update_vendors.sh` to sync.
 
 See `instructions/prompts.md` for an example prompt sequence that explains how to initialise and extend a project with Codex.
+
+## Index Generation
+
+`PROJECT.md` lists repository tags under a `## Tags` heading. Run `scripts/generate_index.py` whenever these tags or the vendors change. The script builds `instructions/_INDEX.md` and groups vendor summaries below the detected tags.
