@@ -21,6 +21,8 @@ def test_setup_script_creates_app(tmp_path):
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
     subprocess.run([str(tmp_script), "demoapp"], cwd=tmp_path, check=True)
 
+    assert (tmp_path / "app" / "config").is_dir()
+    assert (tmp_path / "app" / "templates").is_dir()
     assert (tmp_path / "app" / "demoapp").is_dir()
-    assert (tmp_path / "app" / "demoapp" / "pyproject.toml").exists()
-    assert (tmp_path / "app" / "demoapp" / "patches.txt").exists()
+    assert (tmp_path / "app" / "pyproject.toml").exists()
+    assert (tmp_path / "app" / "patches.txt").exists()
