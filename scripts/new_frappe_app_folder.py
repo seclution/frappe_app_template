@@ -44,15 +44,26 @@ def guess_frappe_dependency(apps_json: Path) -> str | None:
 
 
 def create_app(root: Path, app_name: str, apps_json: Path | None = None) -> None:
-    app_title = humanize(app_name)
-    app_dir = root
+    """Create a Frappe app skeleton similar to ``bench new-app`` output."""
 
+    app_title = humanize(app_name)
+
+    root.mkdir(parents=True, exist_ok=True)
+    app_dir = root / app_name
+
+    # Core directories inside the app package
     (app_dir / "config").mkdir(parents=True, exist_ok=True)
     (app_dir / "templates" / "pages").mkdir(parents=True, exist_ok=True)
+    (app_dir / "templates" / "includes").mkdir(parents=True, exist_ok=True)
+    (app_dir / "www").mkdir(parents=True, exist_ok=True)
+    (app_dir / "public" / "css").mkdir(parents=True, exist_ok=True)
+    (app_dir / "public" / "js").mkdir(parents=True, exist_ok=True)
+    (app_dir / "public" / ".gitkeep").write_text("")
     (app_dir / app_name).mkdir(parents=True, exist_ok=True)
 
-    ensure_file(app_dir / "README.md", README.format(app_name=app_name, app_title=app_title))
-    ensure_file(app_dir / "license.txt", MIT_LICENSE)
+    # Top-level files
+    ensure_file(root / "README.md", README.format(app_name=app_name, app_title=app_title))
+    ensure_file(root / "license.txt", MIT_LICENSE)
     dependency = guess_frappe_dependency(apps_json) if apps_json else None
     pyproject = PYPROJECT.format(app_name=app_name)
     if dependency:
@@ -60,15 +71,18 @@ def create_app(root: Path, app_name: str, apps_json: Path | None = None) -> None
             "# \"frappe~=15.0.0\" # Installed and managed by bench.",
             f'"{dependency}"'
         )
-    ensure_file(app_dir / "pyproject.toml", pyproject)
+    ensure_file(root / "pyproject.toml", pyproject)
+
+    # Files inside app package
     ensure_file(app_dir / "patches.txt", PATCHES)
     ensure_file(app_dir / "modules.txt", f"{app_title}\n")
     ensure_file(app_dir / "hooks.py", HOOKS.format(app_name=app_name, app_title=app_title))
-    ensure_file(app_dir / "__init__.py", "")
-    ensure_file(app_dir / app_name / "__init__.py", "__version__ = '0.0.1'\n")
+    ensure_file(app_dir / "__init__.py", "__version__ = '0.0.1'\n")
+    ensure_file(app_dir / app_name / "__init__.py", "")
     ensure_file(app_dir / "config" / "__init__.py", "")
     ensure_file(app_dir / "templates" / "__init__.py", "")
     ensure_file(app_dir / "templates" / "pages" / "__init__.py", "")
+    ensure_file(app_dir / "templates" / "includes" / "__init__.py", "")
 
 
 README = """### {app_title}
@@ -216,8 +230,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path("app"),
-        help="Parent directory for app",
+        default=Path("."),
+        help="Directory where the app folder should be created",
     )
     parser.add_argument(
         "--apps-json",
