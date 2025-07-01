@@ -13,10 +13,11 @@ def humanize(name: str) -> str:
 
 
 def ensure_file(path: Path, content: str) -> None:
-    """Create ``path`` with ``content`` if it doesn't exist or differs."""
-    if not path.exists() or path.read_text() != content:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content)
+    """Create ``path`` with ``content`` only if it doesn't already exist."""
+    if path.exists():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content)
 
 
 def create_app(root: Path, app_name: str) -> None:
@@ -27,7 +28,7 @@ def create_app(root: Path, app_name: str) -> None:
     (app_dir / "templates" / "pages").mkdir(parents=True, exist_ok=True)
     (app_dir / app_name).mkdir(parents=True, exist_ok=True)
 
-    ensure_file(app_dir / "README.md", f"### {app_title}\n\nfor structure\n")
+    ensure_file(app_dir / "README.md", README.format(app_name=app_name, app_title=app_title))
     ensure_file(app_dir / "license.txt", MIT_LICENSE)
     ensure_file(app_dir / "pyproject.toml", PYPROJECT.format(app_name=app_name))
     ensure_file(app_dir / "patches.txt", PATCHES)
@@ -39,6 +40,48 @@ def create_app(root: Path, app_name: str) -> None:
     ensure_file(app_dir / "templates" / "__init__.py", "")
     ensure_file(app_dir / "templates" / "pages" / "__init__.py", "")
 
+
+README = """### {app_title}
+
+for structure
+
+### Installation
+
+You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+
+```bash
+cd $PATH_TO_YOUR_BENCH
+bench get-app $URL_OF_THIS_REPO --branch develop
+bench install-app {app_name}
+```
+
+### Contributing
+
+This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+
+```bash
+cd apps/{app_name}
+pre-commit install
+```
+
+Pre-commit is configured to use the following tools for checking and formatting your code:
+
+- ruff
+- eslint
+- prettier
+- pyupgrade
+
+### CI
+
+This app can use GitHub Actions for CI. The following workflows are configured:
+
+- CI: Installs this app and runs unit tests on every push to `develop` branch.
+- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
+
+### License
+
+mit
+"""
 
 MIT_LICENSE = """MIT License
 
