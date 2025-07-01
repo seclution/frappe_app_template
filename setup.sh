@@ -207,6 +207,27 @@ dependencies = []
 requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
 EOF
+
+    cat > "$CONFIG_TARGET/setup.py" <<EOF
+from setuptools import find_packages, setup
+
+with open("app/$APP_NAME/__init__.py") as f:
+    for line in f:
+        if line.startswith("__version__"):
+            version = line.split("=")[1].strip().strip("'\"")
+            break
+    else:
+        version = "0.0.1"
+
+setup(
+    name="$APP_NAME",
+    version=version,
+    packages=find_packages("app"),
+    package_dir={"": "app"},
+    include_package_data=True,
+    zip_safe=False,
+)
+EOF
 fi
 
 echo "✅ Setup complete."
