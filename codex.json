@@ -680,7 +680,8 @@
     "vendor/nmb_tools-develop/nmb_tools/templates/pages/",
     "vendor/nmb_tools-develop/nmb_tools/www/",
     "instructions/",
-    "sample_data/"
+    "sample_data/",
+    "PROJECT.md"
   ],
   "templates": []
 }

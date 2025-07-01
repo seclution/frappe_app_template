@@ -11,6 +11,7 @@ Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unt
 4. Installiere Entwickler-Abhängigkeiten mit `pip install -r requirements-dev.txt` und prüfe alles über `pytest`.
 5. Installiere Bench (`pip install frappe-bench`) und stelle sicher, dass Node 18 aktiv ist (z. B. via `n 18`), bevor du `bench build` ausführst.
 6. Lies die [DEV_INSTRUCTIONS.md](./DEV_INSTRUCTIONS.md) und die Hinweise im Ordner [instructions/_core](instructions/_core/README.md).
+7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Codex-Kontextes eingelesen.
 
 Weitere Beispiele für Daten und Schnittstellen findest du im [sample_data/README.md](sample_data/README.md).
 
