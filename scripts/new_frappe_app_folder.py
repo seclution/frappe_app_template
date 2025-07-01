@@ -21,7 +21,7 @@ def ensure_file(path: Path, content: str) -> None:
 
 def create_app(root: Path, app_name: str) -> None:
     app_title = humanize(app_name)
-    app_dir = app_name
+    app_dir = root
 
     (app_dir / "config").mkdir(parents=True, exist_ok=True)
     (app_dir / "templates" / "pages").mkdir(parents=True, exist_ok=True)
