@@ -7,3 +7,8 @@ app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = ""
 app_license = "MIT"
+
+# Include client script for Project Request
+doctype_js = {
+    "Project Request": "public/js/project_request.js"
+}
