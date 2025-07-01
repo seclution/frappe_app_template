@@ -226,8 +226,8 @@ build-backend = "flit_core.buildapi"
 EOF
 fi
 
-if [ ! -f "$CONFIG_TARGET/setup.py" ]; then
-    cat > "$CONFIG_TARGET/setup.py" <<EOF
+if [ ! -f "$CONFIG_TARGET/app/setup.py" ]; then
+    cat > "$CONFIG_TARGET/app/setup.py" <<EOF
 from setuptools import find_packages, setup
 
 with open("app/$APP_NAME/__init__.py") as f:
