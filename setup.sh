@@ -147,6 +147,6 @@ fi
 
 
 # Ensure app skeleton exists (matching bench new-app)
-python "$CONFIG_TARGET/scripts/new_frappe_app_folder.py" "$APP_NAME" --root "$CONFIG_TARGET/app"
+python3 "$CONFIG_TARGET/scripts/new_frappe_app_folder.py" "$APP_NAME" --root "$CONFIG_TARGET/app"
 
 echo "✅ Setup complete."
