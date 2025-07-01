@@ -230,7 +230,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path("."),
+        default=Path("app"),
         help="Directory where the app folder should be created",
     )
     parser.add_argument(
