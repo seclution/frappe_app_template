@@ -5,6 +5,13 @@
     "tag": "",
     "commit": "c2d40c3c333b62ad52a09c0c975173253d4a0909"
   },
+  {
+  "nmb_tools": {
+    "repo": "https://github.com/frappe/frappe",
+    "branch": "develop",
+    "tag": "",
+    "commit": ""
+  },
   "bench": {
     "repo": "https://github.com/frappe/bench",
     "branch": "",
