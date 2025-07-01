@@ -6,6 +6,13 @@
 * Registriere Events und Scheduler-Tasks über `hooks.py`.
 * Exportiere Custom Fields oder Doctypes mit Fixtures via `bench export-fixtures`.
 * API-Aufrufe erfolgen über Whitelist-Methoden oder die REST API.
+* Nutzt du **Flit** als Build-System, muss jede App ihre Version in
+  `<appname>/__init__.py` hinterlegen:
+
+  ```python
+  # <appname>/__init__.py
+  __version__ = "0.0.1"
+  ```
 * Weitere Details findest du in der offiziellen Frappe-Dokumentation.
 
 Frappe und Bench werden über `../apps.json` verwaltet. Um zusätzliche Apps
