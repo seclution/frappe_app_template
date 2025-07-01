@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 
@@ -20,7 +21,29 @@ def ensure_file(path: Path, content: str) -> None:
     path.write_text(content)
 
 
-def create_app(root: Path, app_name: str) -> None:
+def guess_frappe_dependency(apps_json: Path) -> str | None:
+    """Return a version spec for Frappe derived from ``apps_json``."""
+    if not apps_json.is_file():
+        return None
+    try:
+        data = json.loads(apps_json.read_text())
+    except Exception:
+        return None
+    frappe_info = data.get("frappe")
+    if not isinstance(frappe_info, dict):
+        return None
+    tag = frappe_info.get("tag")
+    branch = frappe_info.get("branch")
+    if tag:
+        version = tag.lstrip("v")
+        return f"frappe=={version}"
+    if branch and branch.startswith("version-"):
+        major = branch.split("version-")[-1].split(".")[0]
+        return f"frappe~={major}.0"
+    return "frappe"
+
+
+def create_app(root: Path, app_name: str, apps_json: Path | None = None) -> None:
     app_title = humanize(app_name)
     app_dir = root
 
@@ -30,7 +53,14 @@ def create_app(root: Path, app_name: str) -> None:
 
     ensure_file(app_dir / "README.md", README.format(app_name=app_name, app_title=app_title))
     ensure_file(app_dir / "license.txt", MIT_LICENSE)
-    ensure_file(app_dir / "pyproject.toml", PYPROJECT.format(app_name=app_name))
+    dependency = guess_frappe_dependency(apps_json) if apps_json else None
+    pyproject = PYPROJECT.format(app_name=app_name)
+    if dependency:
+        pyproject = pyproject.replace(
+            "# \"frappe~=15.0.0\" # Installed and managed by bench.",
+            f'"{dependency}"'
+        )
+    ensure_file(app_dir / "pyproject.toml", pyproject)
     ensure_file(app_dir / "patches.txt", PATCHES)
     ensure_file(app_dir / "modules.txt", f"{app_title}\n")
     ensure_file(app_dir / "hooks.py", HOOKS.format(app_name=app_name, app_title=app_title))
@@ -184,12 +214,18 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Create or update frappe app folder")
     parser.add_argument("app_name", help="Name of the app")
     parser.add_argument("--root", type=Path, default=Path("app"), help="Parent directory for app")
+    parser.add_argument(
+        "--apps-json",
+        type=Path,
+        default=Path("apps.json"),
+        help="Path to apps.json for deriving Frappe version",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     args = parse_args(argv)
-    create_app(Path(args.root), args.app_name)
+    create_app(Path(args.root), args.app_name, args.apps_json)
 
 
 if __name__ == "__main__":
