@@ -213,7 +213,12 @@ app_license = \"mit\"
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Create or update frappe app folder")
     parser.add_argument("app_name", help="Name of the app")
-    parser.add_argument("--root", type=Path, default=Path("app"), help="Parent directory for app")
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=Path("app"),
+        help="Parent directory for app",
+    )
     parser.add_argument(
         "--apps-json",
         type=Path,
