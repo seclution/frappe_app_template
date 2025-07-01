@@ -10,9 +10,9 @@ This repository uses Codex for automated code generation. These guidelines tell 
    defines repository URL and branch or tag.
 3. The *update-vendors* workflow clones all repositories listed in
    `vendors.txt` and regenerates `apps.json`. Run `./setup.sh` locally for the same
-    effect (requires `jq`).
+   effect (requires `jq`).
 4. The CI workflow only installs dependencies and runs tests. It no longer
-   runs `./setup.sh` automatically.
+   runs `update_vendors.sh` or `./setup.sh` automatically.
 5. Example payloads or external API docs belong in `sample_data/`.
 6. If you include template repositories (such as `template_frappe` or
    `template_erpnext`), also consult their respective `DEV_INSTRUCTIONS.md`
