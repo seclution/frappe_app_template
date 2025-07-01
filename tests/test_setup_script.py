@@ -9,6 +9,11 @@ def test_setup_script_creates_app(tmp_path):
     tmp_script.write_text(script_path.read_text())
     tmp_script.chmod(0o755)
 
+    tmp_scripts = tmp_path / "scripts"
+    tmp_scripts.mkdir()
+    src_script = repo_root / "scripts" / "new_frappe_app_folder.py"
+    (tmp_scripts / "new_frappe_app_folder.py").write_text(src_script.read_text())
+
     # minimal required config files
     (tmp_path / "vendors.txt").write_text((repo_root / "vendors.txt").read_text())
     (tmp_path / "apps.json").write_text((repo_root / "apps.json").read_text())
@@ -17,5 +22,5 @@ def test_setup_script_creates_app(tmp_path):
     subprocess.run([str(tmp_script), "demoapp"], cwd=tmp_path, check=True)
 
     assert (tmp_path / "app" / "demoapp").is_dir()
-    assert (tmp_path / "app" / "setup.py").exists()
-    assert not (tmp_path / "setup.py").exists()
+    assert (tmp_path / "app" / "demoapp" / "pyproject.toml").exists()
+    assert (tmp_path / "app" / "demoapp" / "patches.txt").exists()
