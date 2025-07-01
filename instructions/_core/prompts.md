@@ -21,7 +21,7 @@ In GitHub steht dafür das Workflow **update-vendors** bereit.
 
 ## Prompt 2: App Scaffold
 
-"Erzeuge in `app/my_custom_app` ein Grundgerüst für eine Frappe App mit DocType `Project` und einfachem List View."
+"Erzeuge in `my_custom_app` ein Grundgerüst für eine Frappe App mit DocType `Project` und einfachem List View."
 
 Codex legt entsprechende Dateien in der App an.
 
@@ -31,7 +31,7 @@ Codex legt entsprechende Dateien in der App an.
 
 "Füge einen Server-Side Scripting Hook hinzu, der bei `on_submit` einer Sales Invoice ausgeführt wird." 
 
-Codex aktualisiert die `hooks.py` und erstellt eine neue Python-Funktion unter `app/my_custom_app/my_custom_app/sales_invoice.py`.
+Codex aktualisiert die `hooks.py` und erstellt eine neue Python-Funktion unter `my_custom_app/my_custom_app/sales_invoice.py`.
 
 ---
 

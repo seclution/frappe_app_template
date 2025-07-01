@@ -1,6 +1,6 @@
 # Frappe Development Notes
 
-* Standard-App-Struktur in `app/`.
+* Standard-App-Struktur direkt im Repository-Stamm.
 * Verwende `bench new-app` zum Erstellen neuer Apps.
 * Lege einen DocType `<appname>_Globals` für globale Einstellungen an.
 * Registriere Events und Scheduler-Tasks über `hooks.py`.
