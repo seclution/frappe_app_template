@@ -14,9 +14,9 @@ Codex runs the update-vendors workflow or executes the script locally to generat
 
 ## Prompt 2: Scaffold a Custom App
 
-"Create `my_new_app` with a basic DocType named `Project` and include a README."
+"Create `app/my_new_app` with a basic DocType named `Project` and include a README."
 
-Codex creates the Frappe app structure in the repository root and commits the new files.
+Codex creates the Frappe app structure inside `app/` and commits the new files.
 
 ---
 

@@ -14,7 +14,7 @@ This folder hosts the Frappe app generated from this template. A minimal setup c
    bench init frappe-bench
    cd frappe-bench
    bench new-site mysite.local
-   bench get-app ..
+   bench get-app ../app/app_name
    bench --site mysite.local install-app app_name
    bench start
    ```

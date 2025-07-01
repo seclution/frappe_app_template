@@ -230,8 +230,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path("."),
-        help="Directory where the app folder should be created",
+        default=Path("app"),
+        help="Parent directory for app",
     )
     parser.add_argument(
         "--apps-json",
