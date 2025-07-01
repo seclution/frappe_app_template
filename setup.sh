@@ -26,7 +26,9 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
         [ -f "$wf" ] || continue
         target="$PARENT_DIR/.github/workflows/$(basename "$wf")"
         mkdir -p "$(dirname "$target")"
-        cp "$wf" "$target"
+        if [ ! -f "$target" ]; then
+            cp "$wf" "$target"
+        fi
     done
     if [ ! -f "$PARENT_DIR/requirements.txt" ]; then
         cp "$SCRIPT_DIR/requirements.txt" "$PARENT_DIR/requirements.txt"
@@ -35,8 +37,15 @@ if [ -d "$PARENT_DIR/.git" ] && [ "$PARENT_DIR" != "$SCRIPT_DIR" ]; then
         cp "$SCRIPT_DIR/requirements-dev.txt" "$PARENT_DIR/requirements-dev.txt"
     fi
     if [ -d "$SCRIPT_DIR/scripts" ]; then
-        cp -r "$SCRIPT_DIR/scripts" "$PARENT_DIR/"
-        chmod +x "$PARENT_DIR"/scripts/*.sh
+        mkdir -p "$PARENT_DIR/scripts"
+        for sf in "$SCRIPT_DIR"/scripts/*; do
+            [ -f "$sf" ] || continue
+            target="$PARENT_DIR/scripts/$(basename "$sf")"
+            if [ ! -f "$target" ]; then
+                cp "$sf" "$target"
+            fi
+        done
+        chmod +x "$PARENT_DIR"/scripts/*.sh 2>/dev/null || true
     fi
     if [ "$PARENT_DIR" != "$SCRIPT_DIR" ] && [ ! -f "$PARENT_DIR/.gitignore" ] && [ -f "$SCRIPT_DIR/.gitignore" ]; then
         cp "$SCRIPT_DIR/.gitignore" "$PARENT_DIR/.gitignore"
