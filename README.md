@@ -6,6 +6,7 @@ Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unt
 
 1. Klone dieses Repository oder binde es als Submodul in dein App-Projekt ein.
 2. Führe `./setup.sh` aus, um das Grundgerüst und die benötigten Ordner anzulegen.
+   Dabei wird sofort ein App-Ordner inklusive `app/.gitignore` erstellt.
 3. Trage aktive Vendoren in `vendors.txt` ein und starte `./scripts/update_vendors.sh`.
 4. Installiere Entwickler-Abhängigkeiten mit `pip install -r requirements-dev.txt` und prüfe alles über `pytest`.
 5. Installiere Bench (`pip install frappe-bench`) und stelle sicher, dass Node 18 aktiv ist (z. B. via `n 18`), bevor du `bench build` ausführst.
@@ -160,7 +161,8 @@ git init -b develop my_app && cd my_app
 
 git submodule add https://github.com/your-org/frappe_app_template
 ./frappe_app_template/setup.sh
-# erstellt auch sofort das App-Verzeichnis
+# erstellt auch sofort das App-Verzeichnis inklusive app/.gitignore
+# (via `scripts/new_frappe_app_folder.py`)
 # legt bei Bedarf auch eine leere .gitmodules an
 
 nano vendors.txt
