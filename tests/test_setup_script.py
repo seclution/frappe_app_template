@@ -26,5 +26,10 @@ def test_setup_script_creates_app(tmp_path):
     assert (app_path / "config").is_dir()
     assert (app_path / "templates").is_dir()
     assert (app_path / "demoapp").is_dir()
-    assert (app_path.parent / "pyproject.toml").exists()
+    root = app_path.parent
+
+    assert (root / "pyproject.toml").exists()
+    assert (root / "README.md").exists()
+    assert (root / "license.txt").exists()
+    assert (root / ".gitignore").exists()
     assert (app_path / "patches.txt").exists()

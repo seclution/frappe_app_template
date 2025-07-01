@@ -64,6 +64,7 @@ def create_app(root: Path, app_name: str, apps_json: Path | None = None) -> None
     # Top-level files
     ensure_file(root / "README.md", README.format(app_name=app_name, app_title=app_title))
     ensure_file(root / "license.txt", MIT_LICENSE)
+    ensure_file(root / ".gitignore", GITIGNORE)
     dependency = guess_frappe_dependency(apps_json) if apps_json else None
     pyproject = PYPROJECT.format(app_name=app_name)
     if dependency:
@@ -148,6 +149,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+"""
+
+GITIGNORE = """# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node and bench outputs
+node_modules/
+sites/assets/
+sites/*/public/
+
+# Logs
+*.log
 """
 
 PYPROJECT = """[project]
