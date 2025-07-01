@@ -2,8 +2,8 @@
   "_comment": "Directories indexed by Codex. Adjust paths as needed.",
   "sources": [
     "app/",
-    "vendor/bench/",
-    "vendor/frappe/",
+    "vendor/bench-v5.25.7/",
+    "vendor/frappe-version-15/",
     "instructions/",
     "sample_data/"
   ],
