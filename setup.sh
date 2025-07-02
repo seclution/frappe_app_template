@@ -135,33 +135,11 @@ if [ ! -f "$CONFIG_TARGET/custom_vendors.json" ]; then
 JSON
 fi
 
-
-if [ ! -f "$CONFIG_TARGET/codex.json" ]; then
-    cat > "$CONFIG_TARGET/codex.json" <<'JSON'
-{
-  "_comment": "Directories indexed by Codex. Adjust paths as needed.",
-  "sources": [
-    "app/",
-    "vendor/bench/",
-    "vendor/frappe/",
-    "instructions/",
-    "sample_data/"
-  ],
-  "templates": []
-}
-JSON
-fi
-
-# ensure templates field exists
-if ! jq -e '.templates' "$CONFIG_TARGET/codex.json" >/dev/null 2>&1; then
-    tmp=$(mktemp)
-    jq '. + {templates: []}' "$CONFIG_TARGET/codex.json" > "$tmp"
-    mv "$tmp" "$CONFIG_TARGET/codex.json"
-fi
-
-
 # Ensure app skeleton exists (matching bench new-app)
 echo "ℹ️  Creating app skeleton (includes app/.gitignore)"
 python3 "$CONFIG_TARGET/scripts/new_frappe_app_folder.py" "$APP_NAME" --root "$CONFIG_TARGET/app"
+
+# Build initial documentation index
+python3 "$CONFIG_TARGET/scripts/generate_index.py"
 
 echo "✅ Setup complete."
