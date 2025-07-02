@@ -15,7 +15,7 @@ automation guidelines used by Codex see `../DEV_INSTRUCTIONS.md`.
 4. The `CI` workflow only installs dependencies and runs tests. It no longer
    executes `../setup.sh` automatically.
 5. Store JSON example files and API docs in `../sample_data` when needed.
-   The folder is indexed in `codex.json` automatically.
+   The folder is listed in `_INDEX.md` automatically.
 
 When template repositories are included, consult their `DEV_INSTRUCTIONS.md` or
 `instructions/` folders in addition to this documentation.

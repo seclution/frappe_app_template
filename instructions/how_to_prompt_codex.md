@@ -26,7 +26,7 @@ Each file in `_scenarios/` outlines when certain instructions or code apply. The
 
 If Codex suggests wrong files or incomplete steps:
 
-- Ensure the paths in `codex.json` include all folders you need.
+- Ensure the vendor index `instructions/_INDEX.md` includes all folders you need.
 - Verify your scenario file lists correct references.
 - Check the docs in `instructions/_core/` to see if they already cover your topic.
 - Rerun `generate_codex_by_scenario.py` after updating scenarios or instructions.
@@ -40,9 +40,9 @@ Run `scripts/print_codex_context.py` to see which files are prioritised for a sc
 python scripts/print_codex_context.py --scenario my-scenario
 ```
 
-The script reads `codex.json` and the chosen markdown file under `instructions/_scenarios/`. It prints the referenced paths with their index positions and shows the suggested prompt template from the scenario file.
+The script reads the chosen markdown file under `instructions/_scenarios/` and prints the referenced paths along with the suggested prompt template.
 ## 6. Automatic context and file management
 
-Before executing any prompt, Codex should read the available documentation and the indexing strategy described in `codex.json`. Adjust the list of indexed paths when repositories grow to avoid excessive context size.
+Before executing any prompt, Codex should read the available documentation and the vendor overview in `_INDEX.md`. Adjust the referenced folders when repositories grow to avoid excessive context size.
 
 Codex may create or extend configuration files such as `Price Settings` automatically. Similarly, when a new algorithm, scraping routine or API integration is required, Codex should scaffold sensible defaults or generate the necessary code once the feature is introduced.

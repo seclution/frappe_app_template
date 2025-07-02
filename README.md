@@ -79,7 +79,7 @@ frappe_app_template/
 ├── requirements.txt
 ├── requirements-dev.txt
 ├── apps.json                           # generiert: enth. aktive Submodule/Vendoren
-├── codex.json                          # Codex-Datei-Index (autogeneriert)
+├── instructions/_INDEX.md              # Übersicht aller Vendoren (autogeneriert)
 ├── .codex_gitlog.json                  # Commit-Historie mit #codex:-Tags
 ├── vendors.txt                         # aktive Vendor-Slugs (z. B. erpnext, website)
 ├── project_meta.yml                    # Steuerung des Repo-Typs etc.
@@ -143,7 +143,7 @@ codex_feedback.json
 }
 ```
 
-Ein Cronjob oder CI-Sync-Skript überträgt regelmäßig Inhalte aus `my_app/instructions/` und `codex.json` zurück nach `.incoming/` in dieses Repo.
+Ein Cronjob oder CI-Sync-Skript überträgt regelmäßig Inhalte aus `my_app/instructions/` und `instructions/_INDEX.md` zurück nach `.incoming/` in dieses Repo.
 
 ## 🧰 Commit-Konventionen (Codex-optimiert)
 
@@ -180,7 +180,7 @@ Jedes App-Repository sollte folgenden Hinweis enthalten:
 > Diese App basiert auf dem zentralen `frappe_app_template`.
 > Eingebundene Vendoren stehen in vendors.txt.
 > Anleitungen wurden automatisch übernommen.
-> codex.json ist aktiv und wird bei jedem Commit aktualisiert.
+> Die Datei `instructions/_INDEX.md` wird bei Änderungen automatisch aktualisiert.
 > Erkenntnisse aus dieser App werden regelmäßig zurück in das zentrale Template synchronisiert.
 
 ## 📈 Mermaid-Diagramme

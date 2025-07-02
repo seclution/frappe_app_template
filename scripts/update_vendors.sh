@@ -21,7 +21,6 @@ if [ ! -d "$PROFILES_DIR" ]; then
     PROFILES_DIR="$ROOT_DIR/template/vendor_profiles"
   fi
 fi
-CODEX_JSON="$ROOT_DIR/codex.json"
 
 mkdir -p "$VENDOR_DIR"
 cd "$ROOT_DIR"
@@ -240,49 +239,9 @@ for slug in "${recognized[@]}"; do
 done
 jq -n "$jq_filter" > "$ROOT_DIR/apps.json"
 
-sources=()
 
-# prepend scenario files if available
-if [ -d "instructions/_scenarios" ]; then
-  while IFS= read -r f; do
-    sources+=("$f")
-  done < <(find instructions/_scenarios -type f | sort)
-fi
-
-# include full depth of app directory
-if [ -d "app" ]; then
-  while IFS= read -r d; do
-    sources+=("${d}/")
-  done < <(find app -type d | sort)
-fi
-
-# include full depth of vendor directories
-for slug in "${recognized[@]}"; do
-  path="${PATHS[$slug]}"
-  if [ -d "$path" ]; then
-    while IFS= read -r d; do
-      sources+=("${d}/")
-    done < <(find "$path" -type d | sort)
-  fi
-done
-
-sources+=("instructions/" "sample_data/")
-tmp_sources=$(mktemp)
-{
-  for src in "${sources[@]}"; do
-    printf '%s\n' "$src"
-  done
-} | jq -R -s 'split("\n")[:-1]' > "$tmp_sources"
-
-tmp_templates=$(mktemp)
-if [ -f "$CODEX_JSON" ]; then
-  jq -r 'if (.templates|type=="array") then .templates else [] end' "$CODEX_JSON" 2>/dev/null > "$tmp_templates" || echo "[]" > "$tmp_templates"
-else
-  echo "[]" > "$tmp_templates"
-fi
-
-jq -n --slurpfile s "$tmp_sources" --slurpfile t "$tmp_templates" '{"_comment":"Directories indexed by Codex. Adjust paths as needed.","sources":$s[0],"templates":$t[0]}' > "$CODEX_JSON"
-rm "$tmp_sources" "$tmp_templates"
+# rebuild documentation index after vendor changes
+python3 "$SCRIPT_DIR/generate_index.py"
 
 summary_parts=()
 if [ ${#installed[@]} -gt 0 ]; then

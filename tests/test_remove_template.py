@@ -1,4 +1,3 @@
-import json
 import subprocess
 from pathlib import Path
 
@@ -18,12 +17,10 @@ def test_remove_template_script(tmp_path):
     gitmodules = tmp_path / ".gitmodules"
     gitmodules.write_text("""[submodule \"vendor/demo-template\"]\n  path = vendor/demo-template\n  url = https://example.com/demo-template\n""")
 
-    codex = tmp_path / "codex.json"
-    codex.write_text(json.dumps({"templates": ["demo-template"], "sources": []}))
+
 
     subprocess.run(["bash", str(tmp_scripts / "remove_template.sh"), "demo-template"], cwd=tmp_path, check=True)
 
     assert not vendor.exists()
     assert not instr.exists()
-    data = json.loads(codex.read_text())
-    assert "demo-template" not in data.get("templates", [])
+

@@ -1,5 +1,4 @@
 import argparse
-import json
 from pathlib import Path
 
 
@@ -13,10 +12,6 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 
-def load_sources():
-    with open("codex.json") as f:
-        data = json.load(f)
-    return data.get("sources", [])
 
 
 def parse_scenario_file(name):
@@ -53,18 +48,12 @@ def parse_scenario_file(name):
 def main(argv=None):
     args = parse_args(argv)
     scenario_file, prompt, refs = parse_scenario_file(args.scenario)
-    sources = load_sources()
 
     print(f"Scenario file: {scenario_file}")
     print(f"Suggested prompt: {prompt or '(none)'}")
-    print("\nIndexed entries:")
-    all_refs = [str(scenario_file)] + refs
-    for ref in all_refs:
-        try:
-            idx = sources.index(ref)
-        except ValueError:
-            idx = -1
-        print(f"{idx}: {ref}")
+    print("\nReferences:")
+    for ref in [str(scenario_file)] + refs:
+        print(ref)
 
 
 if __name__ == "__main__":
