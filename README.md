@@ -126,6 +126,17 @@ myaddon|https://github.com/me/myaddon|develop|v1.0
 ```
 
 Passe bei Bedarf die JSON-Dateien unter `vendor_profiles/` an und starte danach `./scripts/update_vendors.sh` oder den Workflow **update-vendors**. Existiert kein solcher Ordner, nutzt das Skript automatisch die Profile aus dem Template‑Verzeichnis.
+
+### Absoluter GitHub-Link
+
+Wenn du in externer Doku oder CI auf Dateien eines Submodules verlinken möchtest,
+verwende einen vollständigen GitHub-Link inklusive Branch oder Commit. Die
+benötigten Informationen liest `generate_index.py` aus `apps.json`.
+
+Beispiel:
+
+- [frappe](https://github.com/your-org/frappe-version-15/tree/main/frappe)
+- [frappe @ a1b2c3d](https://github.com/your-org/frappe-version-15/tree/a1b2c3d/frappe)
 ## 🔁 Wissen aus App-Repos zurückführen
 
 App-Repos können neue Erkenntnisse lokal ablegen:
