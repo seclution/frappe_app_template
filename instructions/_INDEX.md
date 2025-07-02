@@ -65,7 +65,6 @@
 ### app_structure
 
 ### module
-- [example_vendor](vendors/example_vendor.md)
 
 ### git
 - [nmb_tools-develop](vendors/nmb_tools-develop.md)
