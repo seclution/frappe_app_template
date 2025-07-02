@@ -16,7 +16,7 @@ Codex will scan `instructions/` and the repository structure to answer.
 
 1. Create a markdown file under `_scenarios/<scenario-name>.md`.
 2. Add a `References:` section at the end that lists the important files or instructions.
-3. Run `generate_codex_by_scenario.py` to rebuild the dataset used by Codex.
+3. Run `scripts/generate_index.py` to rebuild the dataset used by Codex.
 
 ## 3. How Codex learns from `_scenarios/` files
 
@@ -29,7 +29,7 @@ If Codex suggests wrong files or incomplete steps:
 - Ensure the vendor index `instructions/_INDEX.md` includes all folders you need.
 - Verify your scenario file lists correct references.
 - Check the docs in `instructions/_core/` to see if they already cover your topic.
-- Rerun `generate_codex_by_scenario.py` after updating scenarios or instructions.
+- Rerun `scripts/generate_index.py` after updating scenarios or instructions.
 
 
 ## 5. Inspecting the active Codex context
