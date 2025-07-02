@@ -70,7 +70,39 @@ def map_tags_to_vendors(tags: list[str], root: Path = ROOT) -> dict[str, list[st
     return mapping
 
 
-def write_index(vendor_links: list[str], tags: list[str], tag_map: dict[str, list[str]], root: Path = ROOT) -> None:
+def parse_prompts(root: Path = ROOT) -> dict[str, list[str]]:
+    """Parse tagged prompt lines from projects.md or PROJECT.md."""
+    for name in ("projects.md", "PROJECT.md"):
+        p = root / name
+        if p.exists():
+            prompts_file = p
+            break
+    else:
+        return {}
+
+    mapping: dict[str, list[str]] = {}
+    for line in prompts_file.read_text().splitlines():
+        line = line.strip()
+        if not line or not line.startswith("["):
+            continue
+        end = line.find("]")
+        if end == -1:
+            continue
+        tag_part = line[1:end]
+        prompt = line[end + 1 :].strip()
+        tags = [t.strip() for t in tag_part.split(",") if t.strip()]
+        for tag in tags:
+            mapping.setdefault(tag, []).append(f"- {prompt}")
+    return mapping
+
+
+def write_index(
+    vendor_links: list[str],
+    tags: list[str],
+    tag_map: dict[str, list[str]],
+    root: Path = ROOT,
+    tasks: dict[str, list[str]] | None = None,
+) -> None:
     instructions = root / "instructions"
     index_file = instructions / "_INDEX.md"
     lines = ["# Instructions Index", "", "## Vendor Summaries", ""]
@@ -83,6 +115,13 @@ def write_index(vendor_links: list[str], tags: list[str], tag_map: dict[str, lis
             if entries:
                 lines.extend(entries)
             lines.append("")
+    if tasks:
+        lines.extend(["", "## Tasks", ""])
+        for tag in sorted(tasks):
+            lines.append(f"### {tag}")
+            lines.extend(tasks[tag])
+            lines.append("")
+
     index_file.write_text("\n".join(lines).rstrip() + "\n")
 
 
@@ -92,7 +131,8 @@ def main(argv: list[str] | None = None) -> None:
     tags = extract_tags()
     vendor_links = generate_vendor_summaries()
     tag_map = map_tags_to_vendors(tags)
-    write_index(vendor_links, tags, tag_map)
+    tasks = parse_prompts()
+    write_index(vendor_links, tags, tag_map, tasks=tasks)
 
 
 if __name__ == "__main__":
