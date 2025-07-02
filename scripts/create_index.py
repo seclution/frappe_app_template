@@ -38,7 +38,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("file_index.json"),
+        default=Path("instructions/file_index.json"),
         help="Output JSON file",
     )
     args = parser.parse_args(argv)
