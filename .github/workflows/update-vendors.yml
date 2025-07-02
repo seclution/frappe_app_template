@@ -43,6 +43,10 @@ jobs:
           echo "::endgroup::"
           tail -n 1 /tmp/vendor_summary.txt
 
+      - name: Generate documentation index
+        run: |
+          python scripts/generate_index.py
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
@@ -50,7 +54,7 @@ jobs:
           if [ -d vendor ]; then
             git add vendor
           fi
-          git add .gitmodules codex.json apps.json vendors.txt
+          git add .gitmodules apps.json vendors.txt instructions/_INDEX.md instructions/vendors
           if [ -d vendor_profiles ]; then
             git add vendor_profiles
           fi

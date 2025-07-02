@@ -19,37 +19,9 @@ jobs:
           fetch-depth: 50
           submodules: recursive
 
-      - name: Generate codex.json
+      - name: Generate documentation index
         run: |
-          python - <<'PY'
-          import os, json
-
-          sources = []
-
-          scenarios = os.path.join('instructions', '_scenarios')
-          if os.path.isdir(scenarios):
-              for root, _, files in os.walk(scenarios):
-                  for name in sorted(files):
-                      sources.append(os.path.join(root, name))
-
-          if os.path.isdir('app'):
-              for root, dirs, _ in os.walk('app'):
-                  dirs.sort()
-                  sources.append(root.rstrip('/') + '/')
-
-          if os.path.isdir('vendor'):
-              for entry in sorted(os.listdir('vendor')):
-                  vend_path = os.path.join('vendor', entry)
-                  if os.path.isdir(vend_path):
-                      for root, dirs, _ in os.walk(vend_path):
-                          dirs.sort()
-                          sources.append(root.rstrip('/') + '/')
-
-          sources.extend(['instructions/', 'sample_data/'])
-
-          with open('codex.json', 'w') as f:
-              json.dump({'sources': sources}, f)
-          PY
+          python scripts/generate_index.py
 
       - name: Extract codex gitlog
         run: |
@@ -59,7 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add codex.json .codex_gitlog.json
+          git add instructions/_INDEX.md instructions/vendors .codex_gitlog.json
           if git diff --cached --quiet; then
             echo "No changes"
           else
