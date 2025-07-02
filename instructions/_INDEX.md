@@ -16,6 +16,87 @@
 
 ### codex
 
+### doctype
+
+### customization
+
+### workflow
+
+### permissions
+
+### automation
+
+### script_report
+
+### print_format
+
+### email_template
+
+### website
+
+### webpage
+
+### webform
+
+### portal
+
+### html
+
+### jinja
+
+### clientscript
+
+### frappe_ui
+
+### frappe_call
+
+### frappe_api
+
+### serverscript
+
+### api
+
+### controller
+
+### scheduler
+
+### hook
+
+### app_structure
+
+### module
+- [example_vendor](vendors/example_vendor.md)
+
+### git
+- [nmb_tools-develop](vendors/nmb_tools-develop.md)
+- [frappe-version-15](vendors/frappe-version-15.md)
+- [bench-v5.25.7](vendors/bench-v5.25.7.md)
+
+### codex
+
+### instructions
+
+### unittest
+
+### testdata
+
+### bench
+- [bench-v5.25.7](vendors/bench-v5.25.7.md)
+
+### sandbox
+
+### barcode
+
+### fileupload
+
+### assets
+
+### export
+
+### print
+
+### webhook
+
 
 ## Tasks
 
