@@ -10,6 +10,7 @@ def test_update_vendors_prunes_obsolete_submodule(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -52,6 +53,7 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -88,12 +90,13 @@ def test_update_vendors_rebuilds_configs(tmp_path):
     assert (tmp_path / "vendor_profiles" / "test" / "app2.json").exists()
 
 
-def test_update_vendors_normalizes_codex_json(tmp_path):
+def test_update_vendors_generates_index(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     scripts_dir = repo_root / "scripts"
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -110,14 +113,14 @@ def test_update_vendors_normalizes_codex_json(tmp_path):
     prof_dir.mkdir()
     (prof_dir / "dummy.json").write_text(json.dumps({"url": str(dummy_repo), "branch": "v1"}))
 
-    codex = tmp_path / "codex.json"
-    codex.write_text('{"templates": {"foo": 1}, "sources": []}')
-
     env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
-    data = json.loads(codex.read_text())
-    assert isinstance(data["templates"], list)
+    index_file = tmp_path / "instructions" / "_INDEX.md"
+    vendor_summary = tmp_path / "instructions" / "vendors" / "dummy-v1.md"
+    assert index_file.is_file()
+    assert vendor_summary.is_file()
+    assert "dummy-v1" in index_file.read_text()
 
 
 def test_update_vendors_accepts_manual_entry(tmp_path):
@@ -126,6 +129,7 @@ def test_update_vendors_accepts_manual_entry(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -155,6 +159,7 @@ def test_update_vendors_removes_unlisted_apps(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -183,6 +188,7 @@ def test_update_vendors_uses_custom_vendors_json(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -212,6 +218,7 @@ def test_update_vendors_supports_tag(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -244,6 +251,7 @@ def test_update_vendors_preserves_existing_apps_json(tmp_path):
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -275,12 +283,13 @@ def test_update_vendors_preserves_existing_apps_json(tmp_path):
     assert data["demo"]["branch"] == "main"
 
 
-def test_update_vendors_sources_order(tmp_path):
+def test_update_vendors_writes_vendor_summary(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     scripts_dir = repo_root / "scripts"
     tmp_scripts = tmp_path / "scripts"
     tmp_scripts.mkdir()
     (tmp_scripts / "update_vendors.sh").write_text((scripts_dir / "update_vendors.sh").read_text())
+    (tmp_scripts / "generate_index.py").write_text((scripts_dir / "generate_index.py").read_text())
 
     subprocess.run(["git", "init"], cwd=tmp_path, check=True)
 
@@ -307,15 +316,8 @@ def test_update_vendors_sources_order(tmp_path):
     env = {**os.environ, "GIT_ALLOW_PROTOCOL": "file"}
     subprocess.run(["bash", str(tmp_scripts / "update_vendors.sh")], cwd=tmp_path, check=True, env=env)
 
-    data = json.loads((tmp_path / "codex.json").read_text())
-    expected = [
-        "instructions/_scenarios/one.md",
-        "instructions/_scenarios/two.md",
-        "app/",
-        "app/module/",
-        "app/module/sub/",
-        "vendor/dummy3-main/",
-        "instructions/",
-        "sample_data/",
-    ]
-    assert data["sources"] == expected
+    index_file = tmp_path / "instructions" / "_INDEX.md"
+    summary_file = tmp_path / "instructions" / "vendors" / "dummy3-main.md"
+    assert index_file.is_file()
+    assert summary_file.is_file()
+    assert "dummy3-main" in index_file.read_text()

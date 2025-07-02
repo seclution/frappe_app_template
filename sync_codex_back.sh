@@ -14,13 +14,12 @@ for d in instructions/_*; do
   rsync -a --delete "$d/" "$TEMPLATE_DIR/instructions/$(basename "$d")/"
 done
 
-mkdir -p "$TEMPLATE_DIR/.incoming/codex_snapshots"
-cp codex.json "$TEMPLATE_DIR/.incoming/codex_snapshots/${APP_NAME}.json"
+
 
 pushd "$TEMPLATE_DIR" >/dev/null
  git config user.name "codex-bot"
  git config user.email "codex-bot@example.com"
- git add instructions .incoming/codex_snapshots/${APP_NAME}.json
+ git add instructions
  if git diff --cached --quiet; then
    echo "No changes"
  else

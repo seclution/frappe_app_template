@@ -26,7 +26,7 @@ Edit these files to add your desired vendor slugs and integration profiles.
 
 ## 2. Initialising the Environment
 
-Run the setup script inside the submodule to clone the vendor apps and generate `codex.json`. The script also copies the GitHub workflow files to the parent repository when they are missing so that CI runs automatically. It relies on `scripts/new_frappe_app_folder.py` to create the `app/` directory and its `app/.gitignore`:
+Run the setup script inside the submodule to clone the vendor apps and generate `instructions/_INDEX.md`. The script also copies the GitHub workflow files to the parent repository when they are missing so that CI runs automatically. It relies on `scripts/new_frappe_app_folder.py` to create the `app/` directory and its `app/.gitignore`:
 
 ```bash
 cd template
