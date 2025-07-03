@@ -4,7 +4,7 @@ from pathlib import Path
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser(
-        description="Print codex context and prompt for a scenario"
+        description="Print agent context and prompt for a scenario"
     )
     parser.add_argument(
         "--scenario", required=True, help="Name of the scenario without extension"

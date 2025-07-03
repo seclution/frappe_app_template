@@ -17,8 +17,8 @@ done
 
 
 pushd "$TEMPLATE_DIR" >/dev/null
- git config user.name "codex-bot"
- git config user.email "codex-bot@example.com"
+ git config user.name "agent-bot"
+ git config user.email "agent-bot@example.com"
  git add instructions
  if git diff --cached --quiet; then
    echo "No changes"

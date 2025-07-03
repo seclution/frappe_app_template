@@ -1,4 +1,4 @@
-from scripts.print_codex_context import parse_args
+from scripts.print_agent_context import parse_args
 
 
 def test_parse_args():

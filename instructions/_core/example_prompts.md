@@ -1,6 +1,6 @@
 # Example Prompt Sequence
 
-Use these prompts to set up and extend a Frappe project with Codex. Replace URLs and app names to fit your own repository.
+Use these prompts to set up and extend a Frappe project with the automation agent. Replace URLs and app names to fit your own repository.
 
 ---
 
@@ -8,7 +8,7 @@ Use these prompts to set up and extend a Frappe project with Codex. Replace URLs
 
 "Clone Frappe and Bench using the versions from `apps.json`. Afterwards run `setup.sh`."
 
-Codex runs the update-vendors workflow or executes the script locally to generate `vendor/` and an updated `apps.json`.
+The agent runs the update-vendors workflow or executes the script locally to generate `vendor/` and an updated `apps.json`.
 
 ---
 
@@ -16,7 +16,7 @@ Codex runs the update-vendors workflow or executes the script locally to generat
 
 "Create `app/my_new_app` with a basic DocType named `Project` and include a README."
 
-Codex creates the Frappe app structure inside `app/` and commits the new files.
+The agent creates the Frappe app structure inside `app/` and commits the new files.
 
 ---
 
@@ -24,7 +24,7 @@ Codex creates the Frappe app structure inside `app/` and commits the new files.
 
 "Hook into the `on_submit` event of `Sales Invoice` and send a notification." 
 
-Codex updates `hooks.py` and adds the corresponding Python code under the app module.
+The agent updates `hooks.py` and adds the corresponding Python code under the app module.
 
 ---
 
@@ -32,7 +32,7 @@ Codex updates `hooks.py` and adds the corresponding Python code under the app mo
 
 "Add `erpnext` to `vendors.txt` and trigger the update-vendors workflow."
 
-Codex adds the submodule under `vendor/` and refreshes the configuration.
+The agent adds the submodule under `vendor/` and refreshes the configuration.
 
 ---
 
@@ -40,4 +40,4 @@ Codex adds the submodule under `vendor/` and refreshes the configuration.
 
 "Pull the latest stable Frappe tag and commit the submodule update." 
 
-Codex executes `git submodule update --remote vendor/frappe` and commits the change.
+The agent executes `git submodule update --remote vendor/frappe` and commits the change.

@@ -1,6 +1,6 @@
-# 📚 Codex Instructions System
+# 📚 Agent Instructions System
 
-Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entwicklung.
+Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Entwicklung.
 
 ## Funktionsweise
 
@@ -10,7 +10,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entw
 
 ## Ziel
 
-Anhand dieser Anleitungen kann Codex automatisch passende Prompt-Ketten generieren, z. B.:
+Anhand dieser Anleitungen kann der Agent automatisch passende Prompt-Ketten generieren, z. B.:
 
 > „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
 
@@ -31,6 +31,6 @@ instructions/
 │       └── sync_with_erpnext.md
 ```
 
-Diese Dateien werden später von Codex ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+Diese Dateien werden später vom Agenten ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
 
 Weitere Hinweise zur Verwaltung des Repositorys findest du in [repo_mgmt.md](repo_mgmt.md).
