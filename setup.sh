@@ -78,9 +78,9 @@ mkdir -p "$CONFIG_TARGET/instructions/_core"
 CORE_README="$CONFIG_TARGET/instructions/_core/README.md"
 if [ ! -f "$CORE_README" ]; then
     cat > "$CORE_README" <<'EOF'
-# 📚 Codex Instructions System
+# 📚 Agent Instructions System
 
-Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entwicklung.
+Dies ist die zentrale, nie löschbare Anleitungsbasis für agent-gestützte Entwicklung.
 
 ## Funktionsweise
 
@@ -90,7 +90,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für Codex-gestützte Entw
 
 ## Ziel
 
-Anhand dieser Anleitungen kann Codex automatisch passende Prompt-Ketten generieren, z. B.:
+Anhand dieser Anleitungen kann der Agent automatisch passende Prompt-Ketten generieren, z. B.:
 
 > „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
 
@@ -111,7 +111,7 @@ instructions/
 │       └── sync_with_erpnext.md
 ```
 
-Diese Dateien werden später von Codex ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+Diese Dateien werden später vom Agent ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
 EOF
 fi
 
