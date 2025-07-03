@@ -1,6 +1,7 @@
-# 📚 Agent Instructions System
+# 📚 Agent Instruction System
 
-Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Entwicklung.
+Dies ist die zentrale, nie löschbare Anleitungsbasis für das agentbasierte Entwicklungssystem.
+
 
 ## Funktionsweise
 
@@ -10,7 +11,8 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Ent
 
 ## Ziel
 
-Anhand dieser Anleitungen kann der Agent automatisch passende Prompt-Ketten generieren, z. B.:
+Diese Anleitungen ermöglichen es dem agentbasierten System, automatisch passende Prompt-Ketten zusammenzustellen, z. B.:
+
 
 > „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
 
@@ -31,6 +33,6 @@ instructions/
 │       └── sync_with_erpnext.md
 ```
 
-Diese Dateien werden später vom Agenten ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+Diese Dateien werden später vom agentbasierten System ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
 
 Weitere Hinweise zur Verwaltung des Repositorys findest du in [repo_mgmt.md](repo_mgmt.md).

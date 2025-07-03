@@ -78,9 +78,10 @@ mkdir -p "$CONFIG_TARGET/instructions/_core"
 CORE_README="$CONFIG_TARGET/instructions/_core/README.md"
 if [ ! -f "$CORE_README" ]; then
     cat > "$CORE_README" <<'EOF'
-# 📚 Agent Instructions System
 
-Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Entwicklung.
+# 📚 Agent Instruction System
+
+Dies ist die zentrale, nie löschbare Anleitungsbasis für das agentbasierte Entwicklungssystem.
 
 ## Funktionsweise
 
@@ -90,7 +91,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Ent
 
 ## Ziel
 
-Anhand dieser Anleitungen kann der Agent automatisch passende Prompt-Ketten generieren, z. B.:
+Diese Anleitungen ermöglichen es dem agentbasierten System, automatisch passende Prompt-Ketten zusammenzustellen, z. B.:
 
 > „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
 
@@ -111,7 +112,7 @@ instructions/
 │       └── sync_with_erpnext.md
 ```
 
-Diese Dateien werden später vom Agenten ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+Diese Dateien werden später vom agentbasierten System ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
 
 EOF
 fi
