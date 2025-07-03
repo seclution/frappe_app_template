@@ -112,6 +112,7 @@ instructions/
 ```
 
 Diese Dateien werden später vom Agenten ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+
 EOF
 fi
 

@@ -2,3 +2,4 @@
 repo_type: template_base
 publish_enabled: false
 description: Template repository for agent-driven Frappe apps
+

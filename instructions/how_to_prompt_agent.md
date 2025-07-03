@@ -33,7 +33,6 @@ If the agent suggests wrong files or incomplete steps:
 
 
 ## 5. Inspecting the active agent context
-
 Run `scripts/print_agent_context.py` to see which files are prioritised for a scenario and which prompt template it suggests:
 
 ```bash

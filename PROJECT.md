@@ -1,7 +1,7 @@
 # Projektkonzept
 
 ## Ziel
-Dieses Template liefert das Fundament für Frappe-Projekte. Es soll eine klare Struktur bieten und wiederverwendbare Workflows bereitstellen.
+Dieses Template liefert das Fundament für agent-unterstützte Frappe-Projekte. Es soll eine klare Struktur bieten und wiederverwendbare Workflows bereitstellen.
 
 ## Technologien
 - Python
@@ -47,12 +47,14 @@ Diese Hinweise fassen die ehemaligen Dateien `DEV_INSTRUCTIONS.md`, `instruction
 - Synchronisiere Vendor-Submodule über `vendors.txt` und `scripts/update_vendors.sh`.
 - Details zu Frappe und ERPNext findest du in `instructions/_core/frappe.md` und `instructions/_core/erpnext.md`. Weitere Tipps liefern `instructions/_core/submodule_usage.md` und `instructions/_core/repo_mgmt.md`.
 - `instructions/_core/prompts.md` zeigt Beispiel-Prompts, um neue Apps zu starten oder zu erweitern.
-- Dieses Repository dient standardmäßig als App-Template für den Agent.
+- Der Agent betrachtet dieses Repository standardmäßig als App-Template.
+
 
 ### Index Generation
 
 `scripts/generate_index.py` baut `instructions/_INDEX.md` anhand der Tags in dieser Datei und der Vendoren auf. Starte das Skript, wenn sich die Tags oder Vendors ändern.
 
 ## Tags
-app-template, frappe, doctype, customization, workflow, permissions, automation, script_report, print_format, email_template, website, webpage, webform, portal, html, jinja, clientscript, frappe_ui, frappe_call, frappe_api, serverscript, api, controller, scheduler, hook, app_structure, module, git, instructions, unittest, testdata, bench, sandbox, barcode, fileupload, assets, export, print, webhook
+app-template, frappe, agent, doctype, customization, workflow, permissions, automation, script_report, print_format, email_template, website, webpage, webform, portal, html, jinja, clientscript, frappe_ui, frappe_call, frappe_api, serverscript, api, controller, scheduler, hook, app_structure, module, git, agent, instructions, unittest, testdata, bench, sandbox, barcode, fileupload, assets, export, print, webhook
+
 

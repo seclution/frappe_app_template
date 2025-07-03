@@ -1,6 +1,8 @@
-# 🚀 Frappe App Template
 
-Dieses Repository ist das **zentrale Master-Template** zur Entwicklung von Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen und Workflows, um neue Projekte effizient aufzusetzen und gezielt externe Inhalte (z. B. ERPNext) einzubinden. Die Arbeitsschritte werden über `agent.md`-Dateien gesteuert.
+# 🚀 Frappe App Template (Agent-Optimiert)
+
+Dieses Repository ist das **zentrale Master-Template** zur Entwicklung agent-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit dem neuen Agent-Standard zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
+
 
 ## 🚀 Getting Started
 
@@ -13,6 +15,7 @@ Dieses Repository ist das **zentrale Master-Template** zur Entwicklung von Frapp
 6. Lies den Abschnitt [Developer Guide](./PROJECT.md#developer-guide) in [PROJECT.md](./PROJECT.md) und die Hinweise im Ordner [instructions/_core](instructions/_core/README.md).
 7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Projektkontextes eingelesen.
 8. Lege projektspezifische Hinweise in `agent.md` Dateien ab. Der Agent bezieht sie bei allen Aktionen mit ein.
+
 
 Weitere Beispiele für Daten und Schnittstellen findest du im [sample_data/README.md](sample_data/README.md).
 
@@ -33,7 +36,7 @@ frappe_app_template/
 │   └── frappe_template_core/           # Referenz-App: UI, Doctypes, Layouts etc.
 │
 ├── instructions/
-│   └── _core/                          # zentrale Anleitungen (niemals löschen)
+│   └── _core/                          # zentrale Agent-Anleitungen (niemals löschen)
 │       ├── frappe.md
 │       ├── erpnext.md
 │       ├── prompts.md
@@ -72,8 +75,8 @@ frappe_app_template/
 │   └── workflows_readme/
 │       └── template_maintenance/
 │
-├── .incoming/                          # Snapshots aus App-Repos
-│   └── agent_snapshots/
+├── .incoming/                          # Snapshots von Agent-Wissen aus App-Repos
+│   └── codex_snapshots/
 │       └── my_app.json
 │
 ├── setup.sh
@@ -157,7 +160,8 @@ agent_feedback.json
 
 Ein Cronjob oder CI-Sync-Skript überträgt regelmäßig Inhalte aus `my_app/instructions/` und `instructions/_INDEX.md` zurück nach `.incoming/` in dieses Repo.
 
-## 🧰 Commit-Konventionen
+## 🧰 Commit-Konventionen (Agent-optimiert)
+
 
 ```bash
 feat(ui): Add layout hooks #agent:index
