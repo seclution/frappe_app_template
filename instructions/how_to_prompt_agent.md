@@ -33,11 +33,10 @@ If the agent suggests wrong files or incomplete steps:
 
 
 ## 5. Inspecting the active agent context
-
-Run `scripts/print_codex_context.py` to see which files are prioritised for a scenario and which prompt template it suggests:
+Run `scripts/print_agent_context.py` to see which files are prioritised for a scenario and which prompt template it suggests:
 
 ```bash
-python scripts/print_codex_context.py --scenario my-scenario
+python scripts/print_agent_context.py --scenario my-scenario
 ```
 
 The script reads the chosen markdown file under `instructions/_scenarios/` and prints the referenced paths along with the suggested prompt template.

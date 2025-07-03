@@ -1,6 +1,8 @@
+
 # 🚀 Frappe App Template (Agent-Optimiert)
 
 Dieses Repository ist das **zentrale Master-Template** zur Entwicklung agent-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit dem neuen Agent-Standard zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
+
 
 ## 🚀 Getting Started
 
@@ -11,7 +13,9 @@ Dieses Repository ist das **zentrale Master-Template** zur Entwicklung agent-unt
 4. Installiere Entwickler-Abhängigkeiten mit `pip install -r requirements-dev.txt` und prüfe alles über `pytest`.
 5. Installiere Bench (`pip install frappe-bench`) und stelle sicher, dass Node 18 aktiv ist (z. B. via `n 18`), bevor du `bench build` ausführst.
 6. Lies den Abschnitt [Developer Guide](./PROJECT.md#developer-guide) in [PROJECT.md](./PROJECT.md) und die Hinweise im Ordner [instructions/_core](instructions/_core/README.md).
-7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Agent-Kontextes eingelesen.
+7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Projektkontextes eingelesen.
+8. Lege projektspezifische Hinweise in `agent.md` Dateien ab. Der Agent bezieht sie bei allen Aktionen mit ein.
+
 
 Weitere Beispiele für Daten und Schnittstellen findest du im [sample_data/README.md](sample_data/README.md).
 
@@ -65,7 +69,7 @@ frappe_app_template/
 │
 ├── .github/
 │   ├── workflows/
-│   │   ├── generate_codex_index.yml
+│   │   ├── generate_agent_index.yml
 │   │   ├── validate_commits.yml
 │   │   └── ci.yml
 │   └── workflows_readme/
@@ -80,7 +84,7 @@ frappe_app_template/
 ├── requirements-dev.txt
 ├── apps.json                           # generiert: enth. aktive Submodule/Vendoren
 ├── instructions/_INDEX.md              # Übersicht aller Vendoren (autogeneriert)
-├── .codex_gitlog.json                  # Commit-Historie mit #codex:-Tags
+├── .agent_gitlog.json                  # Commit-Historie mit #agent:-Tags
 ├── vendors.txt                         # aktive Vendor-Slugs (z. B. erpnext, website)
 ├── project_meta.yml                    # Steuerung des Repo-Typs etc.
 ├── pricing_settings.yml                # Parameter für Preiskalkulationen
@@ -142,7 +146,7 @@ Beispiel:
 App-Repos können neue Erkenntnisse lokal ablegen:
 
 ```json
-codex_feedback.json
+agent_feedback.json
 {
   "vendor": "erpnext",
   "context_improvement": [
@@ -158,9 +162,10 @@ Ein Cronjob oder CI-Sync-Skript überträgt regelmäßig Inhalte aus `my_app/ins
 
 ## 🧰 Commit-Konventionen (Agent-optimiert)
 
+
 ```bash
-feat(ui): Add layout hooks #codex:index
-refactor(sync): simplify vendor loader #codex:infra
+feat(ui): Add layout hooks #agent:index
+refactor(sync): simplify vendor loader #agent:infra
 ```
 
 Workflows wie `validate_commits.yml` prüfen auf Einhaltung.

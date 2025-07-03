@@ -49,10 +49,12 @@ Diese Hinweise fassen die ehemaligen Dateien `DEV_INSTRUCTIONS.md`, `instruction
 - `instructions/_core/prompts.md` zeigt Beispiel-Prompts, um neue Apps zu starten oder zu erweitern.
 - Der Agent betrachtet dieses Repository standardmäßig als App-Template.
 
+
 ### Index Generation
 
 `scripts/generate_index.py` baut `instructions/_INDEX.md` anhand der Tags in dieser Datei und der Vendoren auf. Starte das Skript, wenn sich die Tags oder Vendors ändern.
 
 ## Tags
 app-template, frappe, agent, doctype, customization, workflow, permissions, automation, script_report, print_format, email_template, website, webpage, webform, portal, html, jinja, clientscript, frappe_ui, frappe_call, frappe_api, serverscript, api, controller, scheduler, hook, app_structure, module, git, agent, instructions, unittest, testdata, bench, sandbox, barcode, fileupload, assets, export, print, webhook
+
 

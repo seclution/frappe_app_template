@@ -13,7 +13,7 @@ This document lists major files and directories that were removed or replaced wh
 
 ## Replaced
 
-- **codex_prompt.md** → consolidated into `instructions/prompts.md`
+- **legacy prompt** → consolidated into `instructions/prompts.md`
  - **.github/workflows/create-app-repo.yml** → replaced by `setup.sh` which now generates the app folder
 
 These changes keep the repository minimal and focus on configuration files that the agent can apply to new projects.

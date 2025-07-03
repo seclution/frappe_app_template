@@ -1,4 +1,4 @@
-name: generate-codex-index
+name: generate-agent-index
 
 on:
   push:
@@ -23,18 +23,18 @@ jobs:
         run: |
           python scripts/create_index.py
 
-      - name: Extract codex gitlog
+      - name: Extract agent gitlog
         run: |
-          git log -n 20 --grep '#codex:' --pretty=format:'%H %s' > .codex_gitlog.json
+          git log -n 20 --grep '#agent:' --pretty=format:'%H %s' > .agent_gitlog.json
 
       - name: Commit index
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add instructions/_INDEX.md instructions/vendors .codex_gitlog.json
+          git add instructions/_INDEX.md instructions/vendors .agent_gitlog.json
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "chore: update codex index"
+            git commit -m "chore: update agent index"
             git push
           fi

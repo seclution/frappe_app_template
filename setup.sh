@@ -80,7 +80,7 @@ if [ ! -f "$CORE_README" ]; then
     cat > "$CORE_README" <<'EOF'
 # 📚 Agent Instructions System
 
-Dies ist die zentrale, nie löschbare Anleitungsbasis für agent-gestützte Entwicklung.
+Dies ist die zentrale, nie löschbare Anleitungsbasis für agentengestützte Entwicklung.
 
 ## Funktionsweise
 
@@ -111,7 +111,8 @@ instructions/
 │       └── sync_with_erpnext.md
 ```
 
-Diese Dateien werden später vom Agent ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+Diese Dateien werden später vom Agenten ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+
 EOF
 fi
 

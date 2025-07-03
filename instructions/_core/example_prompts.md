@@ -1,6 +1,8 @@
 # Example Prompt Sequence
 
-Use these prompts to set up and extend a Frappe project with the agent. Replace URLs and app names to fit your own repository.
+
+Use these prompts to set up and extend a Frappe project with the automation agent. Replace URLs and app names to fit your own repository.
+
 
 ---
 

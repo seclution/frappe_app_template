@@ -14,7 +14,7 @@
 - [frappe-version-15](vendors/frappe-version-15.md)
 - [bench-v5.25.7](vendors/bench-v5.25.7.md)
 
-### codex
+### agent
 
 ### doctype
 
@@ -71,7 +71,7 @@
 - [frappe-version-15](vendors/frappe-version-15.md)
 - [bench-v5.25.7](vendors/bench-v5.25.7.md)
 
-### codex
+### agent
 
 ### instructions
 

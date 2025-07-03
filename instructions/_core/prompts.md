@@ -1,6 +1,6 @@
 # Prompt Sequence
 
-Diese Beispiel-Promptabfolge kannst du nutzen, um dein Projekt mit dem Agent zu initialisieren und schrittweise auszubauen.
+Diese Beispiel-Promptabfolge kannst du nutzen, um dein Projekt mit dem Agenten zu initialisieren und schrittweise auszubauen.
 
 ---
 
