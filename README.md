@@ -1,6 +1,6 @@
-# 🚀 Frappe App Template (Codex-Optimiert)
+# 🚀 Frappe App Template (Agent-Optimiert)
 
-Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit OpenAI Codex zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
+Dieses Repository ist das **zentrale Master-Template** zur Entwicklung agent-unterstützter Frappe-Apps. Es beinhaltet alle Werkzeuge, Strukturen, Konventionen und Workflows, um neue Projekte effizient aufzusetzen, kontextoptimiert mit dem neuen Agent-Standard zu entwickeln und gezielt externe Inhalte (z. B. ERPNext) einzubinden.
 
 ## 🚀 Getting Started
 
@@ -11,7 +11,7 @@ Dieses Repository ist das **zentrale Master-Template** zur Entwicklung Codex-unt
 4. Installiere Entwickler-Abhängigkeiten mit `pip install -r requirements-dev.txt` und prüfe alles über `pytest`.
 5. Installiere Bench (`pip install frappe-bench`) und stelle sicher, dass Node 18 aktiv ist (z. B. via `n 18`), bevor du `bench build` ausführst.
 6. Lies den Abschnitt [Developer Guide](./PROJECT.md#developer-guide) in [PROJECT.md](./PROJECT.md) und die Hinweise im Ordner [instructions/_core](instructions/_core/README.md).
-7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Codex-Kontextes eingelesen.
+7. Das Projektprofil findest du in [PROJECT.md](./PROJECT.md). Dieses Dokument wird von `generate_index.py` beim Aufbau des Agent-Kontextes eingelesen.
 
 Weitere Beispiele für Daten und Schnittstellen findest du im [sample_data/README.md](sample_data/README.md).
 
@@ -32,7 +32,7 @@ frappe_app_template/
 │   └── frappe_template_core/           # Referenz-App: UI, Doctypes, Layouts etc.
 │
 ├── instructions/
-│   └── _core/                          # zentrale Codex-Anleitungen (niemals löschen)
+│   └── _core/                          # zentrale Agent-Anleitungen (niemals löschen)
 │       ├── frappe.md
 │       ├── erpnext.md
 │       ├── prompts.md
@@ -71,7 +71,7 @@ frappe_app_template/
 │   └── workflows_readme/
 │       └── template_maintenance/
 │
-├── .incoming/                          # Snapshots von Codex-Wissen aus App-Repos
+├── .incoming/                          # Snapshots von Agent-Wissen aus App-Repos
 │   └── codex_snapshots/
 │       └── my_app.json
 │
@@ -94,12 +94,12 @@ Alle Workflows orientieren sich an der jeweiligen `project_meta.yml` eines App-R
 
 In dieser optionalen Datei hinterlegst du Schätzwerte für typische Aufgaben wie Doctypes oder Webseiten. Externe Tools können die Werte nutzen, um Angebote zu kalkulieren. Hinterlege hier nur unsensible Daten und niemals vertrauliche Stundensätze.
 
-## 💡 Codex-Prinzipien
+## 💡 Agent-Prinzipien
 
 * Nur **ein Git-Repo** als aktiver Kontext
 * Externe Tools (ERPNext, Raven ...) werden als Submodule in `vendor/` eingebunden
 * Zu jedem Submodul gibt es begleitende Anleitungen in `instructions/_<slug>/`
-* Codex liest aus: `instructions/`, `vendor/`, `app/`, relevante `scripts/` & Workflows
+* Der Agent liest aus: `instructions/`, `vendor/`, `app/`, relevante `scripts/` & Workflows
 
 ## 🔄 Submodule & Versionierung
 
@@ -156,7 +156,7 @@ codex_feedback.json
 
 Ein Cronjob oder CI-Sync-Skript überträgt regelmäßig Inhalte aus `my_app/instructions/` und `instructions/_INDEX.md` zurück nach `.incoming/` in dieses Repo.
 
-## 🧰 Commit-Konventionen (Codex-optimiert)
+## 🧰 Commit-Konventionen (Agent-optimiert)
 
 ```bash
 feat(ui): Add layout hooks #codex:index
@@ -207,7 +207,7 @@ Die Vorlage `workflow_templates/generate-mermaid.yml` automatisiert die Aktualis
 
 ## ✨ Fazit
 
-Dieses Repository ist das zentrale Fundament zur Entwicklung modularer, wartbarer und kontextoptimierter Frappe-Projekte. Alle Submodule, Anleitungssysteme und Automatisierungen zielen auf einen sauberen Codex-Kontext ab. Neue Erkenntnisse können strukturiert in `.incoming/` zur Verfügung gestellt werden – ganz ohne Submodule pushen zu müssen.
+Dieses Repository ist das zentrale Fundament zur Entwicklung modularer, wartbarer und kontextoptimierter Frappe-Projekte. Alle Submodule, Anleitungssysteme und Automatisierungen zielen auf einen sauberen Agent-Kontext ab. Neue Erkenntnisse können strukturiert in `.incoming/` zur Verfügung gestellt werden – ganz ohne Submodule pushen zu müssen.
 
 **Dieses Template ist das Gehirn – jede App ist ein Ausdruck davon.**
 
