@@ -78,6 +78,7 @@ mkdir -p "$CONFIG_TARGET/instructions/_core"
 CORE_README="$CONFIG_TARGET/instructions/_core/README.md"
 if [ ! -f "$CORE_README" ]; then
     cat > "$CORE_README" <<'EOF'
+
 # 📚 Agent Instruction System
 
 Dies ist die zentrale, nie löschbare Anleitungsbasis für das agentbasierte Entwicklungssystem.
@@ -112,6 +113,7 @@ instructions/
 ```
 
 Diese Dateien werden später vom agentbasierten System ausgelesen, um automatisch die passenden Entwicklungs-Prompts zu generieren.
+
 EOF
 fi
 

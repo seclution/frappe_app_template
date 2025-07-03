@@ -1,15 +1,15 @@
-# === Codex CLI Konfiguration ===
+# === Agent CLI Konfiguration ===
 # Diese Datei legt globale oder projektbezogene Defaults für die CLI fest.
 
 # 🧠 Haupt-Instruktion für den Editierbefehl
 instruction: "Kommentiere den Code auf Deutsch"  # oder z. B. "Refactoriere zu async"
 
-# 🌍 Sprache für Kommentare, Begründungen etc. (optional, kein echter Einfluss auf Codex, aber Meta-Info)
+# 🌍 Sprache für Kommentare, Begründungen etc. (optionale Meta-Info für den Agenten)
 language: "de"
 
 # 🧾 Begründungszusammenfassung anfordern (nur für verifizierte Orgs!)
 # Achtung: Führt bei nicht-verifizierten Accounts zu Fehler 400
-reasoning_summary: false  # true = Codex generiert automatisch eine Begründung
+reasoning_summary: false  # true = der Agent erzeugt automatisch eine Begründung
 
 # 🎯 Modellwahl (nur falls CLI mehrere unterstützt – derzeit default auf GPT-4o)
 # model: "gpt-4o"
@@ -41,7 +41,7 @@ temperature: 0.2  # sinnvoll für Refactorings: 0.1–0.3
 
 # ⚠️ Erfordert ggf. verifizierten API-Zugang oder advanced CLI-Modus:
 # auto_commit: false      # Ob Änderungen direkt in Git committed werden
-# commit_message: "Refactored code with Codex"
+# commit_message: "Refactored code with Agent"
 
 # 🌐 Proxy-Konfiguration (z. B. für interne Netze)
 # proxy: "http://localhost:3128"

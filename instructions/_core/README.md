@@ -2,6 +2,7 @@
 
 Dies ist die zentrale, nie löschbare Anleitungsbasis für das agentbasierte Entwicklungssystem.
 
+
 ## Funktionsweise
 
 - Jedes App-Template enthält ein eigenes `instructions/`-Verzeichnis
@@ -11,6 +12,7 @@ Dies ist die zentrale, nie löschbare Anleitungsbasis für das agentbasierte Ent
 ## Ziel
 
 Diese Anleitungen ermöglichen es dem agentbasierten System, automatisch passende Prompt-Ketten zusammenzustellen, z. B.:
+
 
 > „Erstelle eine App mit Website zur Eingabe von Projektdaten, die in ERPNext gespeichert werden“
 
